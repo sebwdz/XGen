@@ -1,0 +1,124 @@
+NUCLEUS_OFF<
+0 {
+	$SET { @IMPULSE 0 }
+	$SET { @WAIT 0 }
+	$SET { @EXEC 0 }
+	$SUP { @EXIT @RES
+		$SET { @MOD 1 }
+		$ADD { @EXIT @PR }
+		$SET { @FU 0 }
+		$ADD { @WAITLNK 1 }
+	}
+	$ADD { @FU 1 }
+	$SUP { @FU 5
+		$SUB { @EXIT 1 }
+		$SET { @FU 0 }
+	}
+}
+>
+
+NUCLEUS_ON<
+0 {
+	$INF { @EXIT 5
+		$INF { @IMPULSE 5
+			$SET { @MOD 0 }
+			$SET { @SLP 20 }
+		}
+	}
+	$INF { @WAIT 1 $ADD { @EXEC 10 } }
+	$SUP { @WAIT 5
+		$SUP { @EXIT 0
+			$SUB { @EXIT 5 }
+			$ADD { @IMPULSE 5 }
+			$SET { @SKL_CNT 30 }
+		}
+	}
+	$ADD { @WAIT 1 }
+	$SUP { @WAITLNK 3
+		$SET { @WAITLNK 0 }
+		$ADD { @CRTLNK 10 }
+	}
+}
+>
+
+NUCLEUS<
+0 {
+	$INF { @IT 1
+		:NCL_CHAN
+		$ADD { @IT 1 }
+		$SET { @RES 30 }
+		$SET { @PR 40 }
+	}
+	$SUP { @RES 55 $ADD { @NCL_KILL 10 } }
+	$SET { @NCL_OK 10 }
+	$SET { @NCL_CHAN 10 }
+	$SET { @SKL_CNT 10  }
+	$INF { @MOD 1 :NUCLEUS_OFF }
+	$SUP { @MOD 0 :NUCLEUS_ON }
+	$SUP { @ACTIVE_ACT 0
+		:TO_EXTERN
+	}
+	$EGAL { @ACTIVE_ACT 1 :TO_ACT }
+	$EGAL { @ACTIVE_ACT 5 :TO_SENS }
+}
+>
+
+TO_EXTERN<
+0 {
+	$INF { @IT_ACT 1 $ADD { @IT_ACT 1 }
+		$SET { @TO_ACT 20 }
+		:TO_EXTERN_CHAN
+	}
+	$SUP { @IS_OK 0
+		$VAR { &MV_NCL { %PW { 5 } } }
+	}
+	$INF { @IS_OK 1
+		$SUP { @STK_ACT 3
+			$ADD { @NCL_CJAN 4 }
+			$ADD { @IS_OK 1 }
+			$SET { @STK_ACT 0 }
+			:BLK_EXTERN_CHAN
+		}
+		$ADD{ @LIFE 1 }
+		$SUP { @LIFE 50
+			$ADD { @NCL_KILL 10 }
+		
+		}
+	}
+}
+>
+
+TO_SENS<
+0 {
+	$SUP { @IS_SENS 1
+		$ADD { @STK_ACT @IS_SENS }
+		$SET { @IS_SENS 0 }
+	}
+	$INF { @IT_SENS 1 $ADD { @IT_SENS 1 }
+		$VAR {
+			&MV_ACT { %ACT { @TO_ACT @IS_SENS } }
+			&GET_ACT { %ACT { @TO_ACT @IS_SENS } }
+		}
+	}
+	$SUP { @IS_OK 0
+		$INF { @CRT_LNK 1
+			$ADD { @CRT_LNK 1 }
+		}
+	}
+}
+>
+
+TO_ACT<
+0 {
+	$SUP { @IS_ACT 1
+		$ADD { @STK_ACT @IS_ACT }
+		$SET { @IS_ACT 0 }
+	}
+	$INF { @IT_SENS 1 $ADD { @IT_SENS 1 }
+		$VAR {
+			&MV_ACT { %ACT { @TO_ACT @IS_ACT } }
+			&GET_ACT { %ACT { @TO_ACT @IS_ACT } }
+		}
+	}
+}
+>

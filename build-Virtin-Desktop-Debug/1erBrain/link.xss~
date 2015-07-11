@@ -1,0 +1,14 @@
+BASE_LINK<
+$VAR {
+	&LINK_UP {
+		%TYPE { %MV %OTH %RPLS }
+		%ACT { @LINK_GROW @LINK_GROW }
+		%PW { 10 }
+	}
+	&BASE_LINK_ATR {
+		%TYPE { %MV %TO %ATR }
+		%ACT { @BASE_LINK @CELL_CHAN }
+		%DST { 20 }
+		%PW { 30 }
+	}
+}

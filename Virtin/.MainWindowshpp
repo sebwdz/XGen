@@ -1,0 +1,17 @@
+#ifndef MAINWINDOWS_HPP
+#define MAINWINDOWS_HPP
+
+#include        "qmainwindow.h"
+
+class       MainWindows : public QMainWindow
+{
+public:
+
+    MainWindows();
+    virtual ~MainWindow();
+
+private:
+
+};
+
+#endif // MAINWINDOWS_HPP

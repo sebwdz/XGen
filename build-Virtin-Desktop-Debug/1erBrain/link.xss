@@ -1,0 +1,60 @@
+BASE_LINK<
+$VAR {
+	&LINK_UP {
+		%TYPE { %MV %OTH %RPLS }
+		%ACT { @LINK_GROW @LINK_GROW }
+		%PW { 10 }
+	}
+	&BASE_LINK_ATR {
+		%TYPE { %MV %TO %ATR }
+		%ACT { @BASE_LINK @NCL_CHAN  }
+		%DST { 20 }
+		%PW { 4 }
+	}
+}
+>
+
+BASE_DENDR_CHAN<
+$VAR {
+	&ATR_MOVE_IMPULSE {
+		%TYPE { %CHNG %OTH %ATR }
+		%ACT { @BASE_LINK @MOVE_IMPULSE }
+		%DST { 140 }
+		%PW { 40 }
+	}
+	&ATR_HEAD {
+		%TYPE { %MV %OTH %ATR }
+		%ACT { @BASE_LINK @HEAD_LINK }
+		%DST { 150 }
+	}
+	&CHECK_HEAD {
+		%TYPE { %CHNG %OTH %ATR }
+		%ACT { @BASE_LINK @HEAD_LINK }
+		%DST { 60 }
+		%PW { 10 }
+	}
+}
+>
+
+HEAD_DENDR_CHAN<
+$VAR {
+	&RPLS_HEAD {
+		%TYPE { %MV %TO %RPLS }
+		%ACT { @HEAD_DENDR @HEAD_DENDR }
+		%DST { 10 }
+		%PW { 6 }
+	}
+	&ATR_IMPULSE {
+		%TYPE { %MV %TO %ATR }
+		%ACT { @HEAD_DENDR @AXON_IMPULSE }
+		%DST { 40 }
+		%PW { 5 }
+	}
+	&EAT_IMPULSE {
+		%TYPE { %CHNG %OTH %ATR }
+		%ACT { @HEAD_DENDR @IMPULSE }
+		%DST { 10 }
+		%PW { 40 }
+	}
+}
+>

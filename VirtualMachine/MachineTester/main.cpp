@@ -14,7 +14,7 @@ int             main(int ac, char **av)
     std::string name;
         QApplication        app(ac, av);
 
-    name = "../build-VirtualMachineV2-Qt_4_8_6_qt4-Debug/libGenetic.so";
+    name = "../build-VirtualMachineV2-Desktop-Debug/libGenetic.so";
     plugin = PluginMachine::load_machine(name);
     if (!plugin)
         return (1);

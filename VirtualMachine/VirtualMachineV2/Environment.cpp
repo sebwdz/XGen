@@ -52,7 +52,8 @@ Brain       *Environment::get_brain()
 void        Environment::show(sf::RenderWindow  *win)
 {
     boost::unordered_map<std::pair<int, int>, int>::iterator    it;
-    sf::Shape                                       blk;
+    //sf::Shape                                       blk;
+    sf::CircleShape                                   blk;
     sf::Color                                       cl;
     std::pair<float, float>                         move;
 
@@ -64,14 +65,18 @@ void        Environment::show(sf::RenderWindow  *win)
                cl = sf::Color(255, 0, 0);
             else
                 cl = sf::Color(0, 0, 255);
-            blk = sf::Shape::Circle(20 + it->first.first * 20, 20 + it->first.second * 20, 10, cl);
-            win->Draw(blk);
+            //blk = sf::Shape::Circle(20 + it->first.first * 20, 20 + it->first.second * 20, 10, cl);
+            blk = sf::CircleShape(10);
+            blk.setFillColor(cl);
+            blk.move(it->first.first * 20, it->first.second * 20);
+            //win->Draw(blk);
+            win->draw(blk);
         }
     }
     cl.r = 0;
     cl.a = 175;
     cl.g = 100;
-    cl.b = 0;
+    cl.b = 0;/*
     std::pair<float, float> val;
     std::pair<float, float> tmp;
     for (int it = 0; it < 3; it++)
@@ -84,10 +89,12 @@ void        Environment::show(sf::RenderWindow  *win)
             tmp.second = (int)(m_pos.second + (val.second * cos(m_dir * 3.14 / 180) + val.first * sin(m_dir * 3.14 / 180)));
             tmp.first = tmp.first > 0 ? (int)tmp.first % 20 : 20 - (int)tmp.first % 20;
             tmp.second = tmp.second > 0 ? (int)tmp.second % 20 : 20 - (int)tmp.second % 20;
-            blk = sf::Shape::Circle(20 + tmp.first * 20, 20 + tmp.second * 20, 10, cl);
-            win->Draw(blk);
+            //blk = sf::Shape::Circle(20 + tmp.first * 20, 20 + tmp.second * 20, 10, cl);
+            blk = sf::CircleShape(20);
+            //win->Draw(blk);
+            win->draw(blk);
         }
-    }
+    }*/
 }
 
 void        Environment::exec()

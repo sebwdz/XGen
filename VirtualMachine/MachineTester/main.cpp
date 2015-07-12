@@ -38,7 +38,7 @@ int             main(int ac, char **av)
     engine->set_view(widget);
     widget->show();
     engine->exec();
-        for (int it = 0; it < 50; it++)
+    //        for (int it = 0; it < 50; it++)
         engine->add_individu(pool);
     engine->wait_block();
     plugin->close();

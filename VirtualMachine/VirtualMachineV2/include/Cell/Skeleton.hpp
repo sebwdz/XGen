@@ -18,6 +18,7 @@ public:
     void                    clear();
     POINT_LIST::iterator    get_begin();
     POINT_LIST::iterator    get_end();
+    int                     get_size();
     void                    make();
     float                   get_angle(std::pair<float, float> pt);
     void                    cal_angle(AN_POINT_LIST &lst);

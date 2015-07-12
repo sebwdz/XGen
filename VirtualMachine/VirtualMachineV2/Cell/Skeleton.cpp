@@ -196,6 +196,11 @@ POINT_LIST::iterator  Skeleton::get_end()
     return (m_pt.end());
 }
 
+int                     Skeleton::get_size()
+{
+    return (m_pt.size());
+}
+
 std::pair<float, float> &Skeleton::get_pos()
 {
     return (m_pos);

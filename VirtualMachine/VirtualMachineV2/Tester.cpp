@@ -18,7 +18,7 @@ void            Tester::set_individu(GeneticalIndividu *ind)
 {
     SMART(Decriptor)    decript;
     GeneticalNode       *node;
-    std::string         str("/home/pouill_s/Documents/project/build-Virtin-Desktop-Debug/1erBrain/test.node");
+    std::string         str("../../build-Virtin-Desktop-Debug/1erBrain/test.node");
     std::pair<float, float> pos(0, 100.0f);
 
     node = new GeneticalNode();

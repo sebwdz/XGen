@@ -7,7 +7,7 @@
 TARGET = Genetic
 TEMPLATE = lib
 
-QT += core qui
+QT += core gui
 
 CONFIG += plugin
 
@@ -15,7 +15,7 @@ INCLUDEPATH += ../../VirtinV4/include
 INCLUDEPATH += include/
 INCLUDEPATH += ../../Virtin/include
 
-LIBS += ../../build-VirtinV4-Desktop-Debug/libVirtinV4.a -lboost_thread /usr/lib64/libsfml-graphics.so
+LIBS += ../../build-VirtinV4-Desktop-Debug/libVirtinV4.a -lboost_thread -lsfml-graphics
 
 SOURCES += \
     Cell/Module.cpp \

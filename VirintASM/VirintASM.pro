@@ -22,9 +22,12 @@ SOURCES += main.cpp \
     Engine.cpp \
     Compilator.cpp \
     ../Virtin/Plugin.cpp \
-    ../VirtualMachine/VirtualMachineV1/Decriptor/Chanel.cpp
+    ../VirtualMachine/VirtualMachineV2/Decriptor/Chanel.cpp
 
 HEADERS += \
     include/NodeMaker.hpp \
     include/Engine.hpp \
     include/Compilator.hpp
+
+OTHER_FILES += \
+    ../VirtualMachine/VirtualMachineV2/Chanel.o

@@ -79,7 +79,7 @@ void        BrainView::show_module(ModuleClass *module)
     //shape.SetOutlineWidth(0.5);
     shape.setFillColor(cl);
     shape.setOutlineThickness(0.8);
-    shape.setOutlineColor(sf::Color(0, 0, 100));
+    shape.setOutlineColor(sf::Color(50, 50, 100));
     //Draw(shape);
     draw(shape);
     for (it = module->get_begin(); it != module->get_end(); it++)
@@ -94,7 +94,7 @@ void        BrainView::show_module(ModuleClass *module)
 void        BrainView::show_object(Object *obj)
 {
     //sf::Shape               shape;
-    sf::RectangleShape        shape;
+    sf::RectangleShape          shape;
     std::pair<float, float>     pos;
 
     pos = obj->get_pos();
@@ -105,7 +105,7 @@ void        BrainView::show_object(Object *obj)
     shape.move(pos.first, pos.second);
     shape.setFillColor(cl);
     shape.setOutlineThickness(0.8);
-    shape.setOutlineColor(sf::Color(0, 0, 100));
+    shape.setOutlineColor(sf::Color(50, 50, 100));
     //shape.Rotate(rand() % 360);
     shape.rotate(rand() % 360);
     //Draw(shape);

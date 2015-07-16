@@ -86,7 +86,7 @@ unsigned int    NodeMaker::get_value(std::string &value)
         value = value.substr(1);
         for (int it = 0; it < (int)m_opt.size(); it++)
         {
-            if (m_opt[it].first == value)
+            if (!strcasecmp(m_opt[it].first.c_str(), value.c_str()))
                 return (m_opt[it].second);
         }
     }

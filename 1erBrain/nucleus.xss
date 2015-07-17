@@ -1,22 +1,22 @@
-NCL_CHAN<
-$VAR (
-	&ATR_SKL (
-		%TYPE ( %MV %OTH %ATR )
-		%ACT ( @SKL_CNT @SKL_CHAN )
-		%DST ( 60 )
-		%PW ( 40 )
-	)
-	&MV_NCL (
-		%TYPE ( %MV %TO %RPLS )
-		%ACT ( @NCL_CHAN @NCL_CHAN )
-		%DST ( 50 )
-		%PW ( 15 )
-	)
-	&EXIT_NCL (
-		%TYPE ( %CHNG %OTH %ATR )
-		%ACT ( @NCL_CHAN @EXIT )
-		%DST ( 20 )
-		%PW ( 100 )
-	)
-)
->
+NCL_CHAN< 
+VAR ( 
+	&ATR_SKL ( 
+		TYPE ( MV OTH ATR ) 
+		ACT ( @SKL_CNT @SKL_CHAN ) 
+		DST ( 60 ) 
+		PW ( 40 ) 
+	) 
+	&MV_NCL ( 
+		TYPE ( MV TO RPLS ) 
+		ACT ( @NCL_CHAN @NCL_CHAN ) 
+		DST ( 50 ) 
+		PW ( 15 ) 
+	) 
+	&EXIT_NCL ( 
+		TYPE ( CHNG OTH ATR ) 
+		ACT ( @NCL_CHAN @EXIT ) 
+		DST ( 20 ) 
+		PW ( 100 ) 
+	) 
+) 
+> 

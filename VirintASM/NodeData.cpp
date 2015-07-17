@@ -72,21 +72,23 @@ NodeData        *NodeMaker::get_node(std::string &name)
 unsigned int    NodeMaker::get_value(std::string &value)
 {
     unsigned int         add;
+    std::string         tmp;
 
     add = VALUE_RANGE;
+    std::cout<<"->"<<value<<std::endl;
     if (value[0] == '@' || value[0] == '&')
     {
         add = CHANNEL_RANGE;
-        value = value.substr(1);
-        add = get_var(value);
+        tmp = value.substr(1);
+        add = get_var(tmp);
         return (add);
     }
-    else if (value[0] == '$' || value[0] == '%')
+    else
     {
-        value = value.substr(1);
+        tmp = value;
         for (int it = 0; it < (int)m_opt.size(); it++)
         {
-            if (!strcasecmp(m_opt[it].first.c_str(), value.c_str()))
+            if (!strcasecmp(m_opt[it].first.c_str(), tmp.c_str()))
                 return (m_opt[it].second);
         }
     }

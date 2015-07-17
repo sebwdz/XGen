@@ -1,0 +1,13 @@
+syntax "gen" "\.x*"
+
+color green "\$[A-Z_a-z]*"
+color cyan "%[A-Za-z_]*"
+color red "@[A-Za-z_]*"
+color yellow ":[A-Za-z_]*"
+color black,yellow "[A-Za-z_]*<"
+color black,yellow ">"
+color brightyellow "\)"
+color brightyellow "\("
+color cyan,red "&[A-Za-z_]*"
+color brightblue "[0-9]*"
+color brightyellow "#[A-Z	a-z0-9 '"]*"

@@ -19,7 +19,7 @@ int             main(int ac, char **av)
     if (!plugin)
         return (1);
     std::cout << "succes" << std::endl;
-    name = "../../build-Virtin-Desktop-Debug/1erBrain/out.gen";
+    name = "../../1erBrain/out.gen";
     pool = new GeneticalIndividu();
     try {
         pool->load_file(name);

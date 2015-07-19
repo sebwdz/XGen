@@ -1,6 +1,7 @@
 
 #include        <cmath>
-#include        "Object/Movable.hpp"
+#include        "Decriptor/Decriptor.hpp"
+#include        "Cell/Module.hpp"
 
 Movable::Movable(Object *parent) : SignalManager(parent)
 {
@@ -107,6 +108,20 @@ void              Movable::apply(Object *from, ChanPropriety *prop, std::pair<fl
     }
 }
 
+bool              Movable::check_attach(MovableLine *line, ChanPropriety *prop)
+{
+    if (get_line()->get_chan(prop->get_act()[0])->get_value() &&
+            !get_line()->get_chan(prop->get_act()[1])->get_value())
+    {
+        if (!CAST(Decriptor*)(this) && CAST(Decriptor*)(line->m_parent))
+        {
+            line->m_parent->add_signal(ATTACH, static_cast<void*>(this));
+            return (true);
+        }
+    }
+    return (false);
+}
+
 void              Movable::interact_with(MovableLine *line, ChanPropriety *prop)
 {
     std::pair<float, float>         vct;
@@ -115,6 +130,8 @@ void              Movable::interact_with(MovableLine *line, ChanPropriety *prop)
     float                           lentmp;
 
     vct = line->m_vct;
+    if (prop->get_type(ATTACH) && check_attach(line, prop))
+        return ;
     if (prop->get_type(OTH))
     {
         vct.first *= -1;

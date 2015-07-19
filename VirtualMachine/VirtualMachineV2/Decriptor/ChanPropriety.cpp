@@ -25,6 +25,7 @@ void            ChanPropriety::set_ref(unsigned int ref)
 
 void            ChanPropriety::set_type(unsigned int type)
 {
+    m_attach = false;
     if (type == MV)
         m_type = true;
     else if (type == CHNG)
@@ -37,6 +38,8 @@ void            ChanPropriety::set_type(unsigned int type)
         m_atr = false;
     else if (type == ATR)
         m_atr = true;
+     if (type == ATTACH)
+        m_attach = true;
 }
 
 void            ChanPropriety::set_pow(unsigned int type, float value)
@@ -62,7 +65,11 @@ unsigned int    ChanPropriety::get_ref()
 
 bool            ChanPropriety::get_type(unsigned int type)
 {
-    if (type == MV && m_type)
+    if (type == ATTACH && m_attach)
+        return (true);
+    else if (type == ATTACH)
+        return (false);
+    else if (type == MV && m_type)
         return (true);
     else if (type == CHNG && !m_type)
         return (true);

@@ -12,6 +12,7 @@ public:
     SignalManager(Object *parent);
     virtual ~SignalManager();
 
+    void            add_signal(unsigned int value, void *ptr);
     virtual void    catch_signals() = 0;
 
     virtual void    catch_create(unsigned int code, void *sig);

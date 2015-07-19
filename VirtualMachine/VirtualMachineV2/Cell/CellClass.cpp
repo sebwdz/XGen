@@ -28,9 +28,10 @@ void        CellClass::exec()
 void        CellClass::catch_duplic(unsigned int code, void *sig)
 {
     SMART(CellClass)   cell;
+    SMART(Decriptor)   decript;
+    OBJ_IT             it;
 
     (void)code;
-    (void)sig;
     if (m_parent)
     {
         cell = SMART(CellClass)(new CellClass(m_parent));
@@ -38,5 +39,13 @@ void        CellClass::catch_duplic(unsigned int code, void *sig)
         cell->set_pos(m_pos);
         cell->get_line()->shared_to_line(get_line());
         CAST(ModuleClass*)(m_parent)->add_object(cell);
+        for (it = ((GeneticalNode*)sig)->get_begin(); it != ((GeneticalNode*)sig)->get_end(); it++)
+        {
+            decript = SMART(Decriptor)(new Decriptor(NULL));
+            decript->set_node(CAST(GeneticalNode*)(it->get()));
+            decript->get_line()->shared_to_line(get_line());
+            decript->set_pos(get_pos());
+            cell->add_object(decript);
+        }
     }
 }

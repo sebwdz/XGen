@@ -93,12 +93,7 @@ int        Decriptor::comp_funcion(GeneticalNode *node)
 
 int         Decriptor::creat_function(GeneticalNode *node)
 {
-    OBJ_IT  it;
-
-    for (it = node->get_begin(); it != node->get_end(); it++)
-    {
-        get_line()->add_signal(node->get_value(), it->get());
-    }
+    get_line()->add_signal(node->get_value(), node);
     return (0);
 }
 
@@ -165,7 +160,7 @@ int             Decriptor::set_var_function(GeneticalNode *node)
         cur = CAST(GeneticalNode*)(it->get());
         set_chan(cur);
     }
-    return (nothing(node));
+    return (0);
 }
 
 void        Decriptor::set_chan(GeneticalNode *node)

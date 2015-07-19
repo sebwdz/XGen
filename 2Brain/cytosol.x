@@ -9,6 +9,5 @@ Cytosol_Init<
 Cytosol<
 0 (
 	:Cytosol_Init
-	sup ( @IMPULSE 0 add ( @EXIT @IMPULSE ) set ( @IMPULSE 0 ) )
 )
 >

@@ -4,6 +4,15 @@ MAIN<
 	SUP ( @WHO 9 :ACT )
 	INF ( @IT 1 ADD ( @IT 1 )
 		SET ( @IS_ACT 10 )
+		var (
+			&Rpls (
+				type ( mv oth rpls )
+				act ( @IMACT @IMACT )
+				dst ( 40 )
+				pw ( 40 )
+			)
+		)
+		SET ( @IMACT 20 )
 	)
 	SET ( @ATTACH 0 )
 	SET ( @CHECK_ATTACH 10 )
@@ -16,7 +25,7 @@ SENSOR<
 0 (  
 	SET( @IMPULSE @RES )  
 	SET ( @RES 0 )  
-	SET ( @BASE 0 )    
+	SET ( @BASE 0 )
 )
 >  
   

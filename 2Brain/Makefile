@@ -7,6 +7,7 @@ SRC =		cell.x \
 		skl.x \
 		nucleuscell.x \
 		cytosol.x \
+		neuron.x
 
 INTER =		cell.xss \
 		skl.xss \

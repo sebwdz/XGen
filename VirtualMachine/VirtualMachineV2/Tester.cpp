@@ -29,7 +29,7 @@ void            Tester::set_individu(GeneticalIndividu *ind)
     m_env->set_brain(m_brain.get());
     for (int it = 0; it < 3; it++)
     {
-        pos.second = (it * 60) - 75;
+        pos.second = (it * 65) - 75;
         pos.first = it == 1 ? 65 : 65;
         m_env->add_module(node, pos, true);
         pos.first = it == 1 ? -65 : -65;
@@ -56,7 +56,7 @@ void            Tester::exec()
         m_brain->exec();
         m_env->exec();
         cycle += 1;
-//        if (m_view && !(cycle % 1))
+        if (m_view && !(cycle % 1))
             m_view->show_tester(m_env);
     }
     if (m_view)

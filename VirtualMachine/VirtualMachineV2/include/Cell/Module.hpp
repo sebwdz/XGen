@@ -20,6 +20,7 @@ public:
     virtual void                catch_signals();
     OBJECT_LIST::iterator       get_begin();
     OBJECT_LIST::iterator       get_end();
+    SMART(Object)               get_obj(Object* obj);
 
     void                        move();
     void                        exec_move();

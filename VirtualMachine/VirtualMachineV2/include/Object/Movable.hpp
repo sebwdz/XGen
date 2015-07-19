@@ -29,6 +29,7 @@ public:
     void            make_move_line();
     void            filter(MovableLine *line, bool stop = true);
     void            apply(Object *from, ChanPropriety *prop, std::pair<float, float> &vct, std::pair<float, unsigned int> &chan);
+    bool            check_attach(MovableLine *line, ChanPropriety *prop);
     void            interact_with(MovableLine *line, ChanPropriety *prop);
     void            get_interact(MovableLine *move);
     virtual void    get_move_line(MovableLine *move, Object *from);

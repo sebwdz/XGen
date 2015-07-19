@@ -25,6 +25,7 @@ private:
     bool            m_type;
     bool            m_dir;
     bool            m_atr;
+    bool            m_attach;
     float           m_dist;
     float           m_pow;
     unsigned int    m_act[2];

@@ -34,7 +34,7 @@ public:
     void            set_propriety(GeneticalNode *node, ChanPropriety *prop);
 
     void            catch_simple(unsigned int code, void *sig);
-    void            catch_duplic(unsigned int, void *sig);
+    void            catch_duplic(unsigned int code, void *sig);
 
 private:
 

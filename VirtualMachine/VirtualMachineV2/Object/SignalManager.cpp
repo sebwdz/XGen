@@ -16,6 +16,11 @@ SignalManager::~SignalManager()
 
 }
 
+void            SignalManager::add_signal(unsigned int value, void *ptr)
+{
+    get_line()->add_signal(value, ptr);
+}
+
 void            SignalManager::catch_signals()
 {
     OBJECT_LIST::iterator                       obj;
@@ -27,42 +32,42 @@ void            SignalManager::catch_signals()
     {
         sig = m_line.get_signal(it->first);
         for (arg = sig.begin(); arg != sig.end(); arg++)
+        {
             (this->*(it->second))(it->first, *arg);
+        }
     }
     get_ready();
 }
 
 void            SignalManager::catch_create(unsigned int code, void *sig)
 {
-    ModuleClass         *parent;
-    SMART(ModuleClass)  create;
-    SMART(Decriptor)    decript;
+    ModuleClass             *parent;
+    SMART(ModuleClass)      create;
+    SMART(Decriptor)        decript;
+    OBJ_IT                  it;
 
-    if (m_parent && (parent = CAST(ModuleClass*)(m_parent)))
+    if (m_parent && (parent = CAST(ModuleClass*)(m_parent)) && code != NEW_HEAD)
     {
-        if (code != NEW_HEAD)
-            while (CAST(ModuleClass*)(parent->get_parent()) && !CAST(Brain*)(parent))
-                parent = CAST(ModuleClass*)(parent->get_parent());
+        while (CAST(ModuleClass*)(parent->get_parent()) && !CAST(Brain*)(parent))
+            parent = CAST(ModuleClass*)(parent->get_parent());
+    }
+    else if (CAST(ModuleClass*)(this))
+        parent = CAST(ModuleClass*)(this);
+    else
+        return ;
+    if (code != DETACH)
+    {
+        create = SMART(ModuleClass)(new ModuleClass(parent));
+        create->set_pos(get_pos());
+        parent->add_object(create);
+        parent = create.get();
+    }
+    for (it = ((GeneticalNode*)sig)->get_begin(); it != ((GeneticalNode*)sig)->get_end(); it++)
+    {
         decript = SMART(Decriptor)(new Decriptor(parent));
-        decript->set_node((GeneticalNode*)sig);
+        decript->set_node(CAST(GeneticalNode*)(it->get()));
         decript->get_line()->shared_to_line(get_line());
-        if (code == CREAT || (code == NEW_HEAD && CAST(ModuleClass*)(this)))
-        {
-            create = SMART(ModuleClass)(new ModuleClass());
-            CAST(ModuleClass*)(create.get())->add_object(decript);
-            create->set_pos(m_pos);
-            create->set_parent(this);
-            create->get_line()->shared_to_line(get_line());
-            if (code == CREAT)
-                parent->add_object(create);
-            else
-                CAST(ModuleClass*)(this)->add_object(create);
-        }
-        else if (code == DETACH)
-        {
-            decript->set_parent(parent);
-            decript->set_pos(m_pos);
-            parent->add_object(decript);
-        }
+        decript->set_pos(get_pos());
+        parent->add_object(decript);
     }
 }

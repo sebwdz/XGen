@@ -16,6 +16,8 @@ ModuleClass::~ModuleClass()
 
 void        ModuleClass::add_object(boost::shared_ptr<Object> obj)
 {
+    if (!obj.get())
+        return ;
     if (CAST(Decriptor*)(obj.get()) && !CAST(Brain*)(this))
         get_line()->shared_to_line(obj->get_line());
     obj->set_parent(this);
@@ -73,15 +75,34 @@ void        ModuleClass::exec()
     make_move_line();
 }
 
+SMART(Object)               ModuleClass::get_obj(Object* obj)
+{
+    OBJECT_LIST::iterator   it;
+
+    for (it = m_obj.begin(); it != m_obj.end(); it++)
+        if (it->get() == obj)
+            return (*it);
+    return (SMART(Object)());
+}
+
 void        ModuleClass::catch_signals()
 {
     OBJECT_LIST::iterator                       obj;
+    OBJECT_LIST::iterator                       rm;
 
     SignalManager::catch_signals();
     for (obj = m_obj.begin(); obj != m_obj.end(); obj++)
     {
         if (CAST(SignalManager*)(obj->get()))
+        {
             CAST(SignalManager*)(obj->get())->catch_signals();
+            if (obj->get()->get_parent() != this)
+            {
+                std::cout << "attach" << std::endl;
+                rm = obj--;
+                m_obj.erase(rm);
+            }
+        }
     }
 }
 
@@ -126,7 +147,7 @@ void        ModuleClass::get_move_line(MovableLine *move, Object *from)
         for (it = m_obj.begin(); it != m_obj.end(); it++)
         {
             if (it->get() != from && CAST(Movable*)(it->get()) &&
-            (CAST(Brain*)(this) || !CAST(Decriptor*)(it->get())))
+                (CAST(Brain*)(this) || !CAST(Decriptor*)(it->get())))
             {
                 CAST(Movable*)(it->get())->get_move_line(move, this);
             }
@@ -150,7 +171,7 @@ void        ModuleClass::catch_kill(unsigned int code, void *sig)
     OBJECT_LIST::iterator   it;
     OBJECT_LIST::iterator   dest;
     ModuleClass             *modul;
-
+return ;
     for (it = m_obj.begin(); it != m_obj.end(); it++)
         if (sig == it->get())
             break;

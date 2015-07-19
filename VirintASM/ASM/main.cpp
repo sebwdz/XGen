@@ -16,8 +16,8 @@ int make(std::vector<std::string> &conf)
 
     try
     {
-        if (conf.size() < 4)
-            throw (std::string("[conf][out][filename]..."));
+        if (conf.size() < 3)
+            throw (std::string("[confa][out][filename]..."));
         it = 2;
         data = new NodeMaker(conf[0], asmn);
         while (it < (int)conf.size() && asmn)

@@ -75,7 +75,6 @@ unsigned int    NodeMaker::get_value(std::string &value)
     std::string         tmp;
 
     add = VALUE_RANGE;
-    std::cout<<"->"<<value<<std::endl;
     if (value[0] == '@' || value[0] == '&')
     {
         add = CHANNEL_RANGE;
@@ -89,7 +88,10 @@ unsigned int    NodeMaker::get_value(std::string &value)
         for (int it = 0; it < (int)m_opt.size(); it++)
         {
             if (!strcasecmp(m_opt[it].first.c_str(), tmp.c_str()))
+            {
+                if (m_opt[it].second == DETACH) std::cout << m_opt[it].second << std::endl;
                 return (m_opt[it].second);
+            }
         }
     }
     try

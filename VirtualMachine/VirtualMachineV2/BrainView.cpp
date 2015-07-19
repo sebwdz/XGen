@@ -69,7 +69,7 @@ void        BrainView::show_module(ModuleClass *module)
     res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value() * 10;
     res = res > 254 ? 254 : res;
     cl.g = res;
-    cl.a = 150;
+    cl.a = 120;
     shape.setPointCount(module->get_skeleton()->get_size());
     for (pt = module->get_skeleton()->get_begin(); pt != module->get_skeleton()->get_end(); pt++)
     {

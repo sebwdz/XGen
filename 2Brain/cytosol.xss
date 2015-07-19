@@ -1,0 +1,10 @@
+Cytosol_Chan<
+var (
+	&AtrImpulse (
+		type ( atr oth chng )
+		act ( @CytoChan @IMPULSE )
+		dst ( 40 )
+		pw ( 5 )
+	)
+)
+>

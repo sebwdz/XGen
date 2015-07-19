@@ -47,7 +47,7 @@ void                        ModuleClass::make_skeleton()
     m_pos = m_skel->get_pos();
     for (it = m_obj.begin(); it != m_obj.end(); it++)
     {
-        if (CAST(Decriptor*)(it->get()))
+        if (CAST(Decriptor*)(it->get()) && !CAST(Brain*)(this))
             it->get()->set_pos(m_pos);
     }
 }
@@ -76,22 +76,13 @@ void        ModuleClass::exec()
 void        ModuleClass::catch_signals()
 {
     OBJECT_LIST::iterator                       obj;
-    boost::unordered_map<unsigned int, SIG_CATCH>::iterator it;
-    std::list<void*>::iterator                  arg;
-    std::list<void*>                            sig;
 
-    for (it = m_sig.begin(); it != m_sig.end(); it++)
-    {
-        sig = m_line.get_signal(it->first);
-        for (arg = sig.begin(); arg != sig.end(); arg++)
-            (this->*(it->second))(it->first, *arg);
-    }
+    SignalManager::catch_signals();
     for (obj = m_obj.begin(); obj != m_obj.end(); obj++)
     {
         if (CAST(SignalManager*)(obj->get()))
             CAST(SignalManager*)(obj->get())->catch_signals();
     }
-    get_ready();
 }
 
 void        ModuleClass::move()

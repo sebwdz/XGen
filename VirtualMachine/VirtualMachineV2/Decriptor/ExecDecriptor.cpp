@@ -5,11 +5,12 @@
 
 void        Decriptor::exec()
 {
-    if ((m_parent && CAST(Brain*)(m_parent)) && m_state == STATE_EXEC)
-        return ;
     turn(m_node);
-    if (!(m_parent && CAST(Brain*)(m_parent)))
+    if (m_parent && CAST(Brain*)(m_parent))
+    {
+        m_state = STATE_EXEC;
         make_move_line();
+    }
 }
 
 void        Decriptor::turn(GeneticalNode *node)

@@ -14,7 +14,7 @@ Decriptor::~Decriptor()
 
 LineDecript     *Decriptor::get_line()
 {
-    if (!CAST(Brain*)(m_parent))
+    if (m_parent && !CAST(Brain*)(m_parent))
         return (m_parent->get_line());
     return (&m_line);
 }
@@ -26,12 +26,11 @@ void        Decriptor::set_node(GeneticalNode *node)
 
 void        Decriptor::catch_signals()
 {
-
+    SignalManager::catch_signals();
 }
 
 void        Decriptor::catch_simple(unsigned int code, void *sig)
 {
-
 }
 
 void        Decriptor::catch_duplic(unsigned int, void *sig)

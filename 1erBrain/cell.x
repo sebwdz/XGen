@@ -1,9 +1,9 @@
 CENTER<  
-0 (  
-	UNSHARED ( @ACTIVE_ACT )  
-	INF ( @IT 1 ADD ( @IT 5 )  
-		INF ( @CRT 8  
-			SHARED ( @ACTIVE_ACT )  
+0 (
+	unshared ( @ACTIVE_ACT )
+	inf ( @IT 1 add ( @IT 5 )
+		inf ( @CRT 8  
+			shared ( @ACTIVE_ACT )  
 			INF ( @TYPE 1 SET ( @ACTIVE_ACT 1 ) )  
 			SUP ( @TYPE 0 SET ( @ACTIVE_ACT 5 ) )  
 			ADD ( @TYPE 1 )  

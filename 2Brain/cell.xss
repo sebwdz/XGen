@@ -1,0 +1,10 @@
+Cell_Base_Chan<
+var (
+	&AtrKill (
+		type ( oth atr chng )
+		act ( @CellChan @KillCell )
+		pw ( 40 )
+		dst ( 10 )
+	)
+)
+>

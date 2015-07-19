@@ -124,8 +124,8 @@ void        Environment::exec()
     {
         move.first = it == 0 ? -1 : it == 2 ? 1 : 0;
         move.second = it == 1 ? 1 : 0;
-        m_sensor[it]->get_line()->get_chan(Chanel::hash(str) + CHANNEL_RANGE)->set_value(get_sensor(m_pos, move));
-        m_act[it]->get_line()->get_chan(Chanel::hash(str2) + CHANNEL_RANGE)->set_value(get_sensor(m_pos, move));
+        m_sensor[it]->get_line()->get_chan(Chanel::hash(str) + CHANNEL_RANGE)->set_value(20);
+        m_act[it]->get_line()->get_chan(Chanel::hash(str) + CHANNEL_RANGE)->set_value(20);
     }
 }
 
@@ -141,7 +141,7 @@ void                                Environment::add_module(GeneticalNode *node,
     module->add_object(decript);
     module->set_parent(m_brain);
     module->set_pos(pos);
-    module->get_line()->get_chan(CHANNEL_RANGE + Chanel::hash(str))->set_value(sensor ? 0 : 30);
+    module->get_line()->get_chan(CHANNEL_RANGE + Chanel::hash(str))->set_value(sensor ? 0 : 0);
     m_brain->add_object(module);
     if (sensor)
         m_sensor.push_back(module);

@@ -31,11 +31,12 @@ void        CellClass::catch_duplic(unsigned int code, void *sig)
 
     (void)code;
     (void)sig;
-    if (m_parent && CAST(ModuleClass*)(m_parent) && m_obj.size() < 20)
+    if (m_parent)
     {
         cell = SMART(CellClass)(new CellClass(m_parent));
         cell->set_dna(m_dna);
         cell->set_pos(m_pos);
+        cell->get_line()->shared_to_line(get_line());
         CAST(ModuleClass*)(m_parent)->add_object(cell);
     }
 }

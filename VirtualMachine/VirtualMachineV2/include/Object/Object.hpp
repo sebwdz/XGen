@@ -13,7 +13,7 @@ public:
     virtual ~Object();
 
     void                    set_pos(std::pair<float, float> &pos);
-    void                    set_parent(Object *parent);
+    virtual void                    set_parent(Object *parent);
     Object                  *get_parent();
 
     std::pair<float, float> &get_pos();

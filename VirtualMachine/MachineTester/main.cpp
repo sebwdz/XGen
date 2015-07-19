@@ -14,15 +14,17 @@ int             main(int ac, char **av)
     std::string name;
         QApplication        app(ac, av);
 
-    name = "../build-VirtualMachineV2-Desktop-Debug/libGenetic.so";
-    plugin = PluginMachine::load_machine(name);
-    if (!plugin)
-        return (1);
-    std::cout << "succes" << std::endl;
-    name = "../../1erBrain/out.gen";
-    pool = new GeneticalIndividu();
     try {
-        pool->load_file(name);
+        if (ac < 2)
+            throw (std::string("./Tester node_file"));
+        name = "../build-VirtualMachineV2-Desktop-Debug/libGenetic.so";
+        plugin = PluginMachine::load_machine(name);
+        if (!plugin)
+            return (1);
+        std::cout << "succes" << std::endl;
+        name = av[1];
+        pool = new GeneticalIndividu();
+            pool->load_file(name);
     } catch (std::string &str)
     {
         std::cout << str << std::endl;

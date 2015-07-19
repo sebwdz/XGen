@@ -18,7 +18,7 @@ void            Tester::set_individu(GeneticalIndividu *ind)
 {
     SMART(Decriptor)    decript;
     GeneticalNode       *node;
-    std::string         str("../../build-Virtin-Desktop-Debug/1erBrain/test.node");
+    std::string         str("../../2Brain/test/out.gen");
     std::pair<float, float> pos(0, 100.0f);
 
     node = new GeneticalNode();
@@ -30,9 +30,9 @@ void            Tester::set_individu(GeneticalIndividu *ind)
     for (int it = 0; it < 3; it++)
     {
         pos.second = (it * 60) - 75;
-        pos.first = it == 1 ? 55 : 35;
+        pos.first = it == 1 ? 65 : 65;
         m_env->add_module(node, pos, true);
-        pos.first = it == 1 ? -55 : -35;
+        pos.first = it == 1 ? -65 : -65;
         m_env->add_module(node, pos, false);
     }
 }
@@ -56,7 +56,7 @@ void            Tester::exec()
         m_brain->exec();
         m_env->exec();
         cycle += 1;
-        if (m_view && !(cycle % 1))
+//        if (m_view && !(cycle % 1))
             m_view->show_tester(m_env);
     }
     if (m_view)

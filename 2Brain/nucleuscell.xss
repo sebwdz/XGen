@@ -1,0 +1,56 @@
+Nucleus_Cell_Chan<
+var (
+	&NclRpls (
+		type ( to rpls mv )
+		act ( @NclChan @NclChan )
+		dst ( 60 )
+		pw ( 50 )
+	)
+)
+>
+
+To_Act_Chan<
+var (
+	&AtrAct (
+		type ( to atr mv )
+		act ( @NclChan @IS_ACT )
+		dst ( 140 )
+		pw ( 30 )
+	)
+	&ChAct (
+		type ( oth atr chng )
+		act ( @NclChan @IS_ACT )
+		dst ( 20 )
+		pw ( 30 )
+	)
+ )
+>
+
+Attach_Act<
+var (
+	&AtrOth (
+		type ( oth atr mv )
+		act ( @NclChan @ATTACH )
+		dst ( 20 )
+		pw ( 10 )
+
+	)
+	&AtrCheck (
+		type ( oth atr chng )
+		act ( @NclChan @CHECK_ATTACH )
+		dst ( 20 )
+		pw ( 10 )
+	)
+)
+>
+
+Rpls_Oth_Act<
+var (	
+	&RplsAct (
+		type ( oth rpls mv )
+		act ( @IsOnAct @IsOnAct )
+		dst ( 80 )
+		pw ( 20 )
+	)
+)
+>

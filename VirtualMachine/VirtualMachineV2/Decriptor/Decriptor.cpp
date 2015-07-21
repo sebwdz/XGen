@@ -40,6 +40,7 @@ void        Decriptor::catch_simple(unsigned int code, void *sig)
     {
         parent = static_cast<ModuleClass*>(sig);
         if ((obj = (CAST(ModuleClass*)(m_parent))->get_obj(this))) {
+            std::cout << "attach";
             parent->add_object(obj);
         }
     }

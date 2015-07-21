@@ -13,13 +13,13 @@ To_Act_Chan<
 var (
 	&AtrAct (
 		type ( to atr mv )
-		act ( @NclChan @IS_ACT )
+		act ( @NclChan @IsAct )
 		dst ( 140 )
 		pw ( 40 )
 	)
 	&ChAct (
 		type ( oth atr chng )
-		act ( @NclChan @IS_ACT )
+		act ( @NclChan @IsAct )
 		dst ( 20 )
 		pw ( 50 )
 	)
@@ -30,14 +30,14 @@ Attach_Act<
 var (
 	&AtrOth (
 		type ( oth atr mv )
-		act ( @NclChan @ATTACH )
+		act ( @NclChan @Attach )
 		dst ( 20 )
 		pw ( 20 )
 
 	)
 	&AtrCheck (
 		type ( oth atr chng )
-		act ( @NclChan @CHECK_ATTACH )
+		act ( @NclChan @CheckAttach )
 		dst ( 20 )
 		pw ( 40 )
 	)

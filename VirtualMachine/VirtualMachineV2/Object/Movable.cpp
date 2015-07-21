@@ -110,8 +110,8 @@ void              Movable::apply(Object *from, ChanPropriety *prop, std::pair<fl
 
 bool              Movable::check_attach(MovableLine *line, ChanPropriety *prop)
 {
-    if (get_line()->get_chan(prop->get_act()[0])->get_value() &&
-            !get_line()->get_chan(prop->get_act()[1])->get_value())
+    if (get_line()->get_chan(prop->get_act()[0])->get_value() > 0 &&
+            get_line()->get_chan(prop->get_act()[1])->get_value() < 1)
     {
         if (!CAST(Decriptor*)(this) && CAST(Decriptor*)(line->m_parent))
         {

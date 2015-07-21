@@ -10,7 +10,7 @@ var (
 		type ( mv rpls oth )
 		act ( @SklCenter @SklArround )
 		dst ( 20 )
-		pw ( 30 )
+		pw ( 40 )
 	)
 )
 >

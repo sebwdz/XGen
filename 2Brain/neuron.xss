@@ -1,0 +1,20 @@
+Atr_Impulse_Chan<
+var (
+	&AtrImpulse (
+		type ( oth atr chng )
+		act ( @Base @Impulse )
+		dst ( 30 )
+		pw ( 20 )
+	)
+)
+>
+
+Nucleus_Neuron_Attach<
+var (
+	&AttachNuclues (
+		type ( attach )
+		act ( @NclChan @NclNeuron )
+		dst ( 20 )
+	)
+)
+>

@@ -16,12 +16,12 @@ Nucleus_Cell<
 0 (
 	:Skl_Center
 	:Nucleus_Cell_Init
-	sup ( @IS_ACT 0 add ( @act @IS_ACT ) set ( @IS_ACT 0 ) )
+	sup ( @IsAct 0 add ( @act @IsAct ) set ( @IsAct 0 ) )
 	sup ( @act 3 var ( &AtrOth ( pw ( 20 ) ) ) )
 	set ( @isAttach 0 )
-	sup ( @CHECK_ATTACH 0
+	sup ( @CheckAttach 0
 		var ( &AtrAct ( pw ( 0 ) ) )
-		set ( @isAttach @CHECK_ATTACH ) set ( @CHECK_ATTACH 0 )
+		set ( @isAttach @CheckAttach ) set ( @CheckAttach 0 )
 		set ( @IsOnAct 10 )
 	)
 	inf ( @IsOnAct 1 var ( &AtrAct ( pw ( 40 ) ) ) )

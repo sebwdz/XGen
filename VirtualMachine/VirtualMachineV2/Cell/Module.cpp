@@ -16,8 +16,6 @@ ModuleClass::~ModuleClass()
 
 void        ModuleClass::add_object(boost::shared_ptr<Object> obj)
 {
-    if (!obj.get())
-        return ;
     if (CAST(Decriptor*)(obj.get()) && !CAST(Brain*)(this))
         get_line()->shared_to_line(obj->get_line());
     obj->set_parent(this);
@@ -171,7 +169,7 @@ void        ModuleClass::catch_kill(unsigned int code, void *sig)
     OBJECT_LIST::iterator   it;
     OBJECT_LIST::iterator   dest;
     ModuleClass             *modul;
-return ;
+//return ;
     for (it = m_obj.begin(); it != m_obj.end(); it++)
         if (sig == it->get())
             break;

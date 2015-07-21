@@ -8,14 +8,14 @@ Cell_Head<
 			)
 			sup ( @canCreate 0 new_head ( :Nucleus_Cell ) )
 		)
-		inf ( @nclCytosol 7 add ( @wait 1 )
+		inf ( @nclCytosol 6 add ( @wait 1 )
 			sup ( @wait 4
 				add ( @nclCytosol 1 )
 				set ( @wait 0 )
 				new_head ( :Cytosol )
 			)
 		)
-		sup ( @nclCytosol 6 add ( @ready 4 ) )
+		sup ( @nclCytosol 5 add ( @ready 4 ) )
 	)
 )
 >
@@ -24,12 +24,12 @@ Create_Cell<
 0 (
 	inf ( @act 1 set ( @act 1 )
 		set ( @S_Cycle 1 )
-		set ( @duplic 1 )
+		set ( @duplic 10 )
 		set ( @S_ToAct 10 )
 	)
 	inf ( @act 2
 		sup ( @wait 30
-			inf ( @duplic 1 set ( @duplic 1 )
+			inf ( @duplic 1 set ( @duplic 20 )
 				add ( @S_Cycle 1 )
 				set ( @needCreate 7 )
 				add ( @act 1 )

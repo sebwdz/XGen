@@ -34,6 +34,8 @@ void            SignalManager::catch_signals()
         for (arg = sig.begin(); arg != sig.end(); arg++)
         {
             (this->*(it->second))(it->first, *arg);
+            if (it->first == ATTACH)
+                break;
         }
     }
     get_ready();

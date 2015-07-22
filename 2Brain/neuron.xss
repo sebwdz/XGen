@@ -3,8 +3,19 @@ var (
 	&AtrImpulse (
 		type ( oth atr chng )
 		act ( @Base @Impulse )
-		dst ( 30 )
+		dst ( 20 )
 		pw ( 20 )
+	)
+)
+>
+
+Cytosol_Neuron_Chan<
+var (
+	&AtrExec (
+		type ( atr oth chng )
+		act ( @NeuronCyto @ExecNcl )
+		dst ( 20 )
+		pw ( 50 )
 	)
 )
 >
@@ -15,6 +26,17 @@ var (
 		type ( attach )
 		act ( @NclChan @NclNeuron )
 		dst ( 20 )
+	)
+)
+>
+
+Atr_Imp_Ncl_Neuron<
+var (
+	&AtrImpulse (
+		type ( oth atr chng )
+		act ( @NclNeuron @ImpulseCyto )
+		dst ( 30 )
+		pw ( 80 )
 	)
 )
 >

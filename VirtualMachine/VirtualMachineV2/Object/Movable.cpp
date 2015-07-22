@@ -16,6 +16,7 @@ Movable::~Movable()
 void            Movable::move()
 {
     m_state = STATE_MOVE;
+    //return ;
     if (m_parent && CAST(Movable*)(m_parent) && m_moveLine.m_inter.size())
         get_move_line(&m_moveLine, this);
 }
@@ -28,6 +29,7 @@ void            Movable::exec_move()
     float                           tmp;
     float                           ref;
 
+    //return ;
     m_pos.first += m_moveLine.m_move.first;
     m_pos.second += m_moveLine.m_move.second;
     for (chan = m_moveLine.m_change.begin(); chan != m_moveLine.m_change.end(); chan++)
@@ -78,7 +80,8 @@ void            Movable::filter(MovableLine *line, bool stop)
         while (it != line->m_inter.end())
         {
             if (!get_line()->get_chan(it->second->get_act()[0])->get_use() ||
-                    !get_line()->get_chan(it->second->get_act()[1])->get_use())
+                    !get_line()->get_chan(it->second->get_act()[1])->get_use() ||
+                    (!it->second->get_pow(PW) && !it->second->get_type(ATTACH)))
             {
                 line->m_stoped.push(std::make_pair(it->second, this));
                 it = line->m_inter.erase(it);

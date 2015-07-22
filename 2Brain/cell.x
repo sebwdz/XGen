@@ -29,7 +29,7 @@ Create_Cell<
 	)
 	inf ( @act 2
 		sup ( @wait 30
-			inf ( @duplic 1 set ( @duplic 20 )
+			inf ( @duplic 1 set ( @duplic 10 )
 				add ( @S_Cycle 1 )
 				set ( @needCreate 7 )
 				add ( @act 1 )
@@ -66,7 +66,7 @@ Cell<
 		sup ( @create @needCreate
 			sub ( @duplic 1 )
 			set ( @create 0 )
-			duplic ( :Neuron )
+			duplic ( )
 		)
 	)
 	sup ( @KillCell 0 kill )

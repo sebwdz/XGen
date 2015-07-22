@@ -56,7 +56,7 @@ void            Tester::exec()
         m_brain->exec();
         m_env->exec();
         cycle += 1;
-        if (m_view && !(cycle % 1))
+        if (m_view && !(cycle % 5))
             m_view->show_tester(m_env);
     }
     if (m_view)

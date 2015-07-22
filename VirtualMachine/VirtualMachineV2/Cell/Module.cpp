@@ -96,7 +96,6 @@ void        ModuleClass::catch_signals()
             CAST(SignalManager*)(obj->get())->catch_signals();
             if (obj->get()->get_parent() != this)
             {
-                std::cout << "attach" << std::endl;
                 rm = obj--;
                 m_obj.erase(rm);
             }

@@ -8,6 +8,7 @@ Nucleus_Cell_Init<
 		)
 		set ( @NclChan 10 )
 		inf ( @S_Crt 2 var ( &NclRpls ( type ( oth ) pw ( 20 ) ) ) )
+		set ( @ready 1 )
 	)
 )
 >
@@ -23,6 +24,7 @@ Nucleus_Cell<
 		var ( &AtrAct ( pw ( 0 ) ) )
 		set ( @isAttach @CheckAttach ) set ( @CheckAttach 0 )
 		set ( @IsOnAct 10 )
+		set ( @ready 1 )
 	)
 	inf ( @IsOnAct 1 var ( &AtrAct ( pw ( 40 ) ) ) )
 	add ( @init 1 )

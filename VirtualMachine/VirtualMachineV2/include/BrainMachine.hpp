@@ -2,7 +2,7 @@
 #define BRAINMACHINE_HPP
 
 #include        <boost/thread.hpp>
-#include        <include/Tester.hpp>
+#include        <Tester.hpp>
 #include        <VirtualMachine/VirtualMachine.hpp>
 
 #define         TESTER_LIST      boost::unordered_map<GeneticObj*, std::pair<std::list<SMART(Tester)>, int> >

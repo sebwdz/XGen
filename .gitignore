@@ -1,4 +1,4 @@
 *.o
 *.pro.user*
-build*
+*build*
 

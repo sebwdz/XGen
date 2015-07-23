@@ -16,7 +16,6 @@ Movable::~Movable()
 void            Movable::move()
 {
     m_state = STATE_MOVE;
-    //return ;
     if (m_parent && CAST(Movable*)(m_parent) && m_moveLine.m_inter.size())
         get_move_line(&m_moveLine, this);
 }
@@ -29,7 +28,6 @@ void            Movable::exec_move()
     float                           tmp;
     float                           ref;
 
-    //return ;
     m_pos.first += m_moveLine.m_move.first;
     m_pos.second += m_moveLine.m_move.second;
     for (chan = m_moveLine.m_change.begin(); chan != m_moveLine.m_change.end(); chan++)

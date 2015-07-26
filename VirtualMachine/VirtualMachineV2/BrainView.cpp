@@ -30,29 +30,21 @@ void        BrainView::show_tester(MachineTester *tester)
     sf::Clock               time;
 
     brain = CAST(Environment*)(tester)->get_brain();
-    //Clear();
     clear();
     view = sf::View(sf::Vector2f(0, 0), sf::Vector2f(250, 250));
-    //view.Zoom(1.5);
     view.zoom(1.5);
-    //view.SetCenter(brain->get_pos().first, brain->get_pos().second);
     view.setCenter(brain->get_pos().first, brain->get_pos().second);
-    //SetView(view);
     setView(view);
     show_module(brain);
-    //m_env->Clear();
     m_env->clear();
     CAST(Environment*)(tester)->show(m_env);
-    //m_env->Display();
     m_env->display();
     repaint();
-    //Display();
     display();
 }
 
 void        BrainView::show_module(ModuleClass *module)
 {
-    //sf::Shape               shape;
     sf::ConvexShape           shape;
     OBJECT_LIST::iterator   it;
     POINT_LIST::iterator    pt;
@@ -74,13 +66,10 @@ void        BrainView::show_module(ModuleClass *module)
     for (pt = module->get_skeleton()->get_begin(); pt != module->get_skeleton()->get_end(); pt++)
     {
         shape.setPoint(index++, sf::Vector2f(pt->first, pt->second));
-        //shape.AddPoint(pt->first, pt->second, cl, sf::Color(50, 50, 100));
     }
-    //shape.SetOutlineWidth(0.5);
     shape.setFillColor(cl);
     shape.setOutlineThickness(0.8);
     shape.setOutlineColor(sf::Color(50, 50, 100));
-    //Draw(shape);
     draw(shape);
     for (it = module->get_begin(); it != module->get_end(); it++)
     {
@@ -93,22 +82,17 @@ void        BrainView::show_module(ModuleClass *module)
 
 void        BrainView::show_object(Object *obj)
 {
-    //sf::Shape               shape;
     sf::RectangleShape          shape;
     std::pair<float, float>     pos;
 
     pos = obj->get_pos();
     sf::Color cl(0, 200, 100);
-    //shape = sf::Shape::Line(-0.5, -0, 1, 0.5, 1, cl, 1, sf::Color(19, 20, 120));
     shape = sf::RectangleShape(sf::Vector2f(-0.5, 0.5));
-    //shape.Move(pos.first, pos.second);
     shape.move(pos.first, pos.second);
     shape.setFillColor(cl);
     shape.setOutlineThickness(0.8);
     shape.setOutlineColor(sf::Color(50, 50, 100));
-    //shape.Rotate(rand() % 360);
     shape.rotate(rand() % 360);
-    //Draw(shape);
     draw(shape);
 }
 

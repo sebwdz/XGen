@@ -10,9 +10,9 @@ int             main(int ac, char **av)
     PluginMachine      *plugin;
     GeneticalIndividu  *pool;
     VirtualMachine     *engine;
-    //MachineViewWidget  *widget;
+    MachineViewWidget  *widget;
     std::string name;
-    //    QApplication        app(ac, av);
+        QApplication        app(ac, av);
 
     try {
         if (ac < 2)
@@ -21,9 +21,9 @@ int             main(int ac, char **av)
         plugin = PluginMachine::load_machine(name);
         if (!plugin)
             return (1);
-        //std::cout << "succes" << std::endl;
+        std::cout << "succes" << std::endl;
         name = av[1];
-        //name = "../../2Brain/out.gen";
+        name = "../../2Brain/out.gen";
         pool = new GeneticalIndividu();
             pool->load_file(name);
     } catch (std::string &str)
@@ -37,11 +37,11 @@ int             main(int ac, char **av)
         std::cout << "error when cast engine" << std::endl;
         return (1);
     }
-    //widget = plugin->get_view();
-    //engine->set_view(widget);
-    //widget->show();
+    widget = plugin->get_view();
+    engine->set_view(widget);
+    widget->show();
     engine->exec();
-    //for (int it = 0; it < 50; it++)
+    for (int it = 0; it < 50; it++)
         engine->add_individu(pool);
     engine->wait_block();
     plugin->close();

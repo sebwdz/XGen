@@ -3,7 +3,7 @@
 #include        "Cell/Brain.hpp"
 #include        "Cell/Module.hpp"
 
-ModuleClass::ModuleClass(Object *parent) : Movable(parent)
+ModuleClass::ModuleClass(Object *parent) : Movable(parent), ClassMap()
 {
     m_skel = new Skeleton();
     m_sig.insert(std::make_pair(KILL, (SIG_CATCH)(&ModuleClass::catch_kill)));

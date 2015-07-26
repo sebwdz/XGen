@@ -3,10 +3,11 @@
 
 #include        "Object/Movable.hpp"
 #include        "Cell/Skeleton.hpp"
+#include        "ClassMap.hpp"
 
 #define         OBJECT_LIST      std::list<SMART(Object)>
 
-class           ModuleClass : public Movable
+class           ModuleClass : public Movable, public ClassMap
 {
 public:
     ModuleClass(Object *parent = 0);

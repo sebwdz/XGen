@@ -4,7 +4,7 @@
 #include        "Cell/Module.hpp"
 #include        "Object/Signal.hpp"
 
-SignalManager::SignalManager(Object *parent) : Object(parent)
+SignalManager::SignalManager(Object *parent) : ObjectMap(parent)
 {
     m_sig.insert(std::make_pair(CREAT, &SignalManager::catch_create));
     m_sig.insert(std::make_pair(NEW_HEAD, &SignalManager::catch_create));

@@ -36,7 +36,11 @@ SOURCES += \
     Object/Movable.cpp \
     Environment.cpp \
     Decriptor/Chanel.cpp \
-    Decriptor/ChanPropriety.cpp
+    Decriptor/ChanPropriety.cpp \
+    Object/ObjectMap.cpp \
+    ClassMap.cpp \
+    ClassCase.cpp \
+    LnkCase.cpp
 
 HEADERS += \
     include/Cell/Module.hpp \
@@ -56,4 +60,6 @@ HEADERS += \
     include/Object/Movable.hpp \
     include/Environment.hpp \
     include/Decriptor/chanel.hpp \
-    include/Decriptor/ChanelPropriety.hpp
+    include/Decriptor/ChanelPropriety.hpp \
+    include/ClassMap.hpp \
+    include/Object/ObjectMap.hpp

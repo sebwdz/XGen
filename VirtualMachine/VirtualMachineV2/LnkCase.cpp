@@ -1,35 +1,66 @@
 
 #include        "ClassMap.hpp"
 
-LnkCase::LnkCase()
+LnkCase::LnkCase(bool border)
 {
-
+    m_case = NULL;
+    m_pos.first = 0;
+    m_pos.second = 0;
+    m_border = border;
+    m_dir[0] = NULL;
+    m_dir[1] = NULL;
+    m_dir[2] = NULL;
+    m_dir[3] = NULL;
 }
 
 LnkCase::~LnkCase()
 {
-
+    delete m_case;
 }
 
-void        LnkCase::add_obj(SMART(ObjectMap) obj, std::pair<int, int> &pos, LnkDir dir)
+void        LnkCase::add_obj(SMART(ObjectMap) obj, std::pair<int, int> &pos, LnkDir dir, int turn)
 {
     std::pair<int, int>     tmp;
-    ClassCase               *oth;
-    bool                    ok;
+    LnkCase                 *lnk;
 
-    if ((oth = CAST(ClassCase*)(m_dir[dir].get())))
-        ok = (pos.first > oth->get_pos().first && dir == RIGHT) || (pos.second > oth->get_pos().second && dir == DOWN);
-    if (!m_dir[dir] || ok)
+    if (pos == m_pos && !m_border)
     {
-
+        if (!m_case)
+            m_case = new ClassCase();
+        m_case->add_obj(obj);
+        return ;
     }
-    else if (oth)
+    if ((!m_dir[dir] || m_dir[dir]->m_border) || tmp.first)
     {
-
+        lnk = new LnkCase(false);
+        lnk->set_dir((LnkDir)(dir % 2 ? dir - 1 : dir + 1), this);
+        lnk->set_dir(dir, m_dir[dir]);
+        if (m_dir[dir])
+            m_dir[dir]->set_dir((LnkDir)(dir % 2 ? dir - 1 : dir + 1), lnk);
+        m_dir[dir] = lnk;
+        tmp.first = dir == LEFT || dir == RIGHT ? pos.first : m_pos.first;
+        tmp.second = dir == UP || dir == DOWN ? pos.second : m_pos.second;
+        lnk->set_pos(tmp);
+        if (!turn)
+        {
+            if (dir == LEFT || dir == RIGHT)
+                dir = pos.second > m_pos.second ? DOWN : UP;
+            else
+                dir = pos.first > m_pos.first ? RIGHT : LEFT;
+            lnk->add_obj(obj, pos, dir, 1);
+            return ;
+        }
     }
+    if (m_dir[dir])
+        m_dir[dir]->add_obj(obj, pos, dir, turn);
 }
 
-void        LnkCase::set_dir(LnkDir dir, SMART(LnkCase) lnk)
+void        LnkCase::set_pos(std::pair<int, int> pos)
+{
+    m_pos = pos;
+}
+
+void        LnkCase::set_dir(LnkDir dir,LnkCase *lnk)
 {
     m_dir[dir] = lnk;
 }
@@ -47,7 +78,12 @@ void        LnkCase::remove()
     }
 }
 
-SMART(LnkCase)     LnkCase::get_dir(LnkDir dir)
+LnkCase     *LnkCase::get_dir(LnkDir dir)
 {
     return (m_dir[dir]);
+}
+
+std::pair<int, int>     &LnkCase::get_pos()
+{
+    return (m_pos);
 }

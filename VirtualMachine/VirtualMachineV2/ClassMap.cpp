@@ -4,7 +4,7 @@
 
 ClassMap::ClassMap()
 {
-    m_begin = SMART(LnkCase)(new LnkCase);
+    m_begin = SMART(LnkCase)(new LnkCase(true));
 }
 
 ClassMap::~ClassMap()
@@ -16,9 +16,9 @@ void        ClassMap::set_obj(SMART(ObjectMap) obj)
     std::pair<int, int>     pos;
 
     pos = obj->get_pos();
-    pos.first %= 10;
-    pos.second %= 10;
-    //m_begin->add_obj(obj);
+    pos.first /= 10;
+    pos.second /= 10;
+    m_begin->add_obj(obj, pos, RIGHT, 0);
 }
 
 SMART(ObjectMap)        ClassMap::remove_object(ObjectMap *obj)

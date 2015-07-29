@@ -19,6 +19,8 @@ void        ModuleClass::add_object(boost::shared_ptr<Object> obj)
     if (CAST(Decriptor*)(obj.get()) && !CAST(Brain*)(this))
         get_line()->shared_to_line(obj->get_line());
     obj->set_parent(this);
+    if ((!CAST(Decriptor*)(obj.get()) || CAST(Brain*)(this)) && CAST(ObjectMap*)(obj.get()))
+        set_obj(boost::dynamic_pointer_cast<ObjectMap>(obj));
     m_obj.push_back(obj);
 }
 

@@ -2,7 +2,7 @@
 
 #include        "ClassMap.hpp"
 
-ClassCase::ClassCase() : LnkCase()
+ClassCase::ClassCase()
 {
 
 }
@@ -31,8 +31,6 @@ SMART(ObjectMap)                ClassCase::remove_obj(ObjectMap *obj)
             break;
         }
     }
-    if (!m_obj.size())
-        LnkCase::remove();
     return (res);
 }
 

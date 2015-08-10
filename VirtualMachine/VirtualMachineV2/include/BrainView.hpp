@@ -13,6 +13,7 @@ public:
 
     void            show_tester(MachineTester *tester);
     void            show_module(ModuleClass *module);
+    void            show_map(ModuleClass *map);
     void            show_object(Object *obj);
     void            paintEvent(QPaintEvent *envent);
     void            showEvent(QShowEvent*event);

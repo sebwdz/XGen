@@ -1,7 +1,7 @@
 
 #include        "ClassMap.hpp"
 
-LnkCase::LnkCase(bool border)
+LnkCase::LnkCase(LnkDir border, ClassMap *map)
 {
     m_case = NULL;
     m_pos.first = 0;
@@ -11,6 +11,7 @@ LnkCase::LnkCase(bool border)
     m_dir[1] = NULL;
     m_dir[2] = NULL;
     m_dir[3] = NULL;
+    m_map = map;
 }
 
 LnkCase::~LnkCase()
@@ -18,41 +19,39 @@ LnkCase::~LnkCase()
     delete m_case;
 }
 
-void        LnkCase::add_obj(SMART(ObjectMap) obj, std::pair<int, int> &pos, LnkDir dir, int turn)
+LnkCase     *LnkCase::get_next(LnkDir dir, std::pair<int, int> &pos, bool create, bool cross)
 {
-    std::pair<int, int>     tmp;
     LnkCase                 *lnk;
+    std::pair<int, int>     tmp;
 
-    if (pos == m_pos && !m_border)
+   if ((dir > 1 && m_pos.first == pos.first) ||
+           (dir < 2 && m_pos.second == pos.second))
+       return (this);
+    if (!m_dir[dir] || (((dir == RIGHT && m_dir[dir]->get_pos().first > pos.first) ||
+                         (dir == LEFT && m_dir[dir]->get_pos().first < pos.first) ||
+                         (dir == DOWN && m_dir[dir]->get_pos().second > pos.second) ||
+                         (dir == UP && m_dir[dir]->get_pos().second < pos.second))))
     {
-        if (!m_case)
-            m_case = new ClassCase();
-        m_case->add_obj(obj);
-        return ;
-    }
-    if ((!m_dir[dir] || m_dir[dir]->m_border) || tmp.first)
-    {
-        lnk = new LnkCase(false);
-        lnk->set_dir((LnkDir)(dir % 2 ? dir - 1 : dir + 1), this);
+        if ((!cross ||
+             (!get_case() || (m_dir[dir] && m_dir[dir]->get_case()))) &&
+                !create)
+            return (this);
+        if (pos.first == 0 || pos.second == 0)
+            lnk = new LnkCase(dir, m_map);
+        else
+            lnk = new LnkCase(NONE, m_map);
+        tmp.first = dir > 1 ? pos.first : m_pos.first;
+        tmp.second = dir < 2 ? pos.second : m_pos.second;
+        lnk->set_pos(tmp);
+        m_map->insert(lnk);
+        lnk->set_dir(INV_DIR(dir), this);
         lnk->set_dir(dir, m_dir[dir]);
         if (m_dir[dir])
-            m_dir[dir]->set_dir((LnkDir)(dir % 2 ? dir - 1 : dir + 1), lnk);
+            m_dir[dir]->set_dir(INV_DIR(dir), lnk);
         m_dir[dir] = lnk;
-        tmp.first = dir == LEFT || dir == RIGHT ? pos.first : m_pos.first;
-        tmp.second = dir == UP || dir == DOWN ? pos.second : m_pos.second;
-        lnk->set_pos(tmp);
-        if (!turn)
-        {
-            if (dir == LEFT || dir == RIGHT)
-                dir = pos.second > m_pos.second ? DOWN : UP;
-            else
-                dir = pos.first > m_pos.first ? RIGHT : LEFT;
-            lnk->add_obj(obj, pos, dir, 1);
-            return ;
-        }
+        return (lnk);
     }
-    if (m_dir[dir])
-        m_dir[dir]->add_obj(obj, pos, dir, turn);
+   return (m_dir[dir]->get_next(dir, pos, create, cross));
 }
 
 void        LnkCase::set_pos(std::pair<int, int> pos)
@@ -65,6 +64,11 @@ void        LnkCase::set_dir(LnkDir dir,LnkCase *lnk)
     m_dir[dir] = lnk;
 }
 
+void        LnkCase::set_case(ClassCase *newCase)
+{
+    m_case = newCase;
+}
+
 void        LnkCase::remove()
 {
     int     oth;
@@ -72,9 +76,11 @@ void        LnkCase::remove()
 
     for (it = 0; it < 4; it++)
     {
-        oth = it % 2 ? it - 1 : it + 1;
+        oth = INV_DIR(it);
         if (m_dir[it])
             m_dir[it]->set_dir((LnkDir)oth, m_dir[oth]);
+        if (m_dir[oth])
+            m_dir[oth]->set_dir((LnkDir)it, m_dir[it]);
     }
 }
 
@@ -86,4 +92,14 @@ LnkCase     *LnkCase::get_dir(LnkDir dir)
 std::pair<int, int>     &LnkCase::get_pos()
 {
     return (m_pos);
+}
+
+ClassCase               *LnkCase::get_case()
+{
+    return (m_case);
+}
+
+LnkDir                  LnkCase::get_border()
+{
+    return (m_border);
 }

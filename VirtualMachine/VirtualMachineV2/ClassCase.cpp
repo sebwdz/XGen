@@ -12,9 +12,10 @@ ClassCase::~ClassCase()
 
 }
 
-void                            ClassCase::add_obj(SMART(ObjectMap)   obj)
+void                            ClassCase::add_obj(SMART(ObjectMap) obj)
 {
-
+    obj->set_case(this);
+    m_obj.push_back(obj);
 }
 
 SMART(ObjectMap)                ClassCase::remove_obj(ObjectMap *obj)
@@ -34,7 +35,7 @@ SMART(ObjectMap)                ClassCase::remove_obj(ObjectMap *obj)
     return (res);
 }
 
-std::list<SMART(ObjectMap)>     &ClassCase::get_obj()
+std::list<SMART(ObjectMap)> &ClassCase::get_obj()
 {
     return (m_obj);
 }

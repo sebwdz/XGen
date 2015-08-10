@@ -3,15 +3,17 @@
 #include        "Cell/Brain.hpp"
 #include        "Cell/Module.hpp"
 
-ModuleClass::ModuleClass(Object *parent) : Movable(parent), ClassMap()
+ModuleClass::ModuleClass(Object *parent) : Movable(parent)
 {
     m_skel = new Skeleton();
+    m_map = new ClassMap();
     m_sig.insert(std::make_pair(KILL, (SIG_CATCH)(&ModuleClass::catch_kill)));
 }
 
 ModuleClass::~ModuleClass()
 {
     delete m_skel;
+    delete m_map;
 }
 
 void        ModuleClass::add_object(boost::shared_ptr<Object> obj)
@@ -20,7 +22,7 @@ void        ModuleClass::add_object(boost::shared_ptr<Object> obj)
         get_line()->shared_to_line(obj->get_line());
     obj->set_parent(this);
     if ((!CAST(Decriptor*)(obj.get()) || CAST(Brain*)(this)) && CAST(ObjectMap*)(obj.get()))
-        set_obj(boost::dynamic_pointer_cast<ObjectMap>(obj));
+        m_map->add_obj(boost::dynamic_pointer_cast<ObjectMap>(obj));
     m_obj.push_back(obj);
 }
 
@@ -52,6 +54,7 @@ void                        ModuleClass::make_skeleton()
         if (CAST(Decriptor*)(it->get()) && !CAST(Brain*)(this))
             it->get()->set_pos(m_pos);
     }
+    m_map->clean();
 }
 
 OBJECT_LIST::iterator       ModuleClass::get_begin()
@@ -62,6 +65,11 @@ OBJECT_LIST::iterator       ModuleClass::get_begin()
 OBJECT_LIST::iterator       ModuleClass::get_end()
 {
     return (m_obj.end());
+}
+
+ClassMap    *ModuleClass::get_map()
+{
+    return (m_map);
 }
 
 void        ModuleClass::exec()
@@ -130,6 +138,7 @@ void        ModuleClass::exec_move()
                 (CAST(Brain*)(this) || !CAST(Decriptor*)(it->get())))
         {
             CAST(Movable*)(it->get())->exec_move();
+            m_map->move_object(CAST(ObjectMap*)(it->get()));
         }
     }
     Movable::exec_move();
@@ -170,7 +179,7 @@ void        ModuleClass::catch_kill(unsigned int code, void *sig)
     OBJECT_LIST::iterator   it;
     OBJECT_LIST::iterator   dest;
     ModuleClass             *modul;
-//return ;
+
     for (it = m_obj.begin(); it != m_obj.end(); it++)
         if (sig == it->get())
             break;
@@ -184,5 +193,6 @@ void        ModuleClass::catch_kill(unsigned int code, void *sig)
                 add_object(*dest);
         }
     }
+    m_map->remove_object(CAST(ObjectMap*)(it->get()));
     m_obj.erase(it);
 }

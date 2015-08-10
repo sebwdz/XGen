@@ -66,7 +66,7 @@ Cell<
 		sup ( @create @needCreate
 			sub ( @duplic 1 )
 			set ( @create 0 )
-			duplic ( )
+			duplic ()
 		)
 	)
 	sup ( @KillCell 0 kill )

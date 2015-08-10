@@ -3,7 +3,7 @@
 
 ObjectMap::ObjectMap(Object *parent) : Object(parent)
 {
-
+    m_case = NULL;
 }
 
 ObjectMap::~ObjectMap()
@@ -11,7 +11,12 @@ ObjectMap::~ObjectMap()
 
 }
 
-std::list<SMART(ClassCase)> &ObjectMap::get_cases()
+void                    ObjectMap::set_case(ClassCase* mycase)
 {
-    return (m_cases);
+    m_case = mycase;
+}
+
+ClassCase               *ObjectMap::get_cases()
+{
+    return (m_case);
 }

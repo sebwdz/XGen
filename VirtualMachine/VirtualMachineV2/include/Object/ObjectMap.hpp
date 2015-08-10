@@ -11,10 +11,11 @@ public:
                 ObjectMap(Object *parent);
                 virtual ~ObjectMap();
 
-                std::list<SMART(ClassCase)>    &get_cases();
+                ClassCase                       *get_cases();
+                void                            set_case(ClassCase* mycase);
 private:
 
-                std::list<SMART(ClassCase)>    m_cases;
+                ClassCase                       *m_case;
 };
 
 #endif // OBJECTMAP_HPP

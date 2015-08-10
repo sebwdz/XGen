@@ -33,14 +33,52 @@ void        BrainView::show_tester(MachineTester *tester)
     clear();
     view = sf::View(sf::Vector2f(0, 0), sf::Vector2f(250, 250));
     view.zoom(1.5);
-    view.setCenter(brain->get_pos().first, brain->get_pos().second);
+    view.setCenter(0, 0);
+    //view.setCenter(brain->get_pos().first, brain->get_pos().second);
     setView(view);
+    show_map(brain);
     show_module(brain);
     m_env->clear();
     CAST(Environment*)(tester)->show(m_env);
     m_env->display();
     repaint();
     display();
+}
+
+void        BrainView::show_map(ModuleClass *module)
+{
+    boost::bimap<std::pair<int, int>, SMART(LnkCase)>::left_map::iterator  it;
+    OBJECT_LIST::iterator                                                  obj;
+    ClassMap                                                               *map;
+
+    usleep(200000);
+    map = module->get_map();
+    for (it = map->get_begin(); it != map->get_end(); it++)
+    {
+        if (it->second->get_case())
+        {
+            sf::RectangleShape  rect;
+            rect.setFillColor(sf::Color(0, 200, 100, 130));
+            rect.setSize(sf::Vector2f(20, 20));
+            rect.setPosition(it->second->get_pos().first * 20 - 20, it->second->get_pos().second * 20 - 20);
+            draw(rect);
+        }
+        else
+        {
+            sf::CircleShape circle;
+            circle.setPosition(it->second->get_pos().first * 20 - 10, it->second->get_pos().second * 20 - 10);
+            circle.setFillColor(sf::Color(0, 0, 200, 130));
+            circle.setRadius(5);
+            circle.setOrigin(5, 5);
+            draw(circle);
+        }
+    }
+    return ;
+    for (obj = module->get_begin(); obj != module->get_end(); obj++)
+    {
+        if (CAST(ModuleClass*)(obj->get()))
+            show_map(CAST(ModuleClass*)(obj->get()));
+    }
 }
 
 void        BrainView::show_module(ModuleClass *module)
@@ -113,7 +151,6 @@ void        BrainView::showEvent(QShowEvent*event)
     if (!m_init)
        {
            XFlush(QX11Info::display());
-           //Create(winId());
            RenderWindow::create(winId());
            m_init = true;
        }

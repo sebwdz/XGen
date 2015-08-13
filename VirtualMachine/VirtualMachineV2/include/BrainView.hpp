@@ -15,7 +15,7 @@ public:
     void            show_module(ModuleClass *module);
     void            show_map(ModuleClass *map);
     void            show_object(Object *obj);
-    void            paintEvent(QPaintEvent *envent);
+    void            paintEvent(QPaintEvent *event);
     void            showEvent(QShowEvent*event);
     QPaintEngine*   paintEngine() const;
 

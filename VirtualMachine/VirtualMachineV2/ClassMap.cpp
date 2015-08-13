@@ -59,7 +59,7 @@ void        ClassMap::cross_lnk(LnkCase *lnk, LnkDir dir)
         tmp.second = dir < 2 ? cross->get_pos().second : lnk->get_pos().second;
         tmpdir = (dir > 1 ? (lnk->get_pos().second > cross->get_pos().second ? DOWN : UP) :
                          (lnk->get_pos().first < cross->get_pos().first ? LEFT : RIGHT));
-        tmpLnk = cross->get_next(tmpdir, tmp, first, true);
+        tmpLnk = cross->get_next(tmpdir, tmp, first, false);
         if (first && tmpLnk != lnk->get_dir(dir) && tmpLnk != lnk)
         {
             tmpLnk->set_dir(dir, lnk->get_dir(dir));
@@ -69,7 +69,7 @@ void        ClassMap::cross_lnk(LnkCase *lnk, LnkDir dir)
             lnk->set_dir(dir, tmpLnk);
         }
         first = false;
-        break;
+        return ;
     }
 }
 
@@ -164,17 +164,6 @@ void        ClassMap::clean()
         else
             it++;
     }
-}
-
-void        ClassMap::get_list_obj(std::pair<float, float> pos, std::pair<float, float> dist,
-                           std::list<SMART(ObjectMap)> &lst)
-{
-    std::pair<int, int>     curpos;
-
-    curpos.first = dist.first + pos.first;
-    curpos.second = pos.second;
-    do {
-    } while (curpos.first != (int)(pos.first + dist.first) || pos.second != 0);
 }
 
 LEFT_MAP::iterator              ClassMap::get_begin()

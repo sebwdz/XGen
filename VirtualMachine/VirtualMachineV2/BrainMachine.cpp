@@ -52,7 +52,7 @@ void            BrainMachine::exec_loop()
         if (exec)
         {
             m_mutexth.lock();
-            if (m_thread >= 5 || !tmp)
+            if (m_thread >= 1 || !tmp)
                 exec = false;
             else
             {

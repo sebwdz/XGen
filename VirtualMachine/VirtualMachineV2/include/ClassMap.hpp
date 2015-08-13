@@ -2,11 +2,12 @@
 #ifndef         CLASS_MAP_HPP
 # define        CLASS_MAP_HPP
 
-#include        <boost/bimap.hpp>
+# include        <boost/bimap.hpp>
 # include       "Object/Movable.hpp"
+
 # define        INV_DIR(X)      (LnkDir)(X & 1 ? X - 1 : X + 1)
-#define         MAP             boost::bimap<std::pair<int, int>, SMART(LnkCase)>
-#define         LEFT_MAP        MAP::left_map
+# define        MAP             boost::bimap<std::pair<int, int>, SMART(LnkCase)>
+# define        LEFT_MAP        MAP::left_map
 
 enum                            LnkDir { UP, DOWN, LEFT, RIGHT, NONE, ALL};
 
@@ -63,8 +64,6 @@ public:
                 void                            move_object(ObjectMap *obj);
                 LnkCase                         *get_lnk(std::pair<int, int> &pos);
                 void                            clean();
-                void                            get_list_obj(std::pair<float, float> pos, std::pair<float, float> dist,
-                                                                std::list<SMART(ObjectMap)> &lst);
                 LEFT_MAP::iterator              get_begin();
                 LEFT_MAP::iterator              get_end();
 protected:

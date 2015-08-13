@@ -12,7 +12,7 @@ int             main(int ac, char **av)
     VirtualMachine     *engine;
     MachineViewWidget  *widget;
     std::string name;
-        QApplication        app(ac, av);
+   //     QApplication        app(ac, av);
 
     try {
         if (ac < 2)
@@ -37,11 +37,11 @@ int             main(int ac, char **av)
         std::cout << "error when cast engine" << std::endl;
         return (1);
     }
-    widget = plugin->get_view();
-    engine->set_view(widget);
-    widget->show();
+    //widget = plugin->get_view();
+    //engine->set_view(widget);
+    //widget->show();
     engine->exec();
-    //for (int it = 0; it < 50; it++)
+    for (int it = 0; it < 10; it++)
         engine->add_individu(pool);
     engine->wait_block();
     plugin->close();

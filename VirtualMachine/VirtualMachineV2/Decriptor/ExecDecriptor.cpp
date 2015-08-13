@@ -135,18 +135,6 @@ int         Decriptor::decript_function(GeneticalNode *node)
 
 int     Decriptor::jmp_function(GeneticalNode *node)
 {
-
-    /*if (node->get_begin() != node->get_end())
-    {
-        if ((tmp = get_line()->get_value(JMP_CHAN)) >= 5)
-        {
-            val = CAST(GeneticalNode*)(node->get_begin()->get())->get_value();
-            val = get_line()->get_value(val);
-            m_jmp = val;
-            tmp -= 5;
-            get_line()->set_value(JMP_CHAN, tmp);
-        }
-    }*/
     return (nothing(node));
 }
 

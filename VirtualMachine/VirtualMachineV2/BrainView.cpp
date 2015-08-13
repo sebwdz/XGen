@@ -34,7 +34,6 @@ void        BrainView::show_tester(MachineTester *tester)
     view = sf::View(sf::Vector2f(0, 0), sf::Vector2f(250, 250));
     view.zoom(1.5);
     view.setCenter(0, 0);
-    //view.setCenter(brain->get_pos().first, brain->get_pos().second);
     setView(view);
     show_map(brain);
     show_module(brain);
@@ -51,7 +50,6 @@ void        BrainView::show_map(ModuleClass *module)
     OBJECT_LIST::iterator                                                  obj;
     ClassMap                                                               *map;
 
-    usleep(200000);
     map = module->get_map();
     for (it = map->get_begin(); it != map->get_end(); it++)
     {
@@ -139,9 +137,9 @@ QPaintEngine*   BrainView::paintEngine() const
     return (0);
 }
 
-void        BrainView::paintEvent(QPaintEvent *envent)
+void        BrainView::paintEvent(QPaintEvent *event)
 {
-    //Display();
+    (void)event;
     display();
 }
 

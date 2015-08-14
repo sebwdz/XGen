@@ -34,7 +34,6 @@ SOURCES += \
     Object/SignalManager.cpp \
     Object/Object.cpp \
     Object/Movable.cpp \
-    Environment.cpp \
     Decriptor/Chanel.cpp \
     Decriptor/ChanPropriety.cpp \
     Object/ObjectMap.cpp \
@@ -58,7 +57,6 @@ HEADERS += \
     include/Object/Object.hpp \
     include/BrainMachine.hpp \
     include/Object/Movable.hpp \
-    include/Environment.hpp \
     include/Decriptor/chanel.hpp \
     include/Decriptor/ChanelPropriety.hpp \
     include/ClassMap.hpp \

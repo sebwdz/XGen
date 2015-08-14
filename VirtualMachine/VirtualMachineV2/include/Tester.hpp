@@ -1,11 +1,11 @@
 #ifndef TESTER_HPP
 #define TESTER_HPP
 
+#include        "VirtualMachine/VirtualMachine.hpp"
 #include        "Cell/CellClass.hpp"
 #include        "Cell/Brain.hpp"
-#include        "Environment.hpp"
 
-class                   Tester
+class                   Tester : public MachineTester
 {
 public:
     Tester();
@@ -15,12 +15,12 @@ public:
     void                                set_individu(GeneticalIndividu *ind);
     void                                set_view(MachineView *view);
     void                                exec();
+    Brain                               *get_brain();
 
 private:
     SMART(Brain)                        m_brain;
     GeneticalIndividu                   *m_ind;
     MachineView                         *m_view;
-    Environment                         *m_env;
 };
 
 #endif // TESTER_HPP

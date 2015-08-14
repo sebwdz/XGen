@@ -1,5 +1,5 @@
 
-#include        "Environment.hpp"
+#include        "Tester.hpp"
 #include        "Cell/Brain.hpp"
 #include        "BrainView.hpp"
 #include        <QX11Info>
@@ -15,7 +15,6 @@ BrainView::BrainView() : MachineViewWidget(), sf::RenderWindow()
 
     resize(800, 800);
     m_init = false;
-    m_env = new RenderWindow(sf::VideoMode(800, 600), "word");
 }
 
 BrainView::~BrainView()
@@ -27,9 +26,8 @@ void        BrainView::show_tester(MachineTester *tester)
 {
     Brain                   *brain;
     sf::View                view;
-    sf::Clock               time;
 
-    brain = CAST(Environment*)(tester)->get_brain();
+    brain = CAST(Tester*)(tester)->get_brain();
     clear();
     view = sf::View(sf::Vector2f(0, 0), sf::Vector2f(250, 250));
     view.zoom(1.5);
@@ -37,9 +35,6 @@ void        BrainView::show_tester(MachineTester *tester)
     setView(view);
     show_map(brain);
     show_module(brain);
-    m_env->clear();
-    CAST(Environment*)(tester)->show(m_env);
-    m_env->display();
     repaint();
     display();
 }
@@ -50,6 +45,7 @@ void        BrainView::show_map(ModuleClass *module)
     OBJECT_LIST::iterator                                                  obj;
     ClassMap                                                               *map;
 
+    usleep(200);
     map = module->get_map();
     for (it = map->get_begin(); it != map->get_end(); it++)
     {

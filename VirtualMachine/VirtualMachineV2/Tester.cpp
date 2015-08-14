@@ -2,16 +2,14 @@
 #include        <cmath>
 #include        "Tester.hpp"
 
-Tester::Tester()
+Tester::Tester() : MachineTester()
 {
     m_view = 0;
-    m_env = new Environment();
-    m_env->init();
 }
 
 Tester::~Tester()
 {
-    delete m_env;
+
 }
 
 void            Tester::set_individu(GeneticalIndividu *ind)
@@ -26,15 +24,30 @@ void            Tester::set_individu(GeneticalIndividu *ind)
     m_brain = SMART(Brain)(new Brain());
     m_brain->set_dna(ind);
     m_ind = ind;
-    m_env->set_brain(m_brain.get());
     for (int it = 0; it < 3; it++)
     {
         pos.second = (it * 65) - 75;
         pos.first = it == 1 ? 65 : 65;
-        m_env->add_module(node, pos, true);
+        add_module(node, pos, true);
         pos.first = it == 1 ? -65 : -65;
-        m_env->add_module(node, pos, false);
+        add_module(node, pos, false);
     }
+}
+
+void                                Tester::add_module(GeneticalNode *node, std::pair<float, float> &pos, bool sensor)
+{
+    SMART(Decriptor)                decript;
+    SMART(ModuleClass)              module;
+    std::string                     str("WHO");
+
+    module = SMART(ModuleClass)(new ModuleClass());
+    decript = SMART(Decriptor)(new Decriptor(module.get()));
+    decript->set_node(node);
+    module->add_object(decript);
+    module->set_parent(m_brain.get());
+    module->set_pos(pos);
+    module->get_line()->get_chan(CHANNEL_RANGE + Chanel::hash(str))->set_value(sensor ? 0 : 0);
+    m_brain->add_object(module);
 }
 
 void            Tester::set_view(MachineView *view)
@@ -44,28 +57,23 @@ void            Tester::set_view(MachineView *view)
 
 void            Tester::exec()
 {
-    float      fitness;
     int      cycle;
 
-    fitness = 0;
     if (m_view)
         m_view->lock();
     cycle = 0;
     while (cycle < 500)
     {
         m_brain->exec();
-        m_env->exec();
         cycle += 1;
         if (m_view && !(cycle % 5))
-            m_view->show_tester(m_env);
+            m_view->show_tester(this);
     }
     if (m_view)
         m_view->unlock();
-    fitness = m_env->get_food();
-    if (fitness < 0)
-        fitness = 0;
-    if (fitness > 1000)
-        fitness = 1000;
-    std::cout << fitness << std::endl;
-    m_ind->set_fitness(fitness);
+}
+
+Brain                               *Tester::get_brain()
+{
+    return (m_brain.get());
 }

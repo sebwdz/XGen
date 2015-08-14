@@ -35,8 +35,7 @@ void        Decriptor::catch_simple(unsigned int code, void *sig)
     ModuleClass     *parent;
     SMART(Object)   obj;
 
-    if (code == ATTACH &&
-            (!m_parent || CAST(Brain*)(m_parent)))
+    if (code == ATTACH && (!m_parent || CAST(Brain*)(m_parent)))
     {
         parent = static_cast<ModuleClass*>(sig);
         if ((obj = (CAST(ModuleClass*)(m_parent))->get_obj(this))) {

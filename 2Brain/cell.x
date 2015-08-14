@@ -29,7 +29,7 @@ Create_Cell<
 	)
 	inf ( @act 2
 		sup ( @wait 30
-			inf ( @duplic 1 set ( @duplic 10 )
+			inf ( @duplic 1 set ( @duplic 30 )
 				add ( @S_Cycle 1 )
 				set ( @needCreate 7 )
 				add ( @act 1 )

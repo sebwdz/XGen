@@ -3,7 +3,6 @@
 # define        CLASS_MAP_HPP
 
 # include        <boost/bimap.hpp>
-# include       "Object/Movable.hpp"
 
 # define        INV_DIR(X)      (LnkDir)(X & 1 ? X - 1 : X + 1)
 # define        MAP             boost::bimap<std::pair<int, int>, SMART(LnkCase)>

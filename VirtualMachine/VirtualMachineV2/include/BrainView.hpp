@@ -21,7 +21,6 @@ public:
 
 private:
 
-    RenderWindow    *m_env;
     bool        m_init;
 };
 

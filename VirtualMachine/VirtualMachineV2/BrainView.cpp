@@ -45,19 +45,21 @@ void        BrainView::show_map(ModuleClass *module)
     OBJECT_LIST::iterator                                                  obj;
     ClassMap                                                               *map;
 
-    usleep(200);
     map = module->get_map();
     for (it = map->get_begin(); it != map->get_end(); it++)
     {
         if (it->second->get_case())
         {
             sf::RectangleShape  rect;
-            rect.setFillColor(sf::Color(0, 200, 100, 130));
+            if (!module->get_parent())
+                rect.setFillColor(sf::Color(0, 200, 100, 130));
+            else
+                rect.setFillColor(sf::Color(255, 0, 0, 130));
             rect.setSize(sf::Vector2f(20, 20));
             rect.setPosition(it->second->get_pos().first * 20 - 20, it->second->get_pos().second * 20 - 20);
             draw(rect);
         }
-        else
+        else if (!module->get_parent())
         {
             sf::CircleShape circle;
             circle.setPosition(it->second->get_pos().first * 20 - 10, it->second->get_pos().second * 20 - 10);
@@ -67,7 +69,7 @@ void        BrainView::show_map(ModuleClass *module)
             draw(circle);
         }
     }
-    return ;
+    //return ;
     for (obj = module->get_begin(); obj != module->get_end(); obj++)
     {
         if (CAST(ModuleClass*)(obj->get()))

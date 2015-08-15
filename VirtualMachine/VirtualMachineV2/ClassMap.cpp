@@ -1,5 +1,5 @@
 
-
+#include        "ObjectMap.hpp"
 #include        "ClassMap.hpp"
 
 ClassMap::ClassMap()

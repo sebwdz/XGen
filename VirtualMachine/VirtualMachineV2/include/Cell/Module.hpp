@@ -3,7 +3,7 @@
 
 #include        "Object/Movable.hpp"
 #include        "Cell/Skeleton.hpp"
-#include        "ClassMap.hpp"
+#include        "Map/MapController.hpp"
 
 #define         OBJECT_LIST      std::list<SMART(Object)>
 
@@ -36,7 +36,7 @@ protected:
 
     Skeleton                    *m_skel;
     OBJECT_LIST                 m_obj;
-    ClassMap                    *m_map;
+    MapController               *m_map;
 };
 
 #endif // MODULE_HPP

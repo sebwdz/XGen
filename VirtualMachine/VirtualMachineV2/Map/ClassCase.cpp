@@ -1,15 +1,25 @@
 
 
-#include        "ClassMap.hpp"
+#include        "Map/ClassCase.hpp"
 
 ClassCase::ClassCase()
 {
-
+    m_parent = NULL;
 }
 
 ClassCase::~ClassCase()
 {
 
+}
+
+void                            ClassCase::set_parent(ClassCase *parent)
+{
+    m_parent = parent;
+}
+
+void                            ClassCase::set_size(int size)
+{
+    m_size = size;
 }
 
 void                            ClassCase::add_obj(SMART(ObjectMap) obj)
@@ -29,13 +39,23 @@ SMART(ObjectMap)                ClassCase::remove_obj(ObjectMap *obj)
         {
             res = *it;
             m_obj.erase(it--);
-            break;
+            return (res);
         }
     }
-    return (res);
+    return (SMART(ObjectMap)());
 }
 
 std::list<SMART(ObjectMap)> &ClassCase::get_obj()
 {
     return (m_obj);
+}
+
+int                         ClassCase::get_size()
+{
+    return (m_size);
+}
+
+ClassCase                   *ClassCase::get_parent()
+{
+    return (m_parent);
 }

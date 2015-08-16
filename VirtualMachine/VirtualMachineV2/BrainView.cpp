@@ -30,50 +30,50 @@ void        BrainView::show_tester(MachineTester *tester)
     brain = CAST(Tester*)(tester)->get_brain();
     clear();
     view = sf::View(sf::Vector2f(0, 0), sf::Vector2f(250, 250));
-    view.zoom(1.5);
+    view.zoom(3.5);
     view.setCenter(0, 0);
     setView(view);
-    show_map(brain);
+    show_map(brain->get_map());
     show_module(brain);
     repaint();
     display();
 }
 
-void        BrainView::show_map(ModuleClass *module)
+void        BrainView::show_map(ClassMap *map)
 {
     boost::bimap<std::pair<int, int>, SMART(LnkCase)>::left_map::iterator  it;
     OBJECT_LIST::iterator                                                  obj;
-    ClassMap                                                               *map;
+    int                                                                    size;
 
-    map = module->get_map();
+    size = map->get_size() / 5;
     for (it = map->get_begin(); it != map->get_end(); it++)
     {
         if (it->second->get_case())
         {
             sf::RectangleShape  rect;
-            if (!module->get_parent())
+            if (!map->get_parent())
                 rect.setFillColor(sf::Color(0, 200, 100, 130));
-            else
+            else if (!map->get_parent()->get_parent())
                 rect.setFillColor(sf::Color(255, 0, 0, 130));
-            rect.setSize(sf::Vector2f(20, 20));
-            rect.setPosition(it->second->get_pos().first * 20 - 20, it->second->get_pos().second * 20 - 20);
+            else
+                rect.setFillColor(sf::Color(0, 0, 255, 130));
+            rect.setSize(sf::Vector2f(size, size));
+            rect.setPosition(it->second->get_pos().first * size - size / 2,
+                             it->second->get_pos().second * size - size / 2);
             draw(rect);
         }
-        else if (!module->get_parent())
+        else// if (!map->get_parent())
         {
             sf::CircleShape circle;
-            circle.setPosition(it->second->get_pos().first * 20 - 10, it->second->get_pos().second * 20 - 10);
+            circle.setPosition(it->second->get_pos().first * size,
+                               it->second->get_pos().second * size);
             circle.setFillColor(sf::Color(0, 0, 200, 130));
-            circle.setRadius(5);
-            circle.setOrigin(5, 5);
+            circle.setRadius(3);
+            circle.setOrigin(3, 3);
             draw(circle);
         }
-    }
-    //return ;
-    for (obj = module->get_begin(); obj != module->get_end(); obj++)
-    {
-        if (CAST(ModuleClass*)(obj->get()))
-            show_map(CAST(ModuleClass*)(obj->get()));
+        if (CAST(ClassMap*)(it->second->get_case()))
+            show_map(CAST(ClassMap*)(it->second->get_case()));
     }
 }
 

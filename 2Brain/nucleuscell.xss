@@ -3,7 +3,7 @@ var (
 	&NclRpls (
 		type ( to rpls mv )
 		act ( @NclChan @NclChan )
-		dst ( 50 )
+		dst ( 80 )
 		pw ( 30 )
 	)
 )

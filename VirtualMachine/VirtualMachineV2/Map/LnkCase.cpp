@@ -1,5 +1,5 @@
 
-#include        "ClassMap.hpp"
+#include        "Map/ClassMap.hpp"
 
 LnkCase::LnkCase(LnkDir border, ClassMap *map)
 {

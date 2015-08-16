@@ -6,7 +6,7 @@
 ModuleClass::ModuleClass(Object *parent) : Movable(parent)
 {
     m_skel = new Skeleton();
-    m_map = new ClassMap();
+    m_map = new MapController();
     m_sig.insert(std::make_pair(KILL, (SIG_CATCH)(&ModuleClass::catch_kill)));
 }
 
@@ -69,7 +69,7 @@ OBJECT_LIST::iterator       ModuleClass::get_end()
 
 ClassMap    *ModuleClass::get_map()
 {
-    return (m_map);
+    return (m_map->get_map());
 }
 
 void        ModuleClass::exec()
@@ -107,6 +107,7 @@ void        ModuleClass::catch_signals()
             if (obj->get()->get_parent() != this)
             {
                 rm = obj--;
+                m_map->get_map()->remove_object(CAST(ObjectMap*)(rm->get()));
                 m_obj.erase(rm);
             }
         }

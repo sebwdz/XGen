@@ -1,5 +1,5 @@
 
-#include        "ClassMap.hpp"
+#include        "Map/ClassMap.hpp"
 
 ObjectMap::ObjectMap(Object *parent) : Object(parent)
 {

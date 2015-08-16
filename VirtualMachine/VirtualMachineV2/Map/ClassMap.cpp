@@ -1,8 +1,7 @@
 
-#include        "ObjectMap.hpp"
-#include        "ClassMap.hpp"
+#include        "Map/ClassMap.hpp"
 
-ClassMap::ClassMap()
+ClassMap::ClassMap() : ClassCase()
 {
     m_begin = SMART(LnkCase)(new LnkCase(ALL, this));
     m_begin->set_pos(std::make_pair(0, 0));
@@ -20,24 +19,28 @@ void        ClassMap::add_obj(SMART(ObjectMap) obj)
     boost::bimap<std::pair<int, int>, SMART(LnkCase)>::left_map::iterator  it;
 
     pos = obj->get_pos();
-    if (pos.first > 0)
-        pos.first += 20;
-    if (pos.second > 0)
-        pos.second += 20;
-    pos.first = pos.first / 20;
-    pos.second = pos.second / 20;
+    pos.first += pos.first < 0 ? -m_size / 10 : m_size / 10;
+    pos.second += pos.second < 0 ? -m_size / 10  : m_size / 10;
+    pos.first = pos.first / (m_size / 5);
+    pos.second = pos.second / (m_size / 5);
     if ((it = m_map.left.find(pos)) != m_map.left.end())
         lnk = it->second.get();
     else
         lnk = get_lnk(pos);
     if (!lnk->get_case())
     {
-        lnk->set_case(new ClassCase());
+        if (m_size > 50)
+            lnk->set_case(new ClassMap());
+        else
+            lnk->set_case(new ClassCase());
+        lnk->get_case()->set_parent(this);
+        lnk->get_case()->set_size(m_size / 5);
         cross_lnk(lnk, LEFT);
         cross_lnk(lnk, RIGHT);
         cross_lnk(lnk, UP);
         cross_lnk(lnk, DOWN);
     }
+    ClassCase::add_obj(obj);
     lnk->get_case()->add_obj(obj);
 }
 
@@ -120,7 +123,12 @@ SMART(ObjectMap)        ClassMap::remove_object(ObjectMap *obj)
     ClassCase               *mycase;
 
     mycase = obj->get_cases();
-    res = mycase->remove_obj(obj);
+    while (mycase)
+    {
+        res = mycase->remove_obj(obj);
+        mycase = mycase->get_parent();
+    }
+    ClassCase::remove_obj(obj);
     return (res);
 }
 
@@ -141,6 +149,8 @@ void        ClassMap::clean()
     it = m_map.begin();
     while (it != m_map.end())
     {
+        if (CAST(ClassMap*)(it->right->get_case()))
+            CAST(ClassMap*)(it->right->get_case())->clean();
         if (it->right->get_case() && !it->right->get_case()->get_obj().size())
         {
             delete it->right->get_case();

@@ -23,6 +23,7 @@ public:
     LnkCase                 *get_dir(LnkDir dir);
     ClassCase               *get_case();
     LnkDir                  get_border();
+    ClassMap                *get_map();
 
 private:
     LnkCase                 *m_dir[4];

@@ -39,7 +39,7 @@ var (
 		type ( oth atr chng )
 		act ( @NclChan @CheckAttach )
 		dst ( 20 )
-		pw ( 40 )
+		pw ( 20 )
 	)
 )
 >

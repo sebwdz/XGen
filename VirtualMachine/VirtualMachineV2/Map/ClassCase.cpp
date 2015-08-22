@@ -1,6 +1,6 @@
 
 
-#include        "Map/ClassCase.hpp"
+#include        "Map/ClassMap.hpp"
 
 ClassCase::ClassCase()
 {
@@ -12,7 +12,7 @@ ClassCase::~ClassCase()
 
 }
 
-void                            ClassCase::set_parent(ClassCase *parent)
+void                            ClassCase::set_lnk(LnkCase *parent)
 {
     m_parent = parent;
 }
@@ -55,7 +55,16 @@ int                         ClassCase::get_size()
     return (m_size);
 }
 
-ClassCase                   *ClassCase::get_parent()
+LnkCase                   *ClassCase::get_lnk()
 {
     return (m_parent);
+}
+
+void                        ClassCase::get_move_line(Movable *move)
+{
+    LnkCase                 *lnk;
+
+    /* check if need to interact */
+    if (lnk = get_lnk())
+        lnk->get_map()->get_move_line(move);
 }

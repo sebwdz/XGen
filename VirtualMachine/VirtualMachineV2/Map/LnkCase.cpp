@@ -36,12 +36,12 @@ LnkCase     *LnkCase::get_next(LnkDir dir, std::pair<int, int> &pos, bool create
              (!get_case() || (m_dir[dir] && m_dir[dir]->get_case()))) &&
                 !create)
             return (this);
-        if (pos.first == 0 || pos.second == 0)
+        tmp.first = dir > 1 ? pos.first : m_pos.first;
+        tmp.second = dir < 2 ? pos.second : m_pos.second;
+        if (tmp.first == 0 || tmp.second == 0)
             lnk = new LnkCase(dir, m_map);
         else
             lnk = new LnkCase(NONE, m_map);
-        tmp.first = dir > 1 ? pos.first : m_pos.first;
-        tmp.second = dir < 2 ? pos.second : m_pos.second;
         lnk->set_pos(tmp);
         m_map->insert(lnk);
         lnk->set_dir(INV_DIR(dir), this);
@@ -102,4 +102,9 @@ ClassCase               *LnkCase::get_case()
 LnkDir                  LnkCase::get_border()
 {
     return (m_border);
+}
+
+ClassMap                *LnkCase::get_map()
+{
+    return (m_map);
 }

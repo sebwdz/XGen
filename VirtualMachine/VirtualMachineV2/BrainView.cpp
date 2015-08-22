@@ -30,7 +30,7 @@ void        BrainView::show_tester(MachineTester *tester)
     brain = CAST(Tester*)(tester)->get_brain();
     clear();
     view = sf::View(sf::Vector2f(0, 0), sf::Vector2f(250, 250));
-    view.zoom(3.5);
+    view.zoom(4.5);
     view.setCenter(0, 0);
     setView(view);
     show_map(brain->get_map());
@@ -51,9 +51,9 @@ void        BrainView::show_map(ClassMap *map)
         if (it->second->get_case())
         {
             sf::RectangleShape  rect;
-            if (!map->get_parent())
+            if (!map->get_lnk() || !map->get_lnk()->get_map())
                 rect.setFillColor(sf::Color(0, 200, 100, 130));
-            else if (!map->get_parent()->get_parent())
+            else if (!map->get_lnk()->get_map()->get_lnk() || !map->get_lnk()->get_map()->get_lnk()->get_map())
                 rect.setFillColor(sf::Color(255, 0, 0, 130));
             else
                 rect.setFillColor(sf::Color(0, 0, 255, 130));
@@ -61,16 +61,6 @@ void        BrainView::show_map(ClassMap *map)
             rect.setPosition(it->second->get_pos().first * size - size / 2,
                              it->second->get_pos().second * size - size / 2);
             draw(rect);
-        }
-        else// if (!map->get_parent())
-        {
-            sf::CircleShape circle;
-            circle.setPosition(it->second->get_pos().first * size,
-                               it->second->get_pos().second * size);
-            circle.setFillColor(sf::Color(0, 0, 200, 130));
-            circle.setRadius(3);
-            circle.setOrigin(3, 3);
-            draw(circle);
         }
         if (CAST(ClassMap*)(it->second->get_case()))
             show_map(CAST(ClassMap*)(it->second->get_case()));

@@ -23,7 +23,6 @@ int             main(int ac, char **av)
             return (1);
         std::cout << "succes" << std::endl;
         name = av[1];
-        name = "../../2Brain/out.gen";
         pool = new GeneticalIndividu();
         pool->load_file(name);
     } catch (std::string &str)

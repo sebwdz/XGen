@@ -21,10 +21,11 @@ public:
                 void                            insert(LnkCase *lnk);
                 boost::shared_ptr<ObjectMap>    remove_object(ObjectMap *obj);
                 void                            move_object(ObjectMap *obj);
-                LnkCase                         *get_lnk(std::pair<int, int> &pos);
+                LnkCase                         *make_lnk(std::pair<int, int> &pos);
                 void                            clean();
                 LEFT_MAP::iterator              get_begin();
                 LEFT_MAP::iterator              get_end();
+                void                            get_move_line(Movable *move);
 protected:
 
     SMART(LnkCase)                                    m_begin;

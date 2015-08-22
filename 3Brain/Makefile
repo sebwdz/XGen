@@ -11,4 +11,4 @@ BEGIN =		Cell
 
 all:
 	$(CC) $(BEGIN) $(TARGET) $(SRC) $(INTER)
-	make -C test/
+

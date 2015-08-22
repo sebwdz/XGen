@@ -17,6 +17,7 @@ void            MapController::add_obj(SMART(ObjectMap) obj)
 {
     ClassMap            *map;
     ClassCase           *tmp;
+    LnkCase             *lnk;
     std::pair<int, int> pos(0, 0);
     std::list<SMART(ObjectMap)>::iterator   it;
 
@@ -25,14 +26,15 @@ void            MapController::add_obj(SMART(ObjectMap) obj)
     {
         map = new ClassMap();
         map->set_size(m_map->get_size() * 5);
-        map->get_lnk(pos)->set_case(m_map);
+        lnk = map->make_lnk(pos);
+        lnk->set_case(m_map);
         for (it = m_map->get_obj().begin(); it != m_map->get_obj().end(); it++)
         {
             tmp = it->get()->get_cases();
             map->ClassCase::add_obj(*it);
             it->get()->set_case(tmp);
         }
-        m_map->set_parent(map);
+        m_map->set_lnk(lnk);
         m_map = map;
     }
     m_map->add_obj(obj);

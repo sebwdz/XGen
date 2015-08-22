@@ -1,7 +1,9 @@
 #ifndef CLASSCASE_HPP
 #define CLASSCASE_HPP
 
-# include                       "Object/ObjectMap.hpp"
+# include                       "Object/Movable.hpp"
+
+typedef class                   LnkCase LnkCase;
 
 class                               ClassCase
 {
@@ -9,18 +11,19 @@ public:
     ClassCase();
     virtual ~ClassCase();
 
-    void                                    set_parent(ClassCase *paent);
+    void                                    set_lnk(LnkCase *paent);
     void                                    set_size(int size);
     virtual void                            add_obj(SMART(ObjectMap)   obj);
     virtual SMART(ObjectMap)                remove_obj(ObjectMap *obj);
     std::list<SMART(ObjectMap)>             &get_obj();
     int                                     get_size();
-    ClassCase                               *get_parent();
+    LnkCase                                 *get_lnk();
+    virtual void                            get_move_line(Movable *move);
 
 protected:
     std::list<SMART(ObjectMap)>     m_obj;
     int                             m_size;
-    ClassCase                       *m_parent;
+    LnkCase                       *m_parent;
 };
 
 

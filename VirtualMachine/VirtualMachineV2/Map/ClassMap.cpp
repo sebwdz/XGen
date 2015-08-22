@@ -26,14 +26,14 @@ void        ClassMap::add_obj(SMART(ObjectMap) obj)
     if ((it = m_map.left.find(pos)) != m_map.left.end())
         lnk = it->second.get();
     else
-        lnk = get_lnk(pos);
+        lnk = make_lnk(pos);
     if (!lnk->get_case())
     {
-        if (m_size > 50)
+        if (m_size > 100)
             lnk->set_case(new ClassMap());
         else
             lnk->set_case(new ClassCase());
-        lnk->get_case()->set_parent(this);
+        lnk->get_case()->set_lnk(lnk);
         lnk->get_case()->set_size(m_size / 5);
         cross_lnk(lnk, LEFT);
         cross_lnk(lnk, RIGHT);
@@ -76,7 +76,7 @@ void        ClassMap::cross_lnk(LnkCase *lnk, LnkDir dir)
     }
 }
 
-LnkCase     *ClassMap::get_lnk(std::pair<int, int> &pos)
+LnkCase     *ClassMap::make_lnk(std::pair<int, int> &pos)
 {
     LnkCase                         *lnk[2];
     LnkCase                         *res;
@@ -120,13 +120,13 @@ void                    ClassMap::insert(LnkCase *lnk)
 SMART(ObjectMap)        ClassMap::remove_object(ObjectMap *obj)
 {
     SMART(ObjectMap)        res;
-    ClassCase               *mycase;
+    LnkCase               *mycase;
 
-    mycase = obj->get_cases();
+    mycase = obj->get_cases()->get_lnk();
     while (mycase)
     {
-        res = mycase->remove_obj(obj);
-        mycase = mycase->get_parent();
+        res = mycase->get_case()->remove_obj(obj);
+        mycase = mycase->get_map()->get_lnk();
     }
     ClassCase::remove_obj(obj);
     return (res);
@@ -184,4 +184,8 @@ LEFT_MAP::iterator              ClassMap::get_begin()
 LEFT_MAP::iterator              ClassMap::get_end()
 {
     return (m_map.left.end());
+}
+
+void                            ClassMap::get_move_line(Movable *move)
+{
 }

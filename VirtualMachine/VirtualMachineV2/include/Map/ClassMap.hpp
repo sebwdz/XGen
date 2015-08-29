@@ -25,7 +25,7 @@ public:
                 void                            clean();
                 LEFT_MAP::iterator              get_begin();
                 LEFT_MAP::iterator              get_end();
-                void                            get_move_line(Movable *move);
+                void                            get_move_line(MovableLine *move, ClassCase *from, Object *obj);
 protected:
 
     SMART(LnkCase)                                    m_begin;

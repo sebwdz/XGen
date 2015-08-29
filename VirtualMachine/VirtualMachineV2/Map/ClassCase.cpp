@@ -60,11 +60,17 @@ LnkCase                   *ClassCase::get_lnk()
     return (m_parent);
 }
 
-void                        ClassCase::get_move_line(Movable *move)
+void                        ClassCase::get_move_line(MovableLine *move, ClassCase *from, Object *obj)
 {
-    LnkCase                 *lnk;
+    std::list<SMART(ObjectMap)>::iterator it;
 
-    /* check if need to interact */
-    if (lnk = get_lnk())
-        lnk->get_map()->get_move_line(move);
+    for (it = m_obj.begin(); it != m_obj.end(); it++)
+    {
+        if (CAST(Movable*)(it->get()))
+            CAST(Movable*)(it->get())->get_move_line(move, CAST(Movable*)(obj));
+    }
+    if (m_parent && from != m_parent->get_map())
+    {
+        m_parent->get_map()->get_move_line(move, this, obj);
+    }
 }

@@ -18,7 +18,7 @@ public:
     std::list<SMART(ObjectMap)>             &get_obj();
     int                                     get_size();
     LnkCase                                 *get_lnk();
-    virtual void                            get_move_line(Movable *move);
+    virtual void                            get_move_line(MovableLine *move, ClassCase *from, Object *obj);
 
 protected:
     std::list<SMART(ObjectMap)>     m_obj;

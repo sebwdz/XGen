@@ -186,6 +186,7 @@ LEFT_MAP::iterator              ClassMap::get_end()
     return (m_map.left.end());
 }
 
-void                            ClassMap::get_move_line(Movable *move)
+void                            ClassMap::get_move_line(MovableLine *move, ClassCase *from, Object *obj)
 {
+    ClassCase::get_move_line(move, from, obj);
 }

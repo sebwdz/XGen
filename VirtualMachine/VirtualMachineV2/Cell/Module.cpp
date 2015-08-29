@@ -150,8 +150,8 @@ void        ModuleClass::get_move_line(MovableLine *move, Object *from)
     OBJECT_LIST::iterator   it;
 
     if (from == m_parent)
-      filter(move, true);
-    if (move->m_inter.size())
+      move->filter(this, true);
+    if (move->get_inter().size())
     {
         for (it = m_obj.begin(); it != m_obj.end(); it++)
         {
@@ -162,7 +162,7 @@ void        ModuleClass::get_move_line(MovableLine *move, Object *from)
             }
         }
     }
-    filter(move, false);
+    move->filter(this, false);
     Movable::get_move_line(move, from);
 }
 

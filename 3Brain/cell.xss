@@ -1,21 +1,10 @@
 Cell_Base_Chan<
-Var (
+var (
 	&Rpls (
 		type ( oth to mv )
 		act ( @cellInit @cellInit )
 		dst ( 100 )
-		pw ( 50 )
-	)
-)
->
-
-Cell_Impulse<
-var (
-	&Atr (
-		type ( oth atr mv )
-		act ( @cellInit @Impulse )
-		dst ( 190 )
-		pw ( 0 )
+		pw ( 10 )
 	)
 )
 >

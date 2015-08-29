@@ -40,7 +40,8 @@ SOURCES += \
     Map/ClassCase.cpp \
     Map/ClassMap.cpp \
     Map/LnkCase.cpp \
-    Map/MapController.cpp
+    Map/MapController.cpp \
+    Object/MovableLine.cpp
 
 HEADERS += \
     include/Cell/Module.hpp \
@@ -64,4 +65,5 @@ HEADERS += \
     include/Map/ClassMap.hpp \
     include/Map/LnkCase.hpp \
     include/Map/ClassCase.hpp \
-    include/Map/MapController.hpp
+    include/Map/MapController.hpp \
+    include/Object/MovableLine.hpp

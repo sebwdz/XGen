@@ -68,11 +68,12 @@ void            Tester::exec()
     {
         m_brain->exec();
         cycle += 1;
-        if (m_view && !(cycle % 5))
+        if (m_view && !(cycle % 1))
             m_view->show_tester(this);
-        if (!(cycle % 10)) {
+        if (!(cycle % 10))
+        {
             gettimeofday(&_time[1], NULL);
-            std::cout << 10.0 / (float)((_time[1].tv_sec + _time[1].tv_usec / 1000000.0) - (_time[0].tv_sec + _time[0].tv_usec / 1000000.0)) << "c/s" << std::endl;
+            std::cout << 10.0 / (float)((_time[1].tv_sec + _time[1].tv_usec / 1000000.0) - (_time[0].tv_sec + _time[0].tv_usec / 1000000.0)) << " c/s" << std::endl;
             gettimeofday(&_time[0], NULL);
         }
     }

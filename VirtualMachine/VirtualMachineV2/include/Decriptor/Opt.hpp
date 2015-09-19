@@ -3,9 +3,9 @@
 
 /* range parameter */
 
-#define         OPT_RANGE       200
-#define         OPT_CHAN_RANGE  250
-#define         CHANNEL_RANGE   280
+#define         OPT_RANGE       0
+#define         OPT_CHAN_RANGE  0
+#define         CHANNEL_RANGE   0
 #define         VALUE_RANGE     0
 
 /* Set opt */
@@ -78,5 +78,13 @@
 #define         CREATE_CHANNEL  1 + CHANNEL_RANGE
 #define         JMP_CHAN        CHANNEL_RANGE
 #define         WEIGHT_CHAN     19 + CHANNEL_RANGE
+
+/* Node type */
+
+#define         INSTRU          0
+#define         GLOBAL_CHAN     1
+#define         LOCAL_CHAN      2
+#define         DECRIPT_CHAN    3
+#define         VALUE           4
 
 #endif // OPT_HPP

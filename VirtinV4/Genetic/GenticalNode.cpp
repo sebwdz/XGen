@@ -4,6 +4,8 @@
 GeneticalNode::GeneticalNode(GeneticObj *parent) : GeneticObj(parent)
 {
     m_value = 0;
+    m_type = 0;
+    m_function = 0;
     if (parent)
     {
         set_propriety(parent->get_propriety());
@@ -35,19 +37,38 @@ void            GeneticalNode::set_value(unsigned int value)
     m_value = value;
 }
 
+void            GeneticalNode::set_type(unsigned char type)
+{
+    m_type = type;
+}
+
+void            GeneticalNode::set_function(int (Decriptor::*function)(GeneticalNode*))
+{
+    m_function = function;
+}
+
 unsigned int    GeneticalNode::get_value()
 {
     return (m_value);
 }
 
+unsigned char   GeneticalNode::get_type()
+{
+    return (m_type);
+}
+
+int             (Decriptor::*GeneticalNode::get_function())(GeneticalNode*)
+{
+    return (m_function);
+}
+
 void        GeneticalNode::load(std::ifstream &stream)
 {
-    int     nb;
+    unsigned int     nb;
 
-    if (!m_parent)
-        GeneticObj::load(stream);
-    stream >> m_value;
-    stream >> nb;
+    stream.read(reinterpret_cast<char*>(&m_value), sizeof(unsigned int));
+    stream.read(reinterpret_cast<char*>(&m_type), sizeof(unsigned char));
+    stream.read(reinterpret_cast<char*>(&nb), sizeof(unsigned int));
     for (int it = 0; it < nb; it++)
     {
         m_son.push_back(SMART(GeneticalNode)(new GeneticalNode(this)));
@@ -58,11 +79,12 @@ void        GeneticalNode::load(std::ifstream &stream)
 void        GeneticalNode::save(std::ofstream &stream)
 {
     OBJ_IT it;
+    unsigned int    size;
 
-    if (!m_parent)
-        GeneticObj::save(stream);
-    stream << m_value << " ";
-    stream << m_son.size() << std::endl;
+    size = m_son.size();
+    stream.write(reinterpret_cast<const char*>(&m_value), sizeof(unsigned int));
+    stream.write(reinterpret_cast<const char*>(&m_type), sizeof(unsigned char));
+    stream.write(reinterpret_cast<const char*>(&size), sizeof(unsigned int));
     for (it = m_son.begin(); it != m_son.end(); it++)
     {
         (*it)->save(stream);

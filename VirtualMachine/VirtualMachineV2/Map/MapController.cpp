@@ -4,7 +4,7 @@
 MapController::MapController()
 {
     m_map = new ClassMap();
-    m_map->set_size(100);
+    m_map->set_size(150);
 }
 
 
@@ -43,7 +43,31 @@ void            MapController::add_obj(SMART(ObjectMap) obj)
 void            MapController::move_object(ObjectMap *obj)
 {
     SMART(ObjectMap)    res;
+    ClassCase*          mcase;
+    std::pair<int, int> pos;
 
+    mcase = obj->get_cases();
+    while (mcase && mcase->get_lnk())
+    {
+        pos = obj->get_pos();
+        pos.first += pos.first < 0 ? -mcase->get_size() / 2 : mcase->get_size() / 2;
+        pos.second += pos.second < 0 ? -mcase->get_size() / 2  : mcase->get_size() / 2;
+        pos.first /= mcase->get_size();
+        pos.second /= mcase->get_size();
+        if (pos.first == mcase->get_lnk()->get_pos().first &&
+                pos.second == mcase->get_lnk()->get_pos().second)
+        {
+            if (mcase != obj->get_cases())
+            {
+                res = mcase->ClassCase::remove_obj(obj);
+                mcase->add_obj(res);
+            }
+            return ;
+        }
+        else
+            mcase->ClassCase::remove_obj(obj);
+        mcase = mcase->get_lnk()->get_map();
+    }
     res = remove_object(obj);
     add_obj(res);
 }

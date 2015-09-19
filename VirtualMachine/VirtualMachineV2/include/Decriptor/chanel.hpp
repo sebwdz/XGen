@@ -3,6 +3,7 @@
 
 #include        <iostream>
 #include        <list>
+#include        "Monitor.hpp"
 
 class       Chanel
 {

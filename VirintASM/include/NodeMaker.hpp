@@ -24,7 +24,7 @@ public:
     void            read_data(std::ifstream &file);
     void            dasm(std::ofstream &file, GeneticalNode *node);
     void            make_node(std::string &name, std::string &str);
-    unsigned int    get_value(std::string &value);
+    std::pair<unsigned char, unsigned int>    get_value(std::string &value);
     std::string     get_value(unsigned int value);
     boost::shared_ptr<GeneticalNode> read_node(std::string &data, std::size_t &pos, std::string &str);
     void            check_pile(NodeData *data);

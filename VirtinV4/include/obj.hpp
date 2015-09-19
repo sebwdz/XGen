@@ -2,13 +2,13 @@
 #define OBJ_HPP
 
 #include    <fstream>
-#include    <list>
+#include    <vector>
 #include    <boost/smart_ptr/shared_ptr.hpp>
 
 #define     SMART(X) boost::shared_ptr<X>
 #define     CAST(X)  dynamic_cast<X>
 
-#define     OBJ_IT  std::list<SMART(ObjClass)>::iterator
+#define     OBJ_IT  std::vector<SMART(ObjClass)>::iterator
 
 class       ObjClass
 {
@@ -29,13 +29,12 @@ public:
 
     void            clear();
 
-    OBJ_IT          get_begin();
-    OBJ_IT          get_end();
+    std::vector<SMART(ObjClass)>    &get_son();
 
 protected:
 
     ObjClass                          *m_parent;
-    std::list<SMART(ObjClass)>        m_son;
+    std::vector<SMART(ObjClass)>        m_son;
 
 };
 

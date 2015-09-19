@@ -1,31 +1,31 @@
 MAIN<  
 0 (  
-	INF ( @WHO 10 :SENSOR )
-	SUP ( @WHO 9 :ACT )
-	INF ( @it 1 ADD ( @it 1 )
-		SET ( @IsAct 10 )
+	inf ( @WHO 10 :SENSOR )
+	sup ( @WHO 9 :ACT )
+	inf ( @it 1 add ( @it 1 )
+		set ( @IsAct 10 )
 	)
-	SET ( @Attach 0 )
-	SET ( @CheckAttach 10 )
-	INF ( @IsAct 7 SET ( @Attach 20 ) )
-	SUP ( @Attach 0 SET ( @CheckAttach 20 ) )
+	set ( @Attach 0 )
+	set ( @CheckAttach 10 )
+	inf ( @IsAct 7 set ( @Attach 20 ) )
+	sup ( @Attach 0 set ( @CheckAttach 20 ) )
 )
 >  
   
 SENSOR<
 0 (  
-	SET( @Impulse @RES )  
-	SET ( @RES 0 )  
-	SET ( @Base 0 )
+	set ( @Impulse @RES )  
+	set ( @RES 0 )  
+	set ( @Base 0 )
 )
 >  
   
 ACT<  
 0 (  
-	SUP ( @Impulse 0  
-		SET ( @RES )  
-		SET ( @Impulse 0 )
+	sup ( @Impulse 0  
+		set ( @RES )  
+		set ( @Impulse 0 )
 	)  
-	SET ( @Base 10 ) 
+	set ( @Base 10 ) 
 )  
 >  

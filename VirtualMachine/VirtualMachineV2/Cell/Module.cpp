@@ -48,13 +48,6 @@ void                        ModuleClass::make_skeleton()
         }
     }
     m_skel->finish();
-    m_pos = m_skel->get_pos();
-    for (it = m_obj.begin(); it != m_obj.end(); it++)
-    {
-        if (CAST(Decriptor*)(it->get()) && !CAST(Brain*)(this))
-            it->get()->set_pos(m_pos);
-    }
-    m_map->clean();
 }
 
 OBJECT_LIST::iterator       ModuleClass::get_begin()
@@ -76,8 +69,6 @@ void        ModuleClass::exec()
 {
     OBJECT_LIST::iterator    it;
 
-    if (m_state == STATE_EXEC)
-        return ;
     for (it = m_obj.begin(); it != m_obj.end(); it++)
         (*it)->exec();
     make_move_line();
@@ -143,6 +134,7 @@ void        ModuleClass::exec_move()
         }
     }
     Movable::exec_move();
+    cal_pos();
 }
 
 void        ModuleClass::get_move_line(MovableLine *move, Object *from)
@@ -168,11 +160,14 @@ void        ModuleClass::get_move_line(MovableLine *move, Object *from)
 
 void        ModuleClass::catch_simple(unsigned int code, void *sig)
 {
+    (void)code;
+    (void)sig;
 }
 
-void        ModuleClass::catch_duplic(unsigned int, void *sig)
+void        ModuleClass::catch_duplic(unsigned int code, void *sig)
 {
-
+    (void)code;
+    (void)sig;
 }
 
 void        ModuleClass::catch_kill(unsigned int code, void *sig)
@@ -196,4 +191,35 @@ void        ModuleClass::catch_kill(unsigned int code, void *sig)
     }
     m_map->remove_object(CAST(ObjectMap*)(it->get()));
     m_obj.erase(it);
+}
+
+void                    ModuleClass::cal_pos()
+{
+    OBJECT_LIST::iterator   it;
+    std::pair<float, float> pos;
+    int                     nb;
+
+    pos.first = 0;
+    pos.second = 0;
+    nb = 0;
+    for (it = m_obj.begin(); it != m_obj.end(); it++)
+    {
+        if (CAST(ModuleClass*)(it->get())) {
+            nb++;
+            pos.first += it->get()->get_pos().first;
+            pos.second += it->get()->get_pos().second;
+        }
+    }
+    if (nb)
+    {
+        pos.first /= nb;
+        pos.second /= nb;
+        m_pos = pos;
+    }
+    for (it = m_obj.begin(); it != m_obj.end(); it++)
+    {
+        if (CAST(Decriptor*)(it->get()) && !CAST(Brain*)(this))
+            it->get()->set_pos(m_pos);
+    }
+    m_map->clean();
 }

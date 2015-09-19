@@ -10,7 +10,7 @@
 #include    "Opt.hpp"
 
 #define     USE_LIST        boost::unordered_map<unsigned int, Chanel*>
-#define     SIGNALS_LIST    boost::unordered_map<unsigned int, std::list<void*> >
+#define     SIGNALS_LIST    boost::unordered_map<unsigned int, void* >
 
 class               LineDecript
 {
@@ -21,9 +21,10 @@ public:
 
     void                    get_ready();
     Chanel                  *get_chan(unsigned int ref);
+    unsigned int            get_value(unsigned int ref, bool use = false);
     ChanPropriety           *get_prop(unsigned int ref);
     void                    add_signal(unsigned int value, void *ptr);
-    std::list<void*>        &get_signal(unsigned int signal);
+    void                    *get_signal(unsigned int signal);
     void                    shared_to_line(LineDecript *line);
     USE_LIST::iterator      get_begin();
     USE_LIST::iterator      get_end();

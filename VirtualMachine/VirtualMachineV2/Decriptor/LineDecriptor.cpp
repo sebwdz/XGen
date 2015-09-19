@@ -19,25 +19,37 @@ void                LineDecript::get_ready()
 
 void                LineDecript::add_signal(unsigned int value, void *ptr)
 {
-    SIGNALS_LIST::iterator it;
+    SIGNALS_LIST::iterator  it;
 
-    it = m_signals.find(value);
-    if (it == m_signals.end())
+    if ((it = m_signals.find(value)) != m_signals.end())
     {
-        m_signals.insert(std::make_pair(value, std::list<void*>()));
-        it = m_signals.find(value);
+        if (it->second)
+            return ;
     }
-    it->second.push_back(ptr);
+    m_signals[value] = ptr;
 }
 
-std::list<void *> &LineDecript::get_signal(unsigned int signal)
+void                *LineDecript::get_signal(unsigned int signal)
 {
-    static std::list<void*> res;
+    void            *res;
 
-    if (m_signals.find(signal) != m_signals.end())
-        return (m_signals[signal]);
+    res = NULL;
+    if (m_signals.find(signal) != m_signals.end()) {
+        res = m_signals[signal];
+        m_signals[signal] = NULL;
+    }
     return (res);
 }
+
+ unsigned int            LineDecript::get_value(unsigned int ref, bool use)
+ {
+     USE_LIST::iterator it;
+    if ((it = m_chan.find(ref)) == m_chan.end())
+        return (use ? 1 : 0);
+    if (!use)
+        return (it->second->get_value());
+    return (it->second->get_use() ? 1 : 0);
+ }
 
 void                    LineDecript::shared_to_line(LineDecript *line)
 {
@@ -54,6 +66,8 @@ void                    LineDecript::shared_to_line(LineDecript *line)
         }
     }
 }
+
+
 
 Chanel              *LineDecript::get_chan(unsigned int ref)
 {

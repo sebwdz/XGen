@@ -21,14 +21,14 @@ public:
     void                indject(GeneticalNode *node);
 
     virtual void        exec(int cycle);
-    void                move_population(std::list<SMART(ObjClass)> &to);
+    void                move_population(std::vector<SMART(ObjClass)> &to);
     void                add_individu(SMART(GeneticalIndividu) ind);
 
     void                sort_list();
     void                kill_weak();
     void                selection();
 
-    void                cross(std::list<SMART(ObjClass) > &node,
+    void                cross(std::vector<SMART(ObjClass) > &node,
                             GeneticalIndividu *indiv1, GeneticalIndividu *indiv2);
 
     GeneticalIndividu   *get_individu(double value);

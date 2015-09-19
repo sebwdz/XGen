@@ -11,16 +11,14 @@ int make(std::vector<std::string> &conf)
     std::ofstream   out;
     int             it;
     std::string     str;
-    bool            asmn;
-    GeneticalNode   *node;
 
     try
     {
         if (conf.size() < 3)
             throw (std::string("[confa][out][filename]..."));
         it = 2;
-        data = new NodeMaker(conf[0], asmn);
-        while (it < (int)conf.size() && asmn)
+        data = new NodeMaker(conf[0], true);
+        while (it < (int)conf.size())
         {
             file.open(conf[it].c_str());
             if (!file.is_open())

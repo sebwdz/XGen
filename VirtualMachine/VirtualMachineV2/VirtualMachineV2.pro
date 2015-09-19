@@ -66,4 +66,5 @@ HEADERS += \
     include/Map/LnkCase.hpp \
     include/Map/ClassCase.hpp \
     include/Map/MapController.hpp \
-    include/Object/MovableLine.hpp
+    include/Object/MovableLine.hpp \
+    include/Monitor.hpp

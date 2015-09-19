@@ -48,12 +48,7 @@ SMART(ObjClass) ObjClass::copy(SMART(ObjClass) cp)
     return (cp);
 }
 
-OBJ_IT          ObjClass::get_begin()
+std::vector<SMART(ObjClass)>    &ObjClass::get_son()
 {
-    return (m_son.begin());
-}
-
-OBJ_IT          ObjClass::get_end()
-{
-    return (m_son.end());
+    return (m_son);
 }

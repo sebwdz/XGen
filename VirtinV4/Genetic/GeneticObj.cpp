@@ -16,7 +16,7 @@ GeneticObj::~GeneticObj()
 
 void    GeneticObj::set_propriety(boost::shared_ptr<GeneticPropriety> propriety)
 {
-    std::list<SMART(ObjClass)>::iterator it;
+    OBJ_IT it;
 
     if (propriety)
        m_propriety = propriety;
@@ -58,13 +58,13 @@ bool        GeneticObj::alea(int range, int target)
 
 void    GeneticObj::save(std::ofstream &file)
 {
-    file << m_propriety->len << " ";
-    file << m_propriety->height << " ";
-    file << m_propriety->range.size() << std::endl;
+    file << m_propriety->len;
+    file << m_propriety->height;
+    file << m_propriety->range.size();
     for (int it = 0; it < (int)m_propriety->range.size(); it++)
     {
-        file << m_propriety->range[it].first << " ";
-        file << m_propriety->range[it].second << std::endl;
+        file << m_propriety->range[it].first;
+        file << m_propriety->range[it].second;
     }
 }
 

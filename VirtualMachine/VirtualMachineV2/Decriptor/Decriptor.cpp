@@ -6,6 +6,8 @@ Decriptor::Decriptor(Object *obj) : Movable(obj)
 {
     m_jmp = 0;
     m_sig.insert(std::make_pair(ATTACH, (SIG_CATCH)(&Decriptor::catch_simple)));
+    for (int it = 0; it < FAST_SIZE; it++)
+        m_fast[it] = NULL;
 }
 
 Decriptor::~Decriptor()
@@ -46,5 +48,6 @@ void        Decriptor::catch_simple(unsigned int code, void *sig)
 
 void        Decriptor::catch_duplic(unsigned int code, void *sig)
 {
-
+    (void)code;
+    (void)sig;
 }

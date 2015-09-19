@@ -40,7 +40,7 @@ DecriptorManager    *DecriptorManager::get_instance()
 
 int     (Decriptor::*DecriptorManager::get_function(GeneticalNode* node))(GeneticalNode*)
 {
-    if (node->get_value() < CHANNEL_RANGE)
+    if (node->get_type() == INSTRU)
     {
         if (m_opt.find(node->get_value()) != m_opt.end())
             return (m_opt[node->get_value()]);

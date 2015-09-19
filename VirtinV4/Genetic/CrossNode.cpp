@@ -20,11 +20,11 @@ void            GeneticalNode::cross_node(GeneticalNode *node1,
     {
         cross--;
         m_value = node1->get_value();
-        it = node1->get_begin();
-        it2 = node2->get_begin();
-        while (it != node1->get_end())
+        it = node1->get_son().begin();
+        it2 = node2->get_son().begin();
+        while (it != node1->get_son().end())
         {
-            if (!cross && it2!= node2->get_end())
+            if (!cross && it2!= node2->get_son().end())
                 tmp = CAST(GeneticalNode*)((*(it2++)).get());
             else
                 tmp = 0;

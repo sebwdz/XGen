@@ -30,7 +30,7 @@ void        BrainView::show_tester(MachineTester *tester)
     brain = CAST(Tester*)(tester)->get_brain();
     clear();
     view = sf::View(sf::Vector2f(0, 0), sf::Vector2f(250, 250));
-    view.zoom(1.5);
+    view.zoom(2);
     view.setCenter(0, 0);
     setView(view);
     show_map(brain->get_map());
@@ -60,6 +60,8 @@ void        BrainView::show_map(ClassMap *map)
             rect.setSize(sf::Vector2f(size, size));
             rect.setPosition(it->second->get_pos().first * size - size / 2,
                              it->second->get_pos().second * size - size / 2);
+            rect.setOutlineColor(sf::Color::Black);
+            rect.setOutlineThickness(0.5);
             draw(rect);
         }
         if (CAST(ClassMap*)(it->second->get_case()))
@@ -133,7 +135,6 @@ void        BrainView::paintEvent(QPaintEvent *event)
 
 void        BrainView::showEvent(QShowEvent*event)
 {
-
     if (!m_init)
        {
            XFlush(QX11Info::display());

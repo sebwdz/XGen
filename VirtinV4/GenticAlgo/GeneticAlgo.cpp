@@ -38,7 +38,7 @@ double              GeneticalAlgo::get_average()
     return (m_average);
 }
 
-void        GeneticalAlgo::move_population(std::list<SMART(ObjClass)> &to)
+void        GeneticalAlgo::move_population(std::vector<SMART(ObjClass)> &to)
 {
     to.insert(to.end(), m_son.begin(), m_son.end());
     m_son.clear();
@@ -51,7 +51,7 @@ void        GeneticalAlgo::add_individu(SMART(GeneticalIndividu) ind)
 
 void        GeneticalAlgo::save(std::ofstream &file)
 {
-    std::list<SMART(ObjClass)>::iterator it;
+    OBJ_IT it;
 
     if (!m_parent)
         GeneticObj::save(file);

@@ -39,7 +39,7 @@ void        CellClass::catch_duplic(unsigned int code, void *sig)
         cell->set_pos(m_pos);
         cell->get_line()->shared_to_line(get_line());
         CAST(ModuleClass*)(m_parent)->add_object(cell);
-        for (it = ((GeneticalNode*)sig)->get_begin(); it != ((GeneticalNode*)sig)->get_end(); it++)
+        for (it = ((GeneticalNode*)sig)->get_son().begin(); it != ((GeneticalNode*)sig)->get_son().end(); it++)
         {
             decript = SMART(Decriptor)(new Decriptor(NULL));
             decript->set_node(CAST(GeneticalNode*)(it->get()));

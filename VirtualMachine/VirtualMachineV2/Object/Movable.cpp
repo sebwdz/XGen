@@ -32,27 +32,13 @@ void            Movable::make_move_line()
     m_moveLine.make();
 }
 
-bool              Movable::check_attach(MovableLine *line, ChanPropriety *prop)
-{
-    /*
-    if (get_line()->get_chan(prop->get_act()[0])->get_value() > 0 &&
-            get_line()->get_chan(prop->get_act()[1])->get_value() < 1)
-    {
-        if (!CAST(Decriptor*)(this) && CAST(Decriptor*)(line->m_parent))
-        {
-            line->m_parent->add_signal(ATTACH, static_cast<void*>(this));
-            return (true);
-        }
-    }*/
-    return (false);
-}
-
 void            Movable::get_move_line(MovableLine *move, Object *from)
 {
+
     move->filter(this);
     if (move->get_inter().size() && from != this)
         move->interact(this);
-    if (m_parent /*&& m_parent->get_parent() */&& m_parent != from && CAST(Movable*)(m_parent))
+    if (m_parent && m_parent != from && CAST(Movable*)(m_parent))
     {
         if (move->get_inter().size())
             CAST(Movable*)(m_parent)->get_move_line(move, this);

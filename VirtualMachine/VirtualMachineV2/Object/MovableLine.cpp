@@ -1,7 +1,5 @@
 
-
-#include        "Object/Movable.hpp"
-#include        "Object/MovableLine.hpp"
+#include        "Decriptor/Decriptor.hpp"
 
 MovableLine::MovableLine()
 {
@@ -28,6 +26,36 @@ void            MovableLine::make()
     }
     while (m_stoped.size())
         m_stoped.pop();
+    make_range();
+}
+
+void            MovableLine::make_range()
+{
+    float                               dst;
+    float                               tmp;
+    std::vector<float>::iterator        it2;
+    CHANPLIST::iterator                 it;
+
+    for (it = m_inter.begin(); it != m_inter.end(); it++)
+    {
+        dst = it->second->get_pow(DST);
+        tmp = 10;
+        while (tmp * 5 < dst)
+            tmp *= 5;
+        dst = tmp;
+        for (it2 = m_range.begin(); it2 != m_range.end(); it2++)
+        {
+            if (*it2 == dst)
+                break;
+            else if (*it2 > dst)
+            {
+                m_range.insert(it2, dst);
+                break;
+            }
+        }
+        if (m_range.end() == it2)
+            m_range.push_back(dst);
+    }
 }
 
 void            MovableLine::filter(Object *obj, bool stop)
@@ -40,8 +68,8 @@ void            MovableLine::filter(Object *obj, bool stop)
         it = m_inter.begin();
         while (it != m_inter.end())
         {
-            if (!obj->get_line()->get_chan(it->second->get_act()[0])->get_use() ||
-                    !obj->get_line()->get_chan(it->second->get_act()[1])->get_use())
+            if (!obj->get_line()->get_value(it->second->get_act()[0], true) ||
+                    !obj->get_line()->get_value(it->second->get_act()[1], true))
             {
                 m_stoped.push(std::make_pair(it->second, obj));
                 rm = it++;
@@ -72,6 +100,7 @@ void            MovableLine::change_chan(unsigned int ref, sMovableChan *move)
     it = move->obj.begin();
     all = 0;
     use = move->total < move->have ? move->have : move->total;
+    tmp = 0;
     while (it != move->obj.end())
     {
         if (it->second > 0)
@@ -128,14 +157,17 @@ void            MovableLine::interact_with(class Movable *obj, ChanPropriety *pr
 
     vct = m_vct;
     if (prop->get_type(ATTACH))
+    {
+        check_attach(obj, prop);
         return ;
+    }
     if (prop->get_type(OTH))
     {
         vct.first *= -1;
         vct.second *= -1;
     }
-    if ((tmp[0] = m_parent->get_line()->get_chan(prop->get_act()[0])->get_value()) &&
-            (tmp[1] = obj->get_line()->get_chan(prop->get_act()[1])->get_value()))
+    if ((tmp[0] = m_parent->get_line()->get_value(prop->get_act()[0])) &&
+            (tmp[1] = obj->get_line()->get_value(prop->get_act()[1])))
     {
         chan.first = tmp[0] + tmp[1];
         chan.first *= prop->get_pow(PW) / 100;
@@ -162,8 +194,8 @@ void            MovableLine::interact(Movable *obj)
         m_len = sqrt(m_len);
         m_vct.first /= m_len;
         m_vct.second /= m_len;
-        /*if (m_len < m_range.back())
-        {*/
+        if (m_range.size() && m_len < m_range.back())
+        {
             for (it = m_inter.begin(); it != m_inter.end(); it++)
             {
                 if (it->second->get_pow(DST) > m_len)
@@ -171,7 +203,7 @@ void            MovableLine::interact(Movable *obj)
                     interact_with(obj, it->second);
                 }
             }
-        /*}*/
+        }
     }
 }
 
@@ -215,6 +247,21 @@ void            MovableLine::apply(Movable *from, ChanPropriety *prop, std::pair
         m_change[chan.second]->total += tmp;
     }
 }
+
+bool              MovableLine::check_attach(Object *obj, ChanPropriety *prop)
+{
+    if (obj->get_line()->get_value(prop->get_act()[0]) > 0 &&
+            obj->get_line()->get_value(prop->get_act()[1]) < 1)
+    {
+        if (!CAST(Decriptor*)(obj) && CAST(Decriptor*)(m_parent))
+        {
+            m_parent->add_signal(ATTACH, static_cast<void*>(obj));
+            return (true);
+        }
+    }
+    return (false);
+}
+
 
 void            MovableLine::set_parent(Movable *parent)
 {

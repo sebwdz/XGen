@@ -29,7 +29,7 @@ void        ClassMap::add_obj(SMART(ObjectMap) obj)
         lnk = make_lnk(pos);
     if (!lnk->get_case())
     {
-        if (m_size > 100)
+        if (m_size > 150)
             lnk->set_case(new ClassMap());
         else
             lnk->set_case(new ClassCase());
@@ -120,15 +120,15 @@ void                    ClassMap::insert(LnkCase *lnk)
 SMART(ObjectMap)        ClassMap::remove_object(ObjectMap *obj)
 {
     SMART(ObjectMap)        res;
-    LnkCase               *mycase;
+    LnkCase                 *mycase;
 
     mycase = obj->get_cases()->get_lnk();
-    while (mycase)
+    while (mycase && mycase->get_case() != this)
     {
-        res = mycase->get_case()->remove_obj(obj);
+        mycase->get_case()->remove_obj(obj);
         mycase = mycase->get_map()->get_lnk();
     }
-    ClassCase::remove_obj(obj);
+    res = ClassCase::remove_obj(obj);
     return (res);
 }
 

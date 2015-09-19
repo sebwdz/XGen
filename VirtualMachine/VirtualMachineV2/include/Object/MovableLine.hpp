@@ -23,6 +23,7 @@ class           MovableLine
     ~MovableLine();
 
     void            make();
+    void            make_range();
     void            filter(Object *obj, bool stop = true);
     void            change_chan(unsigned int ref, sMovableChan *move);
     void            exec();
@@ -30,6 +31,7 @@ class           MovableLine
     void            interact(class Movable *obj);
     void            apply(class Movable *from, ChanPropriety *prop,
                           std::pair<float, float> &vct, std::pair<float, unsigned int> &chan);
+    bool            check_attach(Object *obj, ChanPropriety *prop);
 
     void            set_parent(class Movable* parent);
 
@@ -44,7 +46,7 @@ private:
     class Movable                                       *m_parent;
     std::pair<float, float>                             m_vct;
     float                                               m_len;
-    std::vector<int>                                    m_range;
+    std::vector<float>                                  m_range;
 };
 
 #endif // MOVABLELINE_HPP

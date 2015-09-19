@@ -26,17 +26,13 @@ void            SignalManager::catch_signals()
     OBJECT_LIST::iterator                       obj;
     boost::unordered_map<unsigned int, SIG_CATCH>::iterator it;
     std::list<void*>::iterator                  arg;
-    std::list<void*>                            sig;
+    void                                        *sig;
 
     for (it = m_sig.begin(); it != m_sig.end(); it++)
     {
         sig = m_line.get_signal(it->first);
-        for (arg = sig.begin(); arg != sig.end(); arg++)
-        {
-            (this->*(it->second))(it->first, *arg);
-            if (it->first == ATTACH)
-                break;
-        }
+        if (sig)
+            (this->*(it->second))(it->first, sig);
     }
     get_ready();
 }
@@ -46,7 +42,8 @@ void            SignalManager::catch_create(unsigned int code, void *sig)
     ModuleClass             *parent;
     SMART(ModuleClass)      create;
     SMART(Decriptor)        decript;
-    OBJ_IT                  it;
+    int                     it;
+    std::vector<SMART(ObjClass)>    &vct = ((GeneticalNode*)sig)->get_son();
 
     if (m_parent && (parent = CAST(ModuleClass*)(m_parent)) && code != NEW_HEAD)
     {
@@ -64,10 +61,10 @@ void            SignalManager::catch_create(unsigned int code, void *sig)
         parent->add_object(create);
         parent = create.get();
     }
-    for (it = ((GeneticalNode*)sig)->get_begin(); it != ((GeneticalNode*)sig)->get_end(); it++)
+    for (it = 0; it < (int)vct.size(); it++)
     {
         decript = SMART(Decriptor)(new Decriptor(parent));
-        decript->set_node(CAST(GeneticalNode*)(it->get()));
+        decript->set_node(CAST(GeneticalNode*)(vct[it].get()));
         decript->get_line()->shared_to_line(get_line());
         decript->set_pos(get_pos());
         parent->add_object(decript);

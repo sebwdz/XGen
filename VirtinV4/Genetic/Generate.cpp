@@ -23,7 +23,7 @@ void                GeneticalNode::generate()
 SMART(ObjClass)    GeneticalNode::copy(boost::shared_ptr<ObjClass> cp)
 {
     SMART(GeneticalNode)    node;
-    std::list<SMART(ObjClass)>::iterator it;
+    OBJ_IT                  it;
 
     if (!cp)
         node = SMART(GeneticalNode)(new GeneticalNode(this));

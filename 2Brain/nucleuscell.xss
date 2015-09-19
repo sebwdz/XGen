@@ -23,6 +23,12 @@ var (
 		dst ( 20 )
 		pw ( 50 )
 	)
+	&Rpls (
+		type ( oth rpls mv )
+		act ( @IsOnAct @IsOnAct )
+		dst ( 150 )
+		pw ( 20 )
+	)
  )
 >
 

@@ -69,40 +69,37 @@ NodeData        *NodeMaker::get_node(std::string &name)
     return (0);
 }
 
-unsigned int    NodeMaker::get_value(std::string &value)
+std::pair<unsigned char, unsigned int> NodeMaker::get_value(std::string &value)
 {
-    unsigned int         add;
+    unsigned int        add;
+    unsigned char       type;
     std::string         tmp;
 
-    add = VALUE_RANGE;
-    if (value[0] == '@' || value[0] == '&')
-    {
-        add = CHANNEL_RANGE;
-        tmp = value.substr(1);
-        add = get_var(tmp);
-        return (add);
-    }
-    else
-    {
-        tmp = value;
-        for (int it = 0; it < (int)m_opt.size(); it++)
-        {
-            if (!strcasecmp(m_opt[it].first.c_str(), tmp.c_str()))
-            {
-                if (m_opt[it].second == DETACH) std::cout << m_opt[it].second << std::endl;
-                return (m_opt[it].second);
-            }
-        }
-    }
     try
     {
-        add += boost::lexical_cast<unsigned int>(value);
+        if (value[0] == '@' || value[0] == '&')
+        {
+            tmp = value.substr(1);
+            add = get_var(tmp);
+            type =  GLOBAL_CHAN;
+        }
+        else
+        {
+            tmp = value;
+            for (int it = 0; it < (int)m_opt.size(); it++)
+            {
+                if (!strcasecmp(m_opt[it].first.c_str(), tmp.c_str()))
+                    return (std::make_pair(INSTRU, m_opt[it].second));
+            }
+            type = VALUE;
+            add = boost::lexical_cast<unsigned int>(value);
+        }
     }
     catch (boost::bad_lexical_cast)
     {
         throw (std::string("Syntax Error with : ") + value);
     }
-    return (add);
+    return (std::make_pair(type, add));
 }
 
 std::string     NodeMaker::get_value(unsigned int value)
@@ -140,19 +137,21 @@ unsigned int    NodeMaker::get_var(std::string &str)
             return (it->second);
     }
     res = Chanel::hash(str);
-    m_var.push_back(std::make_pair(str, res + CHANNEL_RANGE));
+    m_var.push_back(std::make_pair(str, res));
     return (m_var.back().second);
 }
 
 void        NodeMaker::dasm(std::ofstream &file, GeneticalNode* node)
 {
+    std::vector<SMART(ObjClass)> &lst = node->get_son();
+
     file << get_value(node->get_value()) << " ";
-    if (node->get_begin() != node->get_end())
+    if (lst.size())
     {
         file << " {";
-        for (OBJ_IT it = node->get_begin(); it != node->get_end(); it++)
+        for (int it = 0; it < (int)lst.size(); it++)
         {
-            dasm(file, CAST(GeneticalNode*)(it->get()));
+            dasm(file, CAST(GeneticalNode*)(lst[it].get()));
         }
         file << "}" << std::endl;
         file << std::endl;
@@ -185,7 +184,7 @@ void            NodeMaker::check_pile(NodeData *data)
 void            NodeMaker::save(std::string &out)
 {
     GeneticalNode   *res;
-    std::ofstream   file(out.c_str());
+    std::ofstream   file(out.c_str(), std::ios_base::binary);
 
     if (!file.is_open())
         throw (std::string("Can't open out file"));

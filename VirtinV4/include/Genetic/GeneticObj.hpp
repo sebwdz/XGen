@@ -2,6 +2,7 @@
 #define GENETICOBJ_HPP
 
 #include    <vector>
+#include    <list>
 #include    <obj.hpp>
 
 #define        VAR_LIST                                 std::list<std::pair<std::string, unsigned int> >

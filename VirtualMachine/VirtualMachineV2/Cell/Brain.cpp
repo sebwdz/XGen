@@ -24,13 +24,10 @@ void        Brain::exec()
 {
     std::list<SMART(Object)>::iterator it;
 
-    if (m_skel->get_begin() == m_skel->get_end())
-        make_skeleton();
     for (it = m_obj.begin(); it != m_obj.end(); it++)
         (*it)->exec();
     make_move_line();
     move();
     exec_move();
     catch_signals();
-    make_skeleton();
 }

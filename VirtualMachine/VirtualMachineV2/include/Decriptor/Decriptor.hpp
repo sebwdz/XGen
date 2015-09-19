@@ -1,6 +1,8 @@
 #ifndef DRECRIPTOR_HPP
 #define DRECRIPTOR_HPP
 
+#define         FAST_SIZE   20
+
 #include        "Genetic/GeneticalNode.hpp"
 #include        "Object/Movable.hpp"
 
@@ -40,6 +42,7 @@ private:
 
     GeneticalNode       *m_node;
     unsigned int        m_jmp;
+    Chanel              *m_fast[FAST_SIZE];
 };
 
 #endif // DRECRIPTOR_HPP

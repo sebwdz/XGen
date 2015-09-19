@@ -98,8 +98,8 @@ void            GeneticalAlgo::selection()
     double      tmp;
     double      tmp2;
     int         nb;
-    std::list<SMART(ObjClass)> nodes;
-    std::list<SMART(ObjClass)>::iterator it;
+    std::vector<SMART(ObjClass)>    nodes;
+    OBJ_IT                          it;
 
     total = 1;
     for (it = m_son.begin(); it != m_son.end(); it++)
@@ -116,7 +116,7 @@ void            GeneticalAlgo::selection()
     m_son.insert(m_son.begin(), nodes.begin(), nodes.end());
 }
 
-void        GeneticalAlgo::cross(std::list<SMART(ObjClass)> &node,
+void        GeneticalAlgo::cross(std::vector<SMART(ObjClass)> &node,
                                  GeneticalIndividu *indiv1, GeneticalIndividu *indiv2)
 {
     SMART(GeneticalIndividu)   res;

@@ -29,8 +29,9 @@ public:
     void                        get_move_line(MovableLine *move, Object *from);
 
     virtual void                catch_simple(unsigned int code, void *sig);
-    virtual void                catch_duplic(unsigned int, void *sig);
+    virtual void                catch_duplic(unsigned int code, void *sig);
     virtual void                catch_kill(unsigned int code, void *sig);
+    void                        cal_pos();
 
 protected:
 

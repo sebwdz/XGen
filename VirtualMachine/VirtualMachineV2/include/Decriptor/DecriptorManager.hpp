@@ -4,6 +4,12 @@
 #include        <boost/unordered_map.hpp>
 #include        "Decriptor.hpp"
 
+typedef union   decriptFunction
+{
+    int (Decriptor::*fct)(GeneticalNode*);
+    void              *ptr;
+} decriptFunction;
+
 class           DecriptorManager
 {
 public:

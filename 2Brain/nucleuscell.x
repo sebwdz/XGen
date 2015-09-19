@@ -33,6 +33,7 @@ Nucleus_Cell<
 
 Kill_Nucleus_Act<
 0 (
+	set ( @Impulse 10 )
 	sup ( @S_ToAct 0
                 sup ( @crtLife 90 set ( @S_ToAct 0 )
                         inf ( @isAttach 1 set ( @KillCell 10 ) )

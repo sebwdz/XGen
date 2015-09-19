@@ -21,7 +21,7 @@ unsigned int    Chanel::hash(std::string str)
     boost::hash<std::string>    hsh;
 
     res = hsh(str);
-    return (res % 3000000);
+    return (res);
 }
 
 void        Chanel::set_ref(unsigned int ref)

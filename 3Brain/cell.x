@@ -4,6 +4,7 @@ Cell<
 	inf ( @cellInit 10
 		add ( @cellInit 1 )
 	)
+	:Duplic_Cell
 )
 >
 
@@ -16,14 +17,14 @@ Cell_Init<
 		)
 		add ( @CellDuplic 1 )
 	)
-	:Duplic_Cell
 )
 >
 
 Duplic_Cell<
 0 (
+	add ( @A 0 )
 	inf ( @CellDuplic 2
-		inf ( @cellCreate 80
+		inf ( @cellCreate 160
 			sup ( @waitCreate 5
 				duplic ( )
 				add ( @cellCreate 1 )

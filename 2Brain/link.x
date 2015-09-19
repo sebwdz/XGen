@@ -14,12 +14,6 @@ Link_Head<
 				dst ( 30 )
 				pw ( 10 )
 			)
-			&RplsNucleus (
-				type ( mv oth rpls )
-				act ( @HeadLink @NclChan )
-				dst ( 20 )
-				pw ( 0 )
-			)
 			&AtrImpulse (
 				type ( oth chng atr )
 				act ( @Head @AtrImpulse )
@@ -50,15 +44,21 @@ Link_Base<
 			)
 			&RplsHead (
 				type ( mv oth rpls )
-				act ( @BaseLink @Head )
-				dst ( 40 )
+				act ( @BaseHead @Head )
+				dst ( 90 )
 				pw ( 30 )
+			)
+			&AtrHead (
+				type ( mv oth atr )
+				act ( @BaseHead @Head )
+				dst ( 150 )
+				pw ( 20 )
 			)
 			&AtrImpulse (
 				type ( chng oth atr )
 				act ( @Base @Impulse )
 				dst ( 40 )
-				pw ( 0 )
+				pw ( 40 )
 			)
 			&AtrExec (
 				type ( chng oth atr )
@@ -81,13 +81,14 @@ Link_Base<
 	sup ( @Impulse 0 add ( @AtrImpulse @Impulse ) set ( @Impulse 0 ) )
 	set ( @BaseLink 10 )
 	set ( @Base 10 )
+	set ( @BaseHead 10 )
 )
 >
 
 Link<
 0 (
 	inf ( @itLink 1
-		unuse ( @Head @AtrImpulse )
+		unuse ( @Head @AtrImpulse @BaseHead)
 		new_head ( :Link_Head )
 		new_head ( :Link_Base )
 	)

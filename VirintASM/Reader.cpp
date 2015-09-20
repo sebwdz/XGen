@@ -1,6 +1,31 @@
 
 #include    "include/NodeMaker.hpp"
 
+std::string             remove_comment(std::string buff) {
+    std::string res;
+
+    std::size_t found;
+    std::size_t pos;
+
+    res = "";
+    pos = 0;
+    while (pos != std::string::npos) {
+        found = buff.find_first_of("[", pos);
+        if (found != std::string::npos) {
+            res += buff.substr(pos, found - pos);
+            pos = found + 1;
+            found = buff.find_first_of("]", pos);
+        }
+        else
+            res += buff.substr(pos);
+        if (found != std::string::npos)
+            pos = found + 1;
+        else
+            pos = found;
+    }
+    return (res);
+}
+
 void        NodeMaker::read_data(std::ifstream &file)
 {
     std::string line;
@@ -12,6 +37,7 @@ void        NodeMaker::read_data(std::ifstream &file)
 
     while (getline(file, line))
         buff += line + " ";
+    buff = remove_comment(buff);
     pos = 0;
     pos = buff.find_first_not_of("\t ");
     while ((found = buff.find_first_of("<", pos)) != std::string::npos)

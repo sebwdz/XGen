@@ -1,8 +1,6 @@
 #ifndef DRECRIPTOR_HPP
 #define DRECRIPTOR_HPP
 
-#define         FAST_SIZE   20
-
 #include        "Genetic/GeneticalNode.hpp"
 #include        "Object/Movable.hpp"
 
@@ -20,6 +18,11 @@ public:
     virtual void    catch_signals();
     void            turn(GeneticalNode *node);
 
+    /* value */
+
+    unsigned int    get_value(GeneticalNode *node);
+    Chanel*         get_chan(GeneticalNode *node);
+
     int             nothing(GeneticalNode *node);
     int             set_function(GeneticalNode *node);
     int             comp_funcion(GeneticalNode *node);
@@ -34,6 +37,8 @@ public:
     void            set_chan(GeneticalNode *node);
     ChanPropriety   *get_propriety_chan(GeneticalNode *node, Chanel *chan, unsigned int ref);
     void            set_propriety(GeneticalNode *node, ChanPropriety *prop);
+
+    /* signals */
 
     void            catch_simple(unsigned int code, void *sig);
     void            catch_duplic(unsigned int code, void *sig);

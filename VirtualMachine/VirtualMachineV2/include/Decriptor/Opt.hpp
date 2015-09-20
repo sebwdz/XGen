@@ -84,7 +84,10 @@
 #define         INSTRU          0
 #define         GLOBAL_CHAN     1
 #define         LOCAL_CHAN      2
-#define         DECRIPT_CHAN    3
+#define         FAST_CHAN       3
 #define         VALUE           4
+
+
+#define         FAST_SIZE   20
 
 #endif // OPT_HPP

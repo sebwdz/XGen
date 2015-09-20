@@ -83,6 +83,13 @@ std::pair<unsigned char, unsigned int> NodeMaker::get_value(std::string &value)
             add = get_var(tmp);
             type =  GLOBAL_CHAN;
         }
+        else if (value[0] == '#')
+        {
+            add = boost::lexical_cast<unsigned int>(value.substr(1));
+            type = FAST_CHAN;
+            if (add > FAST_SIZE)
+                throw (std::string(value + (" are to big, limited by ")));
+        }
         else
         {
             tmp = value;

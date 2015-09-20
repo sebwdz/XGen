@@ -7,7 +7,7 @@ Decriptor::Decriptor(Object *obj) : Movable(obj)
     m_jmp = 0;
     m_sig.insert(std::make_pair(ATTACH, (SIG_CATCH)(&Decriptor::catch_simple)));
     for (int it = 0; it < FAST_SIZE; it++)
-        m_fast[it] = NULL;
+        m_fast[it] = new Chanel();
 }
 
 Decriptor::~Decriptor()
@@ -25,6 +25,24 @@ LineDecript     *Decriptor::get_line()
 void        Decriptor::set_node(GeneticalNode *node)
 {
     m_node = node;
+}
+
+unsigned int    Decriptor::get_value(GeneticalNode *node)
+{
+    if (node->get_type() == FAST_CHAN && node->get_value() < FAST_SIZE)
+        return (m_fast[node->get_value()]->get_value());
+    else if (node->get_type() == GLOBAL_CHAN)
+        return (get_line()->get_value(node->get_value()));
+    return (node->get_value());
+}
+
+Chanel*         Decriptor::get_chan(GeneticalNode *node)
+{
+    if (node->get_type() == FAST_CHAN && node->get_value() < FAST_SIZE)
+        return (m_fast[node->get_value()]);
+    else
+        return (get_line()->get_chan(node->get_value()));
+    return (NULL);
 }
 
 void        Decriptor::catch_signals()

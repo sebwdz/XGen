@@ -58,10 +58,9 @@ int        Decriptor::set_function(GeneticalNode *node)
     value2 = 0;
     if (vct.size() > 1)
     {
-        value1 = CAST(GeneticalNode*)(vct[it++].get())->get_value();
-        value2 = CAST(GeneticalNode*)(vct[it].get())->get_value();
-        tmp = get_line()->get_chan(value1);
+        tmp = get_chan(CAST(GeneticalNode*)(vct[it++].get()));
         value1 = tmp->get_value();
+        value2 = get_value(CAST(GeneticalNode*)(vct[it].get()));
         if (CAST(GeneticalNode*)(vct[it].get())->get_type() == GLOBAL_CHAN)
             value2 = get_line()->get_value(value2);
         if (node->get_value() == SET)
@@ -88,11 +87,8 @@ int        Decriptor::comp_funcion(GeneticalNode *node)
     it = 0;
     if (vct.size() > 2)
     {
-        value1 = CAST(GeneticalNode*)(vct[it++].get())->get_value();
-        value2 = CAST(GeneticalNode*)(vct[it].get())->get_value();
-        value1 = get_line()->get_value(value1);
-        if (CAST(GeneticalNode*)(vct[it].get())->get_type() == GLOBAL_CHAN)
-            value2 = get_line()->get_value(value2);
+        value1 = get_value(CAST(GeneticalNode*)(vct[it++].get()));
+        value2 = get_value(CAST(GeneticalNode*)(vct[it].get()));
         if (node->get_value() == SUP && value1 <= value2)
             return (1);
         else if (node->get_value() == INF && value1 >= value2)

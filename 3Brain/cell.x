@@ -1,16 +1,22 @@
+[ #0 => init state cell ]
+
+[ Main node ]
+
 Cell<
 0 (
 	:Cell_Init
-	inf ( @cellInit 10
-		add ( @cellInit 1 )
-	)
+	inf ( #0 1 add ( #0 10 ) )
 	:Duplic_Cell
 )
 >
 
+
+[ function need to init cell ]
+
 Cell_Init<
 0 (
-	inf ( @cellInit 1
+	inf ( #0 1
+		set ( @ImCell 10 )		[ for move ]
 		shared ( @CellDuplic )
 		sup ( @CellDuplic 0
 			:Cell_Base_Chan
@@ -20,9 +26,10 @@ Cell_Init<
 )
 >
 
+[ function for duplic cell if it's the one ]
+
 Duplic_Cell<
 0 (
-	add ( @A 0 )
 	inf ( @CellDuplic 2
 		inf ( @cellCreate 160
 			sup ( @waitCreate 5
@@ -30,7 +37,7 @@ Duplic_Cell<
 				add ( @cellCreate 1 )
 				set ( @waitCreate 0 )
 			)
-			set ( @Impulse 10 )
+			set ( @Impulse 10 )			[ color cell ]
 			add ( @waitCreate 1 )
 		)
 	)

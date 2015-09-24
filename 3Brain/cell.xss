@@ -1,7 +1,5 @@
-Cell_Base_Chan<
+Cell_Base_Chan< [ instruction for move cell ]
 var (
-	[ instruction for move cell ]
-
 	&Rpls (
 		type ( oth to mv )
 		act ( @ImCell @ImCell )

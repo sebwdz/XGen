@@ -8,9 +8,9 @@ int make(std::vector<std::string> &conf)
 {
     NodeMaker       *data = 0;
     std::ifstream   file;
-    std::ofstream   out;
     int             it;
     std::string     str;
+    std::vector<SMART(GeneticalNode)>   av;
 
     try
     {
@@ -28,7 +28,7 @@ int make(std::vector<std::string> &conf)
             it++;
             file.close();
         }
-        data->make_node(conf[0], str);
+        data->make_node(conf[0], str, av);
         data->save(conf[1]);
     }
     catch (std::string &st)

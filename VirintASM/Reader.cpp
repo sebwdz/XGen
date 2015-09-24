@@ -53,27 +53,41 @@ void        NodeMaker::read_data(std::ifstream &file)
 }
 
 
-SMART(GeneticalNode)       NodeMaker::read_node(std::string &data, std::size_t &pos, std::string &str)
+SMART(GeneticalNode)               NodeMaker::read_node(std::string &data, std::size_t &pos, std::string &str, std::vector<SMART(GeneticalNode)> &av)
 {
-    SMART(GeneticalNode)   node(new GeneticalNode());
-    SMART(GeneticalNode)   son;
-    std::size_t             found;
-    std::string             tmp;
-    std::pair<unsigned char, unsigned int>      value;
+    SMART(GeneticalNode)                                    node;
+    SMART(GeneticalNode)                                    son;
+    std::size_t                                             found;
+    std::string                                             tmp;
+    std::vector<SMART(GeneticalNode)>                       newAv;
 
     pos = data.find_first_not_of("\t ", pos);
     found = data.find_first_of("\t ()", pos);
     if (data[pos] == ':')
     {
         tmp = data.substr(pos + 1, found - (pos + 1));
-        make_node(tmp, str);
-        pos = found;
+        pos = data.find_first_not_of("\t ", found + 1);
+        if (data[pos] == '(')
+        {
+            pos++;
+            pos = data.find_first_not_of("\t ", pos);
+            while (data[pos] != ')')
+            {
+                son = read_node(data, pos, str, av);
+                newAv.push_back(son);
+                pos = data.find_first_not_of("\t ", pos);
+                if (std::string::npos == pos)
+                    throw (std::string("Error Expected ')'"));
+            }
+            pos++;
+
+        }
+        std::cout << tmp << std::endl;
+        make_node(tmp, str, newAv);
         return (get_node(tmp)->node);
     }
     tmp = data.substr(pos, found - pos);
-    value = get_value(tmp);
-    node->set_value(value.second);
-    node->set_type(value.first);
+    node = get_value(tmp, av);
     pos = data.find_first_not_of("\t ", found);
     if (data[pos] == '(')
     {
@@ -81,8 +95,7 @@ SMART(GeneticalNode)       NodeMaker::read_node(std::string &data, std::size_t &
         pos = data.find_first_not_of("\t ", pos);
         while (data[pos] != ')')
         {
-            son = read_node(data, pos, str);
-            son->set_parent(node.get());
+            son = read_node(data, pos, str, av);
             node->add_son(son);
             pos = data.find_first_not_of("\t ", pos);
             if (std::string::npos == pos)

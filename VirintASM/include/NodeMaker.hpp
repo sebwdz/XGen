@@ -7,7 +7,7 @@ typedef struct  NodeData
 {
     std::string     name;
     std::string     data;
-    SMART(GeneticalNode)   node;
+    SMART(GeneticalNode) node;
 } NodeData;
 
 class   NodeMaker
@@ -23,10 +23,10 @@ public:
     NodeData        *get_node(std::string &name);
     void            read_data(std::ifstream &file);
     void            dasm(std::ofstream &file, GeneticalNode *node);
-    void            make_node(std::string &name, std::string &str);
-    std::pair<unsigned char, unsigned int>    get_value(std::string &value);
+    void            make_node(std::string &name, std::string &str, std::vector<boost::shared_ptr<GeneticalNode> > &av);
+    boost::shared_ptr<GeneticalNode>    get_value(std::string &value, std::vector<boost::shared_ptr<GeneticalNode> > &av);
     std::string     get_value(unsigned int value);
-    boost::shared_ptr<GeneticalNode> read_node(std::string &data, std::size_t &pos, std::string &str);
+    SMART(GeneticalNode) read_node(std::string &data, std::size_t &pos, std::string &str, std::vector<boost::shared_ptr<GeneticalNode> > &av);
     void            check_pile(NodeData *data);
     unsigned int    get_var(std::string &str);
 

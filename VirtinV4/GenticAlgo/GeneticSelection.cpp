@@ -15,7 +15,7 @@ void            GeneticalAlgo::exec(int cycle)
             for (it2 = m_son.begin(); it2 != m_son.end() && m_continue; it2++)
             {
                 individu = CAST(GeneticalIndividu*)((*it2).get());
-                m_engine->add_individu(individu, this);
+                //m_engine->add_individu(individu, this);
             }
             m_engine->wait_block(this);
             sort_list();

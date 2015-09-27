@@ -12,15 +12,15 @@ Tester::~Tester()
 
 }
 
-void            Tester::set_individu(GeneticalIndividu *ind)
+void            Tester::set_individu(SMART(GeneticalIndividu) ind)
 {
     SMART(Decriptor)    decript;
     GeneticalNode       *node;
     std::string         str("../../2Brain/test/out.gen");
     std::pair<float, float> pos(0, 100.0f);
 
-    node = new GeneticalNode();
-    node->load_file(str);
+    //node = new GeneticalNode();
+    //node->load_file(str);
     m_brain = SMART(Brain)(new Brain());
     m_brain->set_dna(ind);
     m_ind = ind;
@@ -37,7 +37,7 @@ void            Tester::set_individu(GeneticalIndividu *ind)
 
 void                                Tester::add_module(GeneticalNode *node, std::pair<float, float> &pos, bool sensor)
 {
-    SMART(Decriptor)                decript;
+    /*SMART(Decriptor)                decript;
     SMART(ModuleClass)              module;
     std::string                     str("WHO");
 
@@ -48,7 +48,7 @@ void                                Tester::add_module(GeneticalNode *node, std:
     module->set_parent(m_brain.get());
     module->set_pos(pos);
     module->get_line()->get_chan(CHANNEL_RANGE + Chanel::hash(str))->set_value(sensor ? 0 : 0);
-    m_brain->add_object(module);
+    m_brain->add_object(module);*/
 }
 
 void            Tester::set_view(MachineView *view)

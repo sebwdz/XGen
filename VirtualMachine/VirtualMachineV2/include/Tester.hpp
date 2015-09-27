@@ -12,14 +12,14 @@ public:
     ~Tester();
 
     void                                add_module(GeneticalNode *node, std::pair<float, float> &pos, bool sensor);
-    void                                set_individu(GeneticalIndividu *ind);
+    void                                set_individu(boost::shared_ptr<GeneticalIndividu> ind);
     void                                set_view(MachineView *view);
     void                                exec();
     Brain                               *get_brain();
 
 private:
     SMART(Brain)                        m_brain;
-    GeneticalIndividu                   *m_ind;
+    SMART(GeneticalIndividu)            m_ind;
     MachineView                         *m_view;
 };
 

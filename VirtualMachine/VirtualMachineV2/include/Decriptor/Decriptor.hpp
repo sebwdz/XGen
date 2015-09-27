@@ -11,7 +11,7 @@ public:
     Decriptor(Object *obj);
     ~Decriptor();
 
-    void            set_node(GeneticalNode *node);
+    void            set_node(SMART(GeneticalNode) node);
     LineDecript     *get_line();
 
     virtual void    exec();
@@ -45,9 +45,9 @@ public:
 
 private:
 
-    GeneticalNode       *m_node;
-    unsigned int        m_jmp;
-    Chanel              *m_fast[FAST_SIZE];
+    SMART(GeneticalNode)    m_node;
+    unsigned int            m_jmp;
+    Chanel                  *m_fast[FAST_SIZE];
 };
 
 #endif // DRECRIPTOR_HPP

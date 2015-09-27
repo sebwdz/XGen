@@ -37,7 +37,7 @@ public:
         virtual void                stop() = 0;
         virtual void                set_view(MachineView *view);
         virtual VirtualMachine      *copy() = 0;
-        virtual void                add_individu(GeneticalIndividu *individu, GeneticObj *obj = 0) = 0;
+        virtual void                add_individu(SMART(GeneticalIndividu) individu, GeneticObj *obj = 0) = 0;
         virtual void                wait_block(GeneticObj *parent = 0) = 0;
         bool                        get_start();
 protected:

@@ -17,7 +17,7 @@ public:
     void            exec();
     void            stop();
     VirtualMachine  *copy();
-    void            add_individu(GeneticalIndividu *individu, GeneticObj *obj);
+    void            add_individu(SMART(GeneticalIndividu) individu, GeneticObj *obj);
     void            wait_block(GeneticObj *obj);
 
     void            exec_loop();

@@ -8,7 +8,7 @@
 int             main(int ac, char **av)
 {
     PluginMachine      *plugin;
-    GeneticalIndividu  *pool;
+    SMART(GeneticalIndividu)  pool;
     VirtualMachine     *engine;
     MachineViewWidget  *widget;
     std::string name;
@@ -23,7 +23,7 @@ int             main(int ac, char **av)
             return (1);
         std::cout << "succes" << std::endl;
         name = av[1];
-        pool = new GeneticalIndividu();
+        pool = SMART(GeneticalIndividu)(new GeneticalIndividu());
         pool->load_file(name);
     } catch (std::string &str)
     {
@@ -46,6 +46,5 @@ int             main(int ac, char **av)
         engine->add_individu(pool);
     engine->wait_block();
     plugin->close();
-    delete pool;
     return (0);
 }

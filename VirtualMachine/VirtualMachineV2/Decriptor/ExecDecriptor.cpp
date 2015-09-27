@@ -6,7 +6,7 @@
 void        Decriptor::exec()
 {
     Monitor::get_instance()->begin_instru();
-    turn(m_node);
+    turn(m_node.get());
     Monitor::get_instance()->end_instru();
     if (m_parent && CAST(Brain*)(m_parent))
     {
@@ -17,23 +17,23 @@ void        Decriptor::exec()
 
 void        Decriptor::turn(GeneticalNode *node)
 {
-    decriptFunction ptr;
+    int             (Decriptor::*fct)(GeneticalNode*);
 
     if (node->get_type() == INSTRU)
     {
         if (!node->get_function())
         {
-            ptr.fct = DecriptorManager::get_instance()->get_function(node);
-            node->set_function(ptr.fct);
+            fct = DecriptorManager::get_instance()->get_function(node);
+            node->set_function(fct);
         }
         else {
-            ptr.fct = node->get_function();
+            fct = node->get_function();
         }
     }
     else
-        ptr.fct = &Decriptor::nothing;
+        fct = &Decriptor::nothing;
     Monitor::get_instance()->add_instru();
-    (this->*(ptr.fct))(node);
+    (this->*(fct))(node);
 }
 
 int             Decriptor::nothing(GeneticalNode *node)
@@ -61,8 +61,6 @@ int        Decriptor::set_function(GeneticalNode *node)
         tmp = get_chan(CAST(GeneticalNode*)(vct[it++].get()));
         value1 = tmp->get_value();
         value2 = get_value(CAST(GeneticalNode*)(vct[it].get()));
-        if (CAST(GeneticalNode*)(vct[it].get())->get_type() == GLOBAL_CHAN)
-            value2 = get_line()->get_value(value2);
         if (node->get_value() == SET)
             value1 = value2;
         else if (node->get_value() == ADD)
@@ -121,9 +119,9 @@ int         Decriptor::use_function(GeneticalNode *node)
     for (it = 0; it < (int)vct.size(); it++)
     {
         if (!mode)
-            get_line()->get_chan(CAST(GeneticalNode*)(vct[it].get())->get_value())->set_use(use);
+            get_chan(CAST(GeneticalNode*)(vct[it].get()))->set_use(use);
         else
-            get_line()->get_chan(CAST(GeneticalNode*)(vct[it].get())->get_value())->set_shared(use);
+            get_chan(CAST(GeneticalNode*)(vct[it].get()))->set_shared(use);
     }
     return (nothing(node));
 }

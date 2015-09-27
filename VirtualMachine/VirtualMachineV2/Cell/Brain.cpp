@@ -11,7 +11,7 @@ Brain::~Brain()
 
 }
 
-void        Brain::set_dna(GeneticalIndividu *node)
+void        Brain::set_dna(SMART(GeneticalNode) node)
 {
     SMART(CellClass)    cell;
 

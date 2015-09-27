@@ -5,7 +5,8 @@ GeneticalNode::GeneticalNode(GeneticObj *parent) : GeneticObj(parent)
 {
     m_value = 0;
     m_type = 0;
-    m_function = 0;
+    m_chan = NULL;
+    m_function = NULL;
     if (parent)
     {
         set_propriety(parent->get_propriety());
@@ -47,6 +48,11 @@ void            GeneticalNode::set_function(int (Decriptor::*function)(Genetical
     m_function = function;
 }
 
+void            GeneticalNode::set_chan(Chanel *chan)
+{
+    m_chan = chan;
+}
+
 unsigned int    GeneticalNode::get_value()
 {
     return (m_value);
@@ -62,6 +68,11 @@ int             (Decriptor::*GeneticalNode::get_function())(GeneticalNode*)
     return (m_function);
 }
 
+Chanel         *GeneticalNode::get_chan()
+{
+    return (m_chan);
+}
+
 void        GeneticalNode::load(std::ifstream &stream)
 {
     unsigned int     nb;
@@ -69,7 +80,7 @@ void        GeneticalNode::load(std::ifstream &stream)
     stream.read(reinterpret_cast<char*>(&m_value), sizeof(unsigned int));
     stream.read(reinterpret_cast<char*>(&m_type), sizeof(unsigned char));
     stream.read(reinterpret_cast<char*>(&nb), sizeof(unsigned int));
-    for (int it = 0; it < nb; it++)
+    for (unsigned int it = 0; it < nb; it++)
     {
         m_son.push_back(SMART(GeneticalNode)(new GeneticalNode(this)));
         m_son.back()->load(stream);

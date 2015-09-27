@@ -48,6 +48,7 @@ void            BrainMachine::exec_loop()
             ref = it->first;
             exec = true;
         }
+
         m_mutex.unlock();
         if (exec)
         {
@@ -113,7 +114,7 @@ void        BrainMachine::exec_brain(TESTER_LIST::iterator it)
     m_mutex.unlock();
 }
 
-void             BrainMachine::add_individu(GeneticalIndividu *individu, GeneticObj *obj)
+void             BrainMachine::add_individu(boost::shared_ptr<GeneticalIndividu> individu, GeneticObj *obj)
 {
     SMART(Tester)       tester;
 

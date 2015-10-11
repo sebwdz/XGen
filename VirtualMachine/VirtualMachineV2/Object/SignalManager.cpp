@@ -23,16 +23,14 @@ void            SignalManager::add_signal(unsigned int value, void *ptr)
 
 void            SignalManager::catch_signals()
 {
-    OBJECT_LIST::iterator                       obj;
-    boost::unordered_map<unsigned int, SIG_CATCH>::iterator it;
-    std::list<void*>::iterator                  arg;
-    void                                        *sig;
+    boost::unordered_map<unsigned int, SIG_CATCH>::iterator sigit;
+    SIGNALS_LIST            &sig = get_line()->get_signals();
 
-    for (it = m_sig.begin(); it != m_sig.end(); it++)
+    for (unsigned int it = 0; it < (int)sig.size(); it++)
     {
-        sig = m_line.get_signal(it->first);
-        if (sig)
-            (this->*(it->second))(it->first, sig);
+        sigit = m_sig.find(sig[it].first);
+        if (sigit != m_sig.end())
+            (this->*(sigit->second))(sigit->first, sig[it].second);
     }
     get_ready();
 }
@@ -40,8 +38,8 @@ void            SignalManager::catch_signals()
 void            SignalManager::catch_create(unsigned int code, void *sig)
 {
     ModuleClass             *parent;
-    SMART(ModuleClass)      create;
-    SMART(Decriptor)        decript;
+    ModuleClass             *create;
+    Decriptor               *decript;
     int                     it;
     std::vector<SMART(ObjClass)>    &vct = ((GeneticalNode*)sig)->get_son();
 
@@ -56,14 +54,14 @@ void            SignalManager::catch_create(unsigned int code, void *sig)
         return ;
     if (code != DETACH)
     {
-        create = SMART(ModuleClass)(new ModuleClass(parent));
+        create = new ModuleClass(parent);
         create->set_pos(get_pos());
         parent->add_object(create);
-        parent = create.get();
+        parent = create;
     }
     for (it = 0; it < (int)vct.size(); it++)
     {
-        decript = SMART(Decriptor)(new Decriptor(parent));
+        decript = new Decriptor(parent);
         decript->set_node(boost::static_pointer_cast<GeneticalNode>(vct[it]->copy()));
         decript->get_line()->shared_to_line(get_line());
         decript->set_pos(get_pos());

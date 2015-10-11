@@ -94,10 +94,8 @@ SMART(GeneticalNode)    NodeMaker::get_value(std::string &value, std::vector<SMA
         else if (value[0] == '#')
         {
             node = SMART(GeneticalNode)(new GeneticalNode());
-            node->set_value(boost::lexical_cast<unsigned int>(value.substr(1)));
+            node->set_value(Chanel::hash(value.substr(1)));
             node->set_type(FAST_CHAN);
-            if (node->get_value() > FAST_SIZE)
-                throw (std::string(value + (" is not a valid fast chan")));
         }
         else
         {

@@ -5,7 +5,7 @@
 #include        "Cell/Skeleton.hpp"
 #include        "Map/MapController.hpp"
 
-#define         OBJECT_LIST      std::list<SMART(Object)>
+#define         OBJECT_LIST      std::vector<Object*>
 
 class           ModuleClass : public Movable
 {
@@ -13,15 +13,13 @@ public:
     ModuleClass(Object *parent = 0);
     virtual ~ModuleClass();
 
-    void                        add_object(SMART(Object) obj);
+    void                        add_object(Object *obj);
     Skeleton                    *get_skeleton();
 
     void                        make_skeleton();
     virtual void                exec();
-    virtual void                catch_signals();
     OBJECT_LIST::iterator       get_begin();
     OBJECT_LIST::iterator       get_end();
-    SMART(Object)               get_obj(Object* obj);
     ClassMap                    *get_map();
 
     void                        move();

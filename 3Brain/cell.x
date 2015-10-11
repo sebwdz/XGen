@@ -1,58 +1,82 @@
-[ 
- All use of fast chans in this file are illegal,
- normaly is only used for talk between differents blocks inside a decriptor
-
- ( 0 - 9 ) => used for talk between block
- ( 10 - 19 ) => are use for global chan in the decriptor ( more fast than global chan ) it's temporary
-]
 
 [
-	#0 => init state chan
+ #0 => init state chan
 ]
 
-Cell< [ Main node ]
+Move_Cell<
 0 (
-	:Cell_Init ( #0 )
-	inf ( #0 1 set ( #0 1 ) )
-	:Duplic_Cell ( ) 
+	inf ( #init 1
+		set ( #init 1 )
+		set ( #dst 130 )
+		:Cell_Base_Chan ( &rpls )
+		set ( @Impulse 10 )
+		set ( #life 20 )
+		set ( @ImCell 10 )
+	)
+	sup ( #up 15
+		sup ( #dst 20
+			var ( &rpls ( dst ( #dst ) ) )
+			sub ( #dst 5 )
+			sub ( @Impulse 1 )
+			set ( #up 0 )
+			add ( #life 15 )
+		)
+	)
+	add ( #up 1 )
+	sub ( #life 1 )
+	inf ( #life 1 kill )
 )
 >
 
+Cell< [ Main node ]
+0 (
+	inf ( #init 1 set ( #init 1 ) :Cell_Init ( ) set ( #needCreate 13 ) )
+	inf ( @S_CellDuplic 2 :Duplic_Cell ( ) set ( @ImMaster 10 ) )
+)
+>
 
 [
-	$0 => init state chan
+ $0 => init state chan
 ]
 
 Cell_Init< [ Function for init cell ]
 0 (
-	inf ( $0 1
-		set ( @ImCell 10 )		[ for move ]
-		shared ( @CellDuplic )
-		sup ( @CellDuplic 0
-			:Cell_Base_Chan ( )
+	set ( @ImCell 20 )			[ for move ]
+	shared ( @S_CellDuplic )
+	inf ( @S_CellDuplic 1
+		var ( 
+			&rpls (
+				dst ( 120 )
+				pw ( 30 )
+				type ( mv to rpls )
+				act ( @ImMaster @ImMaster )
+			)
 		)
-		add ( @CellDuplic 1 )
 	)
 )
 >
 
 [ 
-	#1 => number of created cell
-  	#2 => cycle from last creat
+ #1 => number of created cell
+ #2 => cycle from last creat
 ]
 
 Duplic_Cell< [ Function for duplic cell if it's first ]
 0 (
-	inf ( @CellDuplic 2
-		inf ( #1 160
-			sup ( #2 5
-				duplic ( )
-				add ( #1 1 )
-				set ( #2 0 )
-			)
-			set ( @Impulse 10 )			[ chan for color ]
-			add ( #2 1 )
+	inf ( #nbCreate 37
+		sup ( #time 2
+			creat ( :Move_Cell )
+			add ( #nbCreate 1 )
+			set ( #time 0 )
 		)
+		sup ( #nbCreate #needCreate
+			duplic ( )
+			set ( #needCreate #nbCreate )
+			add ( #needCreate 23 )
+		)
+		set ( @ImpulseStk 10 )			[ chan for color ]
+		add ( #time 1 )
 	)
+	sup ( #nbCreate 36 kill )
 )
 >

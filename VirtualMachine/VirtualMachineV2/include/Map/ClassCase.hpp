@@ -13,17 +13,19 @@ public:
 
     void                                    set_lnk(LnkCase *paent);
     void                                    set_size(int size);
-    virtual void                            add_obj(SMART(ObjectMap)   obj);
-    virtual SMART(ObjectMap)                remove_obj(ObjectMap *obj);
-    std::list<SMART(ObjectMap)>             &get_obj();
+    virtual void                            add_obj(ObjectMap   *obj);
+    virtual void                            remove_obj(ObjectMap *obj);
+    std::list<ObjectMap*>                   &get_obj();
     int                                     get_size();
     LnkCase                                 *get_lnk();
-    virtual void                            get_move_line(MovableLine *move, ClassCase *from, Object *obj);
+    bool                                    get_dist(LnkCase *lnk, MovableLine *move);
+    void                                    interact_with(MovableLine *move, Object *obj);
+    void                                    cross_map(MovableLine *move, Object *obj, LnkCase *lnk);
 
 protected:
-    std::list<SMART(ObjectMap)>     m_obj;
+    std::list<ObjectMap*>           m_obj;
     int                             m_size;
-    LnkCase                       *m_parent;
+    LnkCase                         *m_parent;
 };
 
 

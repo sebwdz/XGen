@@ -4,7 +4,7 @@
 MapController::MapController()
 {
     m_map = new ClassMap();
-    m_map->set_size(150);
+    m_map->set_size(250);
 }
 
 
@@ -13,7 +13,7 @@ MapController::~MapController()
     delete m_map;
 }
 
-void            MapController::add_obj(SMART(ObjectMap) obj)
+void            MapController::add_obj(ObjectMap *obj)
 {
     ClassMap            *map;
     ClassCase           *tmp;
@@ -21,7 +21,7 @@ void            MapController::add_obj(SMART(ObjectMap) obj)
     std::pair<int, int> pos(0, 0);
     std::list<SMART(ObjectMap)>::iterator   it;
 
-    if (std::abs(obj->get_pos().first) > m_map->get_size() / 2 ||
+    /*if (std::abs(obj->get_pos().first) > m_map->get_size() / 2 ||
             std::abs(obj->get_pos().second) > m_map->get_size() / 2)
     {
         map = new ClassMap();
@@ -36,13 +36,12 @@ void            MapController::add_obj(SMART(ObjectMap) obj)
         }
         m_map->set_lnk(lnk);
         m_map = map;
-    }
+    }*/
     m_map->add_obj(obj);
 }
 
 void            MapController::move_object(ObjectMap *obj)
 {
-    SMART(ObjectMap)    res;
     ClassCase*          mcase;
     std::pair<int, int> pos;
 
@@ -59,8 +58,8 @@ void            MapController::move_object(ObjectMap *obj)
         {
             if (mcase != obj->get_cases())
             {
-                res = mcase->ClassCase::remove_obj(obj);
-                mcase->add_obj(res);
+                mcase->ClassCase::remove_obj(obj);
+                mcase->add_obj(obj);
             }
             return ;
         }
@@ -68,13 +67,13 @@ void            MapController::move_object(ObjectMap *obj)
             mcase->ClassCase::remove_obj(obj);
         mcase = mcase->get_lnk()->get_map();
     }
-    res = remove_object(obj);
-    add_obj(res);
+    remove_object(obj);
+    add_obj(obj);
 }
 
-boost::shared_ptr<ObjectMap>    MapController::remove_object(ObjectMap *obj)
+ void MapController::remove_object(ObjectMap *obj)
 {
-    return (m_map->remove_object(obj));
+    m_map->remove_object(obj);
 }
 
 void                            MapController::clean()

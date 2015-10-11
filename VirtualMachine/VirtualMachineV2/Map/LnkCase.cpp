@@ -27,11 +27,11 @@ LnkCase     *LnkCase::get_next(LnkDir dir, std::pair<int, int> &pos, bool create
    if ((dir > 1 && m_pos.first == pos.first) ||
            (dir < 2 && m_pos.second == pos.second))
        return (this);
-    if (!m_dir[dir] || (((dir == RIGHT && m_dir[dir]->get_pos().first > pos.first) ||
+   if (!m_dir[dir] || (((dir == RIGHT && m_dir[dir]->get_pos().first > pos.first) ||
                          (dir == LEFT && m_dir[dir]->get_pos().first < pos.first) ||
                          (dir == DOWN && m_dir[dir]->get_pos().second > pos.second) ||
                          (dir == UP && m_dir[dir]->get_pos().second < pos.second))))
-    {
+   {
         if ((!cross ||
              (!get_case() || (m_dir[dir] && m_dir[dir]->get_case()))) &&
                 !create)
@@ -50,7 +50,7 @@ LnkCase     *LnkCase::get_next(LnkDir dir, std::pair<int, int> &pos, bool create
             m_dir[dir]->set_dir(INV_DIR(dir), lnk);
         m_dir[dir] = lnk;
         return (lnk);
-    }
+   }
    return (m_dir[dir]->get_next(dir, pos, create, cross));
 }
 

@@ -13,7 +13,7 @@ public:
 
                 ClassCase                       *get_cases();
                 void                            set_case(ClassCase* mycase);
-private:
+protected:
 
                 ClassCase                       *m_case;
 };

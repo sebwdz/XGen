@@ -16,13 +16,13 @@ ModuleClass::~ModuleClass()
     delete m_map;
 }
 
-void        ModuleClass::add_object(boost::shared_ptr<Object> obj)
+void        ModuleClass::add_object(Object *obj)
 {
-    if (CAST(Decriptor*)(obj.get()) && !CAST(Brain*)(this))
+    if (CAST(Decriptor*)(obj) && !CAST(Brain*)(this))
         get_line()->shared_to_line(obj->get_line());
     obj->set_parent(this);
-    if ((!CAST(Decriptor*)(obj.get()) || CAST(Brain*)(this)) && CAST(ObjectMap*)(obj.get()))
-        m_map->add_obj(boost::dynamic_pointer_cast<ObjectMap>(obj));
+    if ((!CAST(Decriptor*)(obj) || CAST(Brain*)(this)) && CAST(ObjectMap*)(obj))
+        m_map->add_obj(CAST(ObjectMap*)(obj));
     m_obj.push_back(obj);
 }
 
@@ -40,7 +40,7 @@ void                        ModuleClass::make_skeleton()
     m_skel->set_pos(m_pos);
     for (it = m_obj.begin(); it != m_obj.end(); it++)
     {
-        mod = CAST(ModuleClass*)(it->get());
+        mod = CAST(ModuleClass*)(*it);
         if (mod)
         {
             mod->make_skeleton();
@@ -67,54 +67,32 @@ ClassMap    *ModuleClass::get_map()
 
 void        ModuleClass::exec()
 {
-    OBJECT_LIST::iterator    it;
+    unsigned int            it;
 
-    for (it = m_obj.begin(); it != m_obj.end(); it++)
-        (*it)->exec();
-    make_move_line();
-}
-
-SMART(Object)               ModuleClass::get_obj(Object* obj)
-{
-    OBJECT_LIST::iterator   it;
-
-    for (it = m_obj.begin(); it != m_obj.end(); it++)
-        if (it->get() == obj)
-            return (*it);
-    return (SMART(Object)());
-}
-
-void        ModuleClass::catch_signals()
-{
-    OBJECT_LIST::iterator                       obj;
-    OBJECT_LIST::iterator                       rm;
-
-    SignalManager::catch_signals();
-    for (obj = m_obj.begin(); obj != m_obj.end(); obj++)
+    catch_signals();
+    for (it = 0; it != m_obj.size(); it++)
     {
-        if (CAST(SignalManager*)(obj->get()))
+        m_obj[it]->exec();
+        if (m_obj[it]->get_parent() != this)
         {
-            CAST(SignalManager*)(obj->get())->catch_signals();
-            if (obj->get()->get_parent() != this)
-            {
-                rm = obj--;
-                m_map->get_map()->remove_object(CAST(ObjectMap*)(rm->get()));
-                m_obj.erase(rm);
-            }
+            m_map->get_map()->remove_object(CAST(ObjectMap*)(m_obj[it]));
+            delete m_obj[it];
+            m_obj.erase(m_obj.begin() + it--);
         }
     }
+    make_move_line();
 }
 
 void        ModuleClass::move()
 {
-    OBJECT_LIST::iterator   it;
+    unsigned int    it;
 
-    for (it = m_obj.begin(); it != m_obj.end(); it++)
+    for (it = 0; it != m_obj.size(); it++)
     {
-        if (CAST(Movable*)(it->get()) &&
-                (CAST(Brain*)(this) || !CAST(Decriptor*)(it->get())))
+        if (CAST(Movable*)(m_obj[it]) &&
+                (CAST(Brain*)(this) || !CAST(Decriptor*)(m_obj[it])))
         {
-            CAST(Movable*)(it->get())->move();
+            CAST(Movable*)(m_obj[it])->move();
         }
     }
     Movable::move();
@@ -122,15 +100,15 @@ void        ModuleClass::move()
 
 void        ModuleClass::exec_move()
 {
-    OBJECT_LIST::iterator   it;
+    unsigned int    it;
 
-    for (it = m_obj.begin(); it != m_obj.end(); it++)
+    for (it = 0; it != m_obj.size(); it++)
     {
-        if (CAST(Movable*)(it->get()) &&
-                (CAST(Brain*)(this) || !CAST(Decriptor*)(it->get())))
+        if (CAST(Movable*)(m_obj[it]) &&
+                (CAST(Brain*)(this) || !CAST(Decriptor*)(m_obj[it])))
         {
-            CAST(Movable*)(it->get())->exec_move();
-            m_map->move_object(CAST(ObjectMap*)(it->get()));
+            CAST(Movable*)(m_obj[it])->exec_move();
+            m_map->move_object(CAST(ObjectMap*)(m_obj[it]));
         }
     }
     Movable::exec_move();
@@ -139,23 +117,25 @@ void        ModuleClass::exec_move()
 
 void        ModuleClass::get_move_line(MovableLine *move, Object *from)
 {
-    OBJECT_LIST::iterator   it;
+    unsigned int        it;
 
+    /*
     if (from == m_parent)
       move->filter(this, true);
     if (move->get_inter().size())
     {
-        for (it = m_obj.begin(); it != m_obj.end(); it++)
+        for (it = 0; it < m_obj.size(); it++)
         {
-            if (it->get() != from && CAST(Movable*)(it->get()) &&
-                (CAST(Brain*)(this) || !CAST(Decriptor*)(it->get())))
+            if (m_obj[it] != from && CAST(Movable*)(m_obj[it]) &&
+                (CAST(Brain*)(this) || !CAST(Decriptor*)(m_obj[it])))
             {
-                CAST(Movable*)(it->get())->get_move_line(move, this);
+                CAST(Movable*)(m_obj[it])->get_move_line(move, this);
             }
         }
     }
     move->filter(this, false);
     Movable::get_move_line(move, from);
+    */
 }
 
 void        ModuleClass::catch_simple(unsigned int code, void *sig)
@@ -177,8 +157,10 @@ void        ModuleClass::catch_kill(unsigned int code, void *sig)
     ModuleClass             *modul;
 
     for (it = m_obj.begin(); it != m_obj.end(); it++)
-        if (sig == it->get())
+    {
+        if (sig == *it)
             break;
+    }
     if (it == m_obj.end())
         return ;
     if (code == DESTROY && m_parent)
@@ -189,25 +171,26 @@ void        ModuleClass::catch_kill(unsigned int code, void *sig)
                 add_object(*dest);
         }
     }
-    m_map->remove_object(CAST(ObjectMap*)(it->get()));
+    m_map->remove_object(CAST(ObjectMap*)(*it));
+    delete *it;
     m_obj.erase(it);
 }
 
 void                    ModuleClass::cal_pos()
 {
-    OBJECT_LIST::iterator   it;
+    unsigned int            it;
     std::pair<float, float> pos;
     int                     nb;
 
     pos.first = 0;
     pos.second = 0;
     nb = 0;
-    for (it = m_obj.begin(); it != m_obj.end(); it++)
+    for (it = 0; it < m_obj.size(); it++)
     {
-        if (CAST(ModuleClass*)(it->get())) {
+        if (CAST(ModuleClass*)(m_obj[it])) {
             nb++;
-            pos.first += it->get()->get_pos().first;
-            pos.second += it->get()->get_pos().second;
+            pos.first += m_obj[it]->get_pos().first;
+            pos.second += m_obj[it]->get_pos().second;
         }
     }
     if (nb)
@@ -216,10 +199,10 @@ void                    ModuleClass::cal_pos()
         pos.second /= nb;
         m_pos = pos;
     }
-    for (it = m_obj.begin(); it != m_obj.end(); it++)
+    for (it = 0; it < m_obj.size(); it++)
     {
-        if (CAST(Decriptor*)(it->get()) && !CAST(Brain*)(this))
-            it->get()->set_pos(m_pos);
+        if (CAST(Decriptor*)(m_obj[it]) && !CAST(Brain*)(this))
+            m_obj[it]->set_pos(m_pos);
     }
     m_map->clean();
 }

@@ -16,16 +16,16 @@ public:
                 ClassMap();
                 virtual ~ClassMap();
 
-                virtual void                    add_obj(SMART(ObjectMap) obj);
+                virtual void                    add_obj(ObjectMap *obj);
                 void                            cross_lnk(LnkCase *lnk, LnkDir dir);
                 void                            insert(LnkCase *lnk);
-                boost::shared_ptr<ObjectMap>    remove_object(ObjectMap *obj);
+                void                            remove_object(ObjectMap *obj);
                 void                            move_object(ObjectMap *obj);
                 LnkCase                         *make_lnk(std::pair<int, int> &pos);
+                LnkCase                         *get_near(std::pair<float, float> &pos);
                 void                            clean();
                 LEFT_MAP::iterator              get_begin();
                 LEFT_MAP::iterator              get_end();
-                void                            get_move_line(MovableLine *move, ClassCase *from, Object *obj);
 protected:
 
     SMART(LnkCase)                                    m_begin;

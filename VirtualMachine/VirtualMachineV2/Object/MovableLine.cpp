@@ -13,49 +13,26 @@ MovableLine::~MovableLine()
 
 void            MovableLine::make()
 {
-    CHANPLIST::iterator         it;
-
     m_move.first = 0;
     m_move.second = 0;
-    it = m_parent->get_line()->get_begin_prop();
-    m_inter.clear();
-    while (it != m_parent->get_line()->get_end_prop())
-    {
-        m_inter.insert(std::make_pair(it->first, it->second));
-        it++;
-    }
-    while (m_stoped.size())
-        m_stoped.pop();
+    m_inter.insert(m_parent->get_line()->get_begin_prop(), m_parent->get_line()->get_end_prop());
     make_range();
 }
 
 void            MovableLine::make_range()
 {
-    float                               dst;
-    float                               tmp;
-    std::vector<float>::iterator        it2;
+    int                                 range[2] = {0};
     CHANPLIST::iterator                 it;
 
     for (it = m_inter.begin(); it != m_inter.end(); it++)
     {
-        dst = it->second->get_pow(DST);
-        tmp = 10;
-        while (tmp * 5 < dst)
-            tmp *= 5;
-        dst = tmp;
-        for (it2 = m_range.begin(); it2 != m_range.end(); it2++)
-        {
-            if (*it2 == dst)
-                break;
-            else if (*it2 > dst)
-            {
-                m_range.insert(it2, dst);
-                break;
-            }
-        }
-        if (m_range.end() == it2)
-            m_range.push_back(dst);
+        if (it->second->get_pow(DST) > range[1])
+            range[1] = it->second->get_pow(DST);
+        if (range[0] == 0 || it->second->get_pow(DST) < range[0])
+            range[0] = it->second->get_pow(DST);
     }
+    m_range.first = range[0];
+    m_range.second = range[1];
 }
 
 void            MovableLine::filter(Object *obj, bool stop)
@@ -192,16 +169,14 @@ void            MovableLine::interact(Movable *obj)
     if (m_len > 0)
     {
         m_len = sqrt(m_len);
-        m_vct.first /= m_len;
-        m_vct.second /= m_len;
-        if (m_range.size() && m_len < m_range.back())
+        if (m_len < m_range.second)
         {
+            m_vct.first /= m_len;
+            m_vct.second /= m_len;
             for (it = m_inter.begin(); it != m_inter.end(); it++)
             {
-                if (it->second->get_pow(DST) > m_len)
-                {
+                if (it->second->get_pow(DST) >= m_len)
                     interact_with(obj, it->second);
-                }
             }
         }
     }
@@ -276,4 +251,9 @@ Movable*        MovableLine::get_parent()
 CHANPLIST       &MovableLine::get_inter()
 {
     return (m_inter);
+}
+
+std::pair<int, int>     &MovableLine::get_range()
+{
+    return (m_range);
 }

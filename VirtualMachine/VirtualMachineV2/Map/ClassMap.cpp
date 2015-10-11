@@ -12,7 +12,7 @@ ClassMap::~ClassMap()
 {
 }
 
-void        ClassMap::add_obj(SMART(ObjectMap) obj)
+void        ClassMap::add_obj(ObjectMap *obj)
 {
     std::pair<int, int>     pos;
     LnkCase                 *lnk;
@@ -29,9 +29,9 @@ void        ClassMap::add_obj(SMART(ObjectMap) obj)
         lnk = make_lnk(pos);
     if (!lnk->get_case())
     {
-        if (m_size > 150)
+        /*if (m_size > 150)
             lnk->set_case(new ClassMap());
-        else
+        else*/
             lnk->set_case(new ClassCase());
         lnk->get_case()->set_lnk(lnk);
         lnk->get_case()->set_size(m_size / 5);
@@ -56,8 +56,8 @@ void        ClassMap::cross_lnk(LnkCase *lnk, LnkDir dir)
     tmp.second = dir < 2 ? lnk->get_pos().second : 0;
     cross = m_map.left.find(tmp)->second.get();
     first = true;
-    while ((cross = cross->get_dir(dir)))
-    {
+    /*while ((cross = cross->get_dir(dir)))
+    {*/
         tmp.first = dir > 1 ? cross->get_pos().first : lnk->get_pos().first;
         tmp.second = dir < 2 ? cross->get_pos().second : lnk->get_pos().second;
         tmpdir = (dir > 1 ? (lnk->get_pos().second > cross->get_pos().second ? DOWN : UP) :
@@ -73,7 +73,7 @@ void        ClassMap::cross_lnk(LnkCase *lnk, LnkDir dir)
         }
         first = false;
         return ;
-    }
+    //}
 }
 
 LnkCase     *ClassMap::make_lnk(std::pair<int, int> &pos)
@@ -109,6 +109,30 @@ LnkCase     *ClassMap::make_lnk(std::pair<int, int> &pos)
     return (res);
 }
 
+LnkCase                 *ClassMap::get_near(std::pair<float, float> &pos)
+{
+    LnkCase                         *lnk[2];
+    LnkCase                         *res;
+    LnkDir                          dir[2];
+    int                             it;
+    int                             it2;
+    float                           cmp[3];
+    std::pair<int, int>             tmppos;
+
+    tmppos.first = pos.first;
+    tmppos.second = pos.second;
+    for (it = 0; it < 2; it++)
+    {
+        dir[it] = !it ? (pos.first > 0 ? RIGHT : LEFT) : (pos.second > 0 ? DOWN : UP);
+        lnk[it] = m_begin->get_next(dir[it], tmppos, false, false);
+        dir[it] = it ? (pos.first > 0 ? RIGHT : LEFT) : (pos.second > 0 ? DOWN : UP);
+        lnk[it] = lnk[it]->get_next(dir[it], tmppos, false, false);
+        if (lnk[it]->get_pos().first == tmppos.first &&
+                lnk[it]->get_pos().second == tmppos.second)
+            return (lnk[it]);
+    }
+}
+
 void                    ClassMap::insert(LnkCase *lnk)
 {
     SMART(LnkCase)      add;
@@ -117,7 +141,7 @@ void                    ClassMap::insert(LnkCase *lnk)
     m_map.insert(boost::bimap<std::pair<int, int>, SMART(LnkCase)>::value_type(lnk->get_pos(), add));
 }
 
-SMART(ObjectMap)        ClassMap::remove_object(ObjectMap *obj)
+void                    ClassMap::remove_object(ObjectMap *obj)
 {
     SMART(ObjectMap)        res;
     LnkCase                 *mycase;
@@ -128,16 +152,13 @@ SMART(ObjectMap)        ClassMap::remove_object(ObjectMap *obj)
         mycase->get_case()->remove_obj(obj);
         mycase = mycase->get_map()->get_lnk();
     }
-    res = ClassCase::remove_obj(obj);
-    return (res);
+    ClassCase::remove_obj(obj);
 }
 
 void        ClassMap::move_object(ObjectMap *obj)
 {
-    SMART(ObjectMap)    tmp;
-
-    tmp = remove_object(obj);
-    add_obj(tmp);
+    remove_object(obj);
+    add_obj(obj);
 }
 
 void        ClassMap::clean()
@@ -184,9 +205,4 @@ LEFT_MAP::iterator              ClassMap::get_begin()
 LEFT_MAP::iterator              ClassMap::get_end()
 {
     return (m_map.left.end());
-}
-
-void                            ClassMap::get_move_line(MovableLine *move, ClassCase *from, Object *obj)
-{
-    ClassCase::get_move_line(move, from, obj);
 }

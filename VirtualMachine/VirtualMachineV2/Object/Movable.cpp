@@ -18,7 +18,9 @@ void            Movable::move()
 {
     m_state = STATE_MOVE;
     if (m_parent && CAST(Movable*)(m_parent) && m_moveLine.get_inter().size())
-        get_move_line(&m_moveLine, this);
+    {
+        m_case->get_lnk()->get_map()->cross_map(&m_moveLine, m_parent, m_case->get_lnk());
+    }
 }
 
 void            Movable::exec_move()
@@ -34,10 +36,10 @@ void            Movable::make_move_line()
 
 void            Movable::get_move_line(MovableLine *move, Object *from)
 {
-
     move->filter(this);
-    if (move->get_inter().size() && from != this)
+    if (move->get_inter().size() && from != this) {
         move->interact(this);
+    }
     if (m_parent && m_parent != from && CAST(Movable*)(m_parent))
     {
         if (move->get_inter().size())

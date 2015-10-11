@@ -10,7 +10,7 @@
 #include    "Opt.hpp"
 
 #define     USE_LIST        boost::unordered_map<unsigned int, Chanel*>
-#define     SIGNALS_LIST    boost::unordered_map<unsigned int, void* >
+#define     SIGNALS_LIST    std::vector<std::pair<unsigned int, void* > >
 
 class               LineDecript
 {
@@ -24,7 +24,7 @@ public:
     unsigned int            get_value(unsigned int ref, bool use = false);
     ChanPropriety           *get_prop(unsigned int ref);
     void                    add_signal(unsigned int value, void *ptr);
-    void                    *get_signal(unsigned int signal);
+    SIGNALS_LIST            &get_signals();
     void                    shared_to_line(LineDecript *line);
     USE_LIST::iterator      get_begin();
     USE_LIST::iterator      get_end();

@@ -13,21 +13,21 @@ Brain::~Brain()
 
 void        Brain::set_dna(SMART(GeneticalNode) node)
 {
-    SMART(CellClass)    cell;
+    CellClass       *cell;
 
-    cell = SMART(CellClass)(new CellClass(this));
+    cell = new CellClass(this);
     cell->set_dna(node);
     add_object(cell);
 }
 
 void        Brain::exec()
 {
-    std::list<SMART(Object)>::iterator it;
+    unsigned int    it;
 
-    for (it = m_obj.begin(); it != m_obj.end(); it++)
-        (*it)->exec();
+    SignalManager::catch_signals();
+    for (it = 0; it < m_obj.size(); it++)
+        m_obj[it]->exec();
     make_move_line();
     move();
     exec_move();
-    catch_signals();
 }

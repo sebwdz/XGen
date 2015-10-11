@@ -5,9 +5,9 @@
 
 void        Decriptor::exec()
 {
-    Monitor::get_instance()->begin_instru();
+    Monitor::get_instance()->begin_time(MN_INSTR);
     turn(m_node.get());
-    Monitor::get_instance()->end_instru();
+    Monitor::get_instance()->end_time(MN_INSTR);
     if (m_parent && CAST(Brain*)(m_parent))
     {
         m_state = STATE_EXEC;
@@ -32,7 +32,7 @@ void        Decriptor::turn(GeneticalNode *node)
     }
     else
         fct = &Decriptor::nothing;
-    Monitor::get_instance()->add_instru();
+    Monitor::get_instance()->add_val(MN_INSTR);
     (this->*(fct))(node);
 }
 
@@ -153,7 +153,7 @@ int             Decriptor::set_var_function(GeneticalNode *node)
 
     for (it = 0; it < (int)vct.size(); it++)
     {
-        Monitor::get_instance()->add_instru();
+        Monitor::get_instance()->add_val(MN_INSTR);
         cur = CAST(GeneticalNode*)(vct[it].get());
         set_chan(cur);
     }
@@ -170,7 +170,7 @@ void        Decriptor::set_chan(GeneticalNode *node)
     prop = get_line()->get_prop(node->get_value());
     for (it = 0; it < (int)vct.size(); it++)
     {
-        Monitor::get_instance()->add_instru();
+        Monitor::get_instance()->add_val(MN_INSTR);
         cp = CAST(GeneticalNode*)(vct[it].get());
         set_propriety(cp, prop);
     }
@@ -184,17 +184,15 @@ void        Decriptor::set_propriety(GeneticalNode *node, ChanPropriety *prop)
 
     for (it = 0; it < (int)vct.size(); it++)
     {
-        Monitor::get_instance()->add_instru();
+        Monitor::get_instance()->add_val(MN_INSTR);
         cp = CAST(GeneticalNode*)(vct[it].get());
         if (node->get_value() == TYPE)
             prop->set_type(cp->get_value());
         else if (node->get_value() == DST || node->get_value() == PW) {
-            // check value type
-            prop->set_pow(node->get_value(), cp->get_value());
+            prop->set_pow(node->get_value(), get_value(cp));
         }
         else if (node->get_value() == ACT)
         {
-            // check for reference
             if (it == 0)
                 prop->set_act(TO, cp->get_value());
             else

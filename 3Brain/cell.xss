@@ -1,9 +1,9 @@
 Cell_Base_Chan< [ instruction for move cell ]
 var (
-	&Rpls (
-		type ( oth to mv )
+	$0 (
+		type ( to rpls mv )
 		act ( @ImCell @ImCell )
-		dst ( 100 )
+		dst ( #dst )
 		pw ( 10 )
 	)
 )

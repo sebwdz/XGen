@@ -22,21 +22,22 @@ class           MovableLine
     MovableLine();
     ~MovableLine();
 
-    void            make();
-    void            make_range();
-    void            filter(Object *obj, bool stop = true);
-    void            change_chan(unsigned int ref, sMovableChan *move);
-    void            exec();
-    void            interact_with(class Movable *obj, ChanPropriety *prop);
-    void            interact(class Movable *obj);
-    void            apply(class Movable *from, ChanPropriety *prop,
+    void                make();
+    void                make_range();
+    void                filter(Object *obj, bool stop = true);
+    void                change_chan(unsigned int ref, sMovableChan *move);
+    void                exec();
+    void                interact_with(class Movable *obj, ChanPropriety *prop);
+    void                interact(class Movable *obj);
+    void                apply(class Movable *from, ChanPropriety *prop,
                           std::pair<float, float> &vct, std::pair<float, unsigned int> &chan);
-    bool            check_attach(Object *obj, ChanPropriety *prop);
+    bool                check_attach(Object *obj, ChanPropriety *prop);
 
-    void            set_parent(class Movable* parent);
+    void                set_parent(class Movable* parent);
 
-    class Movable   *get_parent();
-    CHANPLIST       &get_inter();
+    class Movable       *get_parent();
+    CHANPLIST           &get_inter();
+    std::pair<int, int>     &get_range();
 
 private:
     std::stack<std::pair<ChanPropriety*, Object*> >     m_stoped;
@@ -46,7 +47,7 @@ private:
     class Movable                                       *m_parent;
     std::pair<float, float>                             m_vct;
     float                                               m_len;
-    std::vector<float>                                  m_range;
+    std::pair<int, int>                                 m_range;
 };
 
 #endif // MOVABLELINE_HPP

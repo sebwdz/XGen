@@ -47,7 +47,7 @@ private:
 
     SMART(GeneticalNode)    m_node;
     unsigned int            m_jmp;
-    Chanel                  *m_fast[FAST_SIZE];
+    USE_LIST                m_fast;
 };
 
 #endif // DRECRIPTOR_HPP

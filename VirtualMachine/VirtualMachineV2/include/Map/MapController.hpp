@@ -9,9 +9,9 @@ public:
     MapController();
     ~MapController();
 
-    void            add_obj(SMART(ObjectMap) obj);
+    void            add_obj(ObjectMap *obj);
     void            move_object(ObjectMap *obj);
-    boost::shared_ptr<ObjectMap>    remove_object(ObjectMap *obj);
+    void            remove_object(ObjectMap *obj);
     void            clean();
     ClassMap        *get_map();
 

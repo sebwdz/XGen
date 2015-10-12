@@ -30,7 +30,7 @@ void        BrainView::show_tester(MachineTester *tester)
     brain = CAST(Tester*)(tester)->get_brain();
     clear();
     view = sf::View(sf::Vector2f(0, 0), sf::Vector2f(250, 250));
-    view.zoom(3);
+    view.zoom(2.5);
     setView(view);
     show_map(brain->get_map());
     show_module(brain);

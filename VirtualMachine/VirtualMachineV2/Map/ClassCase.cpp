@@ -105,7 +105,7 @@ bool                        ClassCase::get_dist(LnkCase *lnk, MovableLine *move)
         vct.first = (lnk->get_pos().first * (m_size / 5)) - move->get_parent()->get_pos().first;
         vct.second = (lnk->get_pos().second * (m_size / 5)) - move->get_parent()->get_pos().second;
         dst = (vct.first * vct.first) + (vct.second * vct.second);
-        tmp = range.second * range.second + (m_size / 5);
+        tmp = range.second * range.second + ((m_size / 5) * (m_size / 5));
         if (dst < tmp)
             return (true);
     }

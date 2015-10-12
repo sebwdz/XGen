@@ -7,7 +7,7 @@ Move_Cell<
 0 (
 	inf ( #init 1
 		set ( #init 1 )
-		set ( #dst 130 )
+		set ( #dst 70 )
 		:Cell_Base_Chan ( &rpls )
 		set ( @Impulse 10 )
 		set ( #life 20 )
@@ -63,20 +63,18 @@ Cell_Init< [ Function for init cell ]
 
 Duplic_Cell< [ Function for duplic cell if it's first ]
 0 (
-	inf ( #nbCreate 37
-		sup ( #time 2
-			creat ( :Move_Cell )
-			add ( #nbCreate 1 )
-			set ( #time 0 )
-		)
-		sup ( #nbCreate #needCreate
-			duplic ( )
-			set ( #needCreate #nbCreate )
-			add ( #needCreate 23 )
-		)
-		set ( @ImpulseStk 10 )			[ chan for color ]
-		add ( #time 1 )
+	sup ( #time 2
+		creat ( :Move_Cell )
+		add ( #nbCreate 1 )
+		set ( #time 0 )
 	)
-	sup ( #nbCreate 36 kill )
+	sup ( #nbCreate #needCreate
+		duplic ( )
+		set ( #needCreate #nbCreate )
+		add ( #needCreate 23 )
+	)
+	set ( @ImpulseStk 10 )			[ chan for color ]
+	add ( #time 1 )
+	sup ( #nbCreate 34 kill )
 )
 >

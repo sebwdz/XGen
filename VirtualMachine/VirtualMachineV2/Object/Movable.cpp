@@ -17,7 +17,7 @@ Movable::~Movable()
 void            Movable::move()
 {
     m_state = STATE_MOVE;
-    if (m_parent && CAST(Movable*)(m_parent) && m_moveLine.get_inter().size())
+    if (m_parent && CAST(Movable*)(m_parent) && m_moveLine.get_range().second > 0)
     {
         m_case->get_lnk()->get_map()->cross_map(&m_moveLine, m_parent, m_case->get_lnk());
     }

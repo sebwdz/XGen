@@ -10,6 +10,10 @@ DecriptorManager::DecriptorManager()
     m_opt.insert(std::make_pair(SUP, &Decriptor::comp_funcion));
     m_opt.insert(std::make_pair(INF, &Decriptor::comp_funcion));
     m_opt.insert(std::make_pair(EGAL, &Decriptor::comp_funcion));
+    m_opt.insert(std::make_pair(OR, &Decriptor::comp_funcion));
+    m_opt.insert(std::make_pair(AND, &Decriptor::comp_funcion));
+    m_opt.insert(std::make_pair(XOR, &Decriptor::comp_funcion));
+    m_opt.insert(std::make_pair(NO, &Decriptor::comp_funcion));
     m_opt.insert(std::make_pair(CREAT, &Decriptor::creat_function));
     m_opt.insert(std::make_pair(DETACH, &Decriptor::creat_function));
     m_opt.insert(std::make_pair(NEW_HEAD, &Decriptor::creat_function));

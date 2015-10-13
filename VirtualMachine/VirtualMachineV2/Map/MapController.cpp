@@ -4,7 +4,7 @@
 MapController::MapController()
 {
     m_map = new ClassMap();
-    m_map->set_size(250);
+    m_map->set_size(150);
 }
 
 

@@ -10,6 +10,10 @@ NodeMaker::NodeMaker(std::string &maind, bool asmn)
     m_opt.push_back(std::make_pair("SUP", SUP));
     m_opt.push_back(std::make_pair("INF", INF));
     m_opt.push_back(std::make_pair("EGAL", EGAL));
+    m_opt.push_back(std::make_pair("XOR", XOR));
+    m_opt.push_back(std::make_pair("OR", OR));
+    m_opt.push_back(std::make_pair("AND", AND));
+    m_opt.push_back(std::make_pair("NO", NO));
     m_opt.push_back(std::make_pair("USE", USE));
     m_opt.push_back(std::make_pair("UNUSE", UNUSE));
     m_opt.push_back(std::make_pair("SHARED", SHARED));

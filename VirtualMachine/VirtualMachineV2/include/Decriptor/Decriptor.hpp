@@ -25,6 +25,7 @@ public:
 
     int             nothing(GeneticalNode *node);
     int             set_function(GeneticalNode *node);
+    int             comparator(GeneticalNode *node, GeneticalNode *content);
     int             comp_funcion(GeneticalNode *node);
     int             creat_function(GeneticalNode *node);
     int             use_function(GeneticalNode *node);

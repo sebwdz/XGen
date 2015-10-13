@@ -26,9 +26,8 @@ void        Decriptor::turn(GeneticalNode *node)
             fct = DecriptorManager::get_instance()->get_function(node);
             node->set_function(fct);
         }
-        else {
+        else
             fct = node->get_function();
-        }
     }
     else
         fct = &Decriptor::nothing;
@@ -50,13 +49,13 @@ int        Decriptor::set_function(GeneticalNode *node)
 {
     unsigned int    value1;
     unsigned int    value2;
-    int             it;
+    unsigned int    it;
     Chanel          *tmp;
     std::vector<SMART(ObjClass)>    &vct = node->get_son();
 
     it = 0;
     value2 = 0;
-    if (vct.size() > 1)
+    for (it = 0; it + 1 < vct.size(); it++)
     {
         tmp = get_chan(CAST(GeneticalNode*)(vct[it++].get()));
         value1 = tmp->get_value();
@@ -71,30 +70,72 @@ int        Decriptor::set_function(GeneticalNode *node)
             value1 = 0;
         tmp->set_value(value1);
     }
-    return (nothing(node));
+    return (0);
 }
 
-int        Decriptor::comp_funcion(GeneticalNode *node)
+int         Decriptor::comparator(GeneticalNode *node, GeneticalNode *content)
 {
-    unsigned int    value1;
-    unsigned int    value2;
-    int             it;
-    std::vector<SMART(ObjClass)>    &vct = node->get_son();
+    unsigned int                    it;
+    float                           value1;
+    float                           value2;
+    std::vector<SMART(ObjClass)>    &vct = content->get_son();
 
     value2 = 0;
+    value1 = 0;
     it = 0;
-    if (vct.size() > 2)
+    if (node->get_type() == INSTRU && vct.size() > 0 &&
+            (node->get_value() == OR || node->get_value() == AND ||
+                                       node->get_value() == XOR))
+    {
+        for (it = 0; it < vct.size(); it++)
+        {
+            value1 = comp_funcion(CAST(GeneticalNode*)(vct[it].get()));
+            if (value2 && value1 && node->get_value() == XOR)
+                return (0);
+            if (node->get_value() == AND && !value1)
+                return (0);
+            if (!value2 && value1)
+                value2 = value1;
+        }
+        if (!value2 && !value1 && (node->get_value() == OR || node->get_value() == XOR))
+            return (0);
+    }
+    else if (node->get_value() == NO && vct.size() > 0)
+        return (comp_funcion(CAST(GeneticalNode*)(vct[it].get())) ? 0 : 1);
+    else if (vct.size() > 1)
     {
         value1 = get_value(CAST(GeneticalNode*)(vct[it++].get()));
         value2 = get_value(CAST(GeneticalNode*)(vct[it].get()));
         if (node->get_value() == SUP && value1 <= value2)
-            return (1);
+            return (0);
         else if (node->get_value() == INF && value1 >= value2)
-            return (1);
+            return (0);
         else if (node->get_value() == EGAL && value1 != value2)
-            return (1);
+            return (0);
     }
-    return (nothing(node));
+    else
+        return (0);
+    return (1);
+}
+
+int        Decriptor::comp_funcion(GeneticalNode *node)
+{
+    unsigned int    it;
+    std::vector<SMART(ObjClass)>    &vct = node->get_son();
+    GeneticalNode                   *content;
+
+    it = 0;
+    if (vct.size() > 0)
+    {
+        content = CAST(GeneticalNode*)(vct[0].get());
+        if (comparator(node, content))
+        {
+            for (it = 1; it < vct.size(); it++)
+                turn(CAST(GeneticalNode*)(vct[it].get()));
+            return (1);
+        }
+    }
+    return (0);
 }
 
 int         Decriptor::creat_function(GeneticalNode *node)
@@ -123,7 +164,7 @@ int         Decriptor::use_function(GeneticalNode *node)
         else
             get_chan(CAST(GeneticalNode*)(vct[it].get()))->set_shared(use);
     }
-    return (nothing(node));
+    return (0);
 }
 
 int         Decriptor::decript_function(GeneticalNode *node)
@@ -137,7 +178,7 @@ int         Decriptor::decript_function(GeneticalNode *node)
     }
     else
         get_line()->add_signal(node->get_value(), this);
-    return (nothing(node));
+    return (0);
 }
 
 int     Decriptor::jmp_function(GeneticalNode *node)

@@ -19,6 +19,10 @@
 #define         SUP             3 + OPT_RANGE
 #define         INF             4 + OPT_RANGE
 #define         EGAL            5 + OPT_RANGE
+#define         AND             22 + OPT_RANGE
+#define         OR              23 + OPT_RANGE
+#define         XOR             24 + OPT_RANGE
+#define         NO              25 + OPT_RANGE
 
 /* create module and detach decriptor */
 

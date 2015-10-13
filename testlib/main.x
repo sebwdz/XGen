@@ -1,10 +1,31 @@
 MAIN<
 0 (
-	:Cycle ( #crt1 #time1 creat ( :CELL_1 ) 10 40 )
-	:Cycle ( #crt2 #time2 creat ( :CELL_2 ) 40 80 )
-	sup ( #crt1 39 sup ( #crt2 79 kill ) )
-	set ( @ImMaster 10 )
-	set ( @impulseStk 10 )
+   	:Cycle ( #duplic #time3 creat ( :Main_Cell ) 50 10 )
+)
+>
+
+Main_Cell<
+0 (
+	:Cycle ( #crt1 #time1 creat ( :CELL_1 ) 30 10 )
+	:Cycle ( #crt2 #time2 creat ( :CELL_2 ) 20 5 )
+	:Cycle ( #nucl #time3 creat ( :Nucleus ) 30 5 )
+
+	and (
+		0 (
+			sup ( 0 ( #crt1 19 ) )
+			sup ( 0 ( #crt2 4 ) )
+		) 
+		kill
+	)
+)
+>
+
+Nucleus<
+0 (
+	set ( @ImMaster 5 @impulseStk 5 )
+
+        :Make_Rpls_Mv ( &Rpls to @impulseStk @impulseStk )
+        :Init_Prop_Chan ( &Rpls 20 20 )
 )
 >
 
@@ -17,13 +38,14 @@ CELL_1<
 CELL_2<
 0 (
 	:Init ( #init :Init_Cell2 )
-	:Cycle ( #kill #time kill 280 1 )
+	:Make_Atr_Mv ( &Atr to @ImMaster @impulseStk )
+	:Init_Prop_Chan ( &Atr 4 60 )
 )
 >
 
 Init_Cell1<
 0 (
-	set ( @ImCell 10 )
+	set ( @ImCell 40 )
 
         :Make_Rpls_Mv ( &Rpls oth @ImCell @ImCell )
         :Init_Prop_Chan ( &Rpls 10 30 )
@@ -32,16 +54,15 @@ Init_Cell1<
 
 Init_Cell2<
 0 (
-	set ( @Impulse 10 )
-	set ( @ImMaster 10 )
+	set ( @Impulse 10 @ImMaster 10 )
 
-	:Make_Atr_Mv ( &Atr oth @ImMaster @ImCell )
-	:Init_Prop_Chan ( &Atr 10 100 )
+	:Make_Atr_Mv ( &AtrC oth @ImMaster @ImCell )
+	:Init_Prop_Chan ( &AtrC 15 30 )
 
 	:Make_Rpls_Mv ( &Rpls oth @ImMaster @ImMaster )
-	:Init_Prop_Chan ( &Rpls 3 50 )
+	:Init_Prop_Chan ( &Rpls 7 20 )
 
-	:Make_Rpls_Mv ( &RplsCell1 oth @ImMaster @ImCell )
-	:Init_Prop_Chan ( &RplsCell1 15 20 )
+	:Make_Rpls_Mv ( &RplsCell1 to @ImMaster @ImCell )
+	:Init_Prop_Chan ( &RplsCell1 10 10 )
 )
 >

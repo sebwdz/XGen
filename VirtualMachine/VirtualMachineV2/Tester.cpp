@@ -97,7 +97,7 @@ void            Tester::exec()
 
             t = (_time[1].tv_sec + _time[1].tv_usec / 1000000.0) - (_time[0].tv_sec + _time[0].tv_usec / 1000000.0);
             gettimeofday(&_time[0], NULL);
-            std::cout << "\r" << 100 / t << " c/s | real : " << Monitor::get_instance()->get_val(MN_INSTR) / (t * 1000) << " instr/s  " << std::flush;
+            std::cout << "\r" << 100 / t << " c/s | " << Monitor::get_instance()->get_val(MN_INSTR) / (t * 1000) << " instr/s  " << std::flush;
             all += Monitor::get_instance()->get_val(MN_INSTR);
             Monitor::get_instance()->reset_val(MN_INSTR);
         }
@@ -109,9 +109,9 @@ void            Tester::exec()
     std::cout << "Min : " << min  << " c/s" << std::endl;
     std::cout << all / 1000.0  << " * 10³ instrs" << std::endl;
     std::cout << "total time = " << Monitor::get_instance()->get_time(MN_ALL) / 1000 << " s " << std::endl;
-    std::cout << all / (Monitor::get_instance()->get_time(MN_ALL) * 1000) << " * 10⁶ instrs/s" << std::endl;
+    std::cout << "average : " << all / (Monitor::get_instance()->get_time(MN_ALL) * 1000) << " * 10⁶ instrs/s" << std::endl;
     std::cout << "time in instrs = " << tall / 1000 << " s " << std::endl;
-    std::cout << all / (tall * 1000) << " * 10⁶ instrs/s" << std::endl;
+    std::cout << "average : " << all / (tall * 1000) << " * 10⁶ instrs/s" << std::endl;
     if (m_view)
         m_view->unlock();
 }

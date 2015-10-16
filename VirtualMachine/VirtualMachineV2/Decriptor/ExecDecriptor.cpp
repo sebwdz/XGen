@@ -84,8 +84,7 @@ int         Decriptor::comparator(GeneticalNode *node, GeneticalNode *content)
     value1 = 0;
     it = 0;
     if (node->get_type() == INSTRU && vct.size() > 0 &&
-            (node->get_value() == OR || node->get_value() == AND ||
-                                       node->get_value() == XOR))
+            (node->get_value() == OR || node->get_value() == AND || node->get_value() == XOR))
     {
         for (it = 0; it < vct.size(); it++)
         {
@@ -169,7 +168,7 @@ int         Decriptor::use_function(GeneticalNode *node)
 
 int         Decriptor::decript_function(GeneticalNode *node)
 {
-    if (node->get_value() == KILL && m_parent)
+    if ((node->get_value() == KILL|| node->get_value() == TAKEOUT) && m_parent)
     {
         if (!CAST(Brain*)(m_parent) && m_parent->get_parent())
             m_parent->get_parent()->get_line()->add_signal(node->get_value(), m_parent);

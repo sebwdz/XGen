@@ -26,15 +26,16 @@ public:
     void                        exec_move();
     void                        get_move_line(MovableLine *move, Object *from);
 
-    virtual void                catch_simple(unsigned int code, void *sig);
     virtual void                catch_duplic(unsigned int code, void *sig);
     virtual void                catch_kill(unsigned int code, void *sig);
+    virtual void                catch_takeout(unsigned int code, void *sig);
     void                        cal_pos();
 
 protected:
 
     Skeleton                    *m_skel;
     OBJECT_LIST                 m_obj;
+    OBJECT_LIST                 m_decriptor;
     MapController               *m_map;
 };
 

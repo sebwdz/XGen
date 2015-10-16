@@ -37,11 +37,11 @@ int make(std::vector<std::string> &conf)
     }
     catch (boost::bad_lexical_cast &error)
     {
-        str += "Syntax Error\n";
+        str += "Syntax Error ( bad cast )\n";
     }
     catch (std::out_of_range &error)
     {
-        str += "Syntax Error\n";
+        str += "Syntax Error ( out of range )\n";
     }
     std::cout << str << std::endl;
     if (data)

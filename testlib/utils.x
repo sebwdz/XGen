@@ -1,32 +1,31 @@
-Init<
-0 (  
-        inf ( 0 ( $0 1 )
+Init($exec $code)<
+0 (
+        inf ( ( $exec 1 )
 		0 ( 
-			$1
-			set ( $0 1 )
+			$code
+			set ( $exec 1 )
 		)
 	)
 )
 >
- 
-Cycle<
+
+Cycle($count $time $code $wait $limit)<
 0 (
-        or ( 
+        or (
 		0 (
-			inf ( 0 ( $0 $4 ) )
-			inf ( 0 ( $4 1 ) )
+			inf ( ( $count $limit ) )
+			inf ( ( $limit 1 ) )
 		)
 		0 (
-                	sup ( 0 ( $1 $3 )
+                	sup ( ( $time $wait )
 				0 (
-                       			$2
-					add ( $0 1 )
-					set ( $1 0 )
+                       			$code
+					add ( $count 1 )
+					set ( $time 0 )
 				)
                 	)
-                	add ( $1 1 )
+                	add ( $time 1 )
 		)
         )
 )
 >
-

@@ -28,9 +28,9 @@ NodeMaker::NodeMaker(std::string &maind, bool asmn)
     m_opt.push_back(std::make_pair("ATTACH", ATTACH));
     m_opt.push_back(std::make_pair("LINK", LINK));
     m_opt.push_back(std::make_pair("UNLINK", UNLINK));
+    m_opt.push_back(std::make_pair("TAKE_OUT", TAKEOUT));
     m_opt.push_back(std::make_pair("FREE", FREE));
     m_opt.push_back(std::make_pair("KILL", KILL));
-    m_opt.push_back(std::make_pair("JMP", JMP));
     m_opt.push_back(std::make_pair("DESTROY", DESTROY));
     m_opt.push_back(std::make_pair("VAR", VAR));
 
@@ -38,7 +38,6 @@ NodeMaker::NodeMaker(std::string &maind, bool asmn)
     m_opt.push_back(std::make_pair("RPLS", RPLS));
     m_opt.push_back(std::make_pair("DST", DST));
     m_opt.push_back(std::make_pair("PW", PW));
-    m_opt.push_back(std::make_pair("WGTH", WGTH));
     m_opt.push_back(std::make_pair("OTH", OTH));
     m_opt.push_back(std::make_pair("TO", TO));
     m_opt.push_back(std::make_pair("MV", MV));
@@ -55,10 +54,35 @@ NodeMaker::~NodeMaker()
         delete m_node[it];
 }
 
+void        NodeMaker::extract_arg(NodeData *dataN, std::string str)
+{
+    int     it2 = 0;
+
+    for (int it = 0; it < (int)str.size(); it++)
+    {
+        while (it < (int)str.size() && str[it] != ' ')
+            it++;
+        if (str[it] == ' ')
+            it--;
+        dataN->arg[str.substr(it2 + 1, it - it2)] = dataN->arg.size() - 1;
+        if (it < str.size() - 1)
+            it++;
+        while (str[it] == ' ')
+            it2 = it++;
+    }
+}
+
 void        NodeMaker::add_data(std::string &name, std::string &data)
 {
-    NodeData    *dataN = new NodeData;
+    NodeData                *dataN = new NodeData;
+    std::size_t             it[2];
 
+    if ((it[0] = name.find_first_of('(')) != std::string::npos)
+    {
+        it[1] = name.find_first_of(')', it[0]);
+        extract_arg(dataN, name.substr(it[0], it[1] - it[0]));
+        name = name.substr(0, it[0]);
+    }
     dataN->name = name;
     dataN->data = data;
     m_node.push_back(dataN);
@@ -73,7 +97,7 @@ NodeData        *NodeMaker::get_node(std::string &name)
     return (0);
 }
 
-SMART(GeneticalNode)    NodeMaker::get_value(std::string &value, std::vector<SMART(GeneticalNode)> &av)
+SMART(GeneticalNode)    NodeMaker::get_value(NodeData *data, std::string &value, std::vector<SMART(GeneticalNode)> &av)
 {
     std::string             tmp;
     SMART(GeneticalNode)    node;
@@ -81,11 +105,19 @@ SMART(GeneticalNode)    NodeMaker::get_value(std::string &value, std::vector<SMA
 
     try
     {
-        if (value[0] == '$')
+        if (value[0] == 0)
         {
-            v = boost::lexical_cast<unsigned int>(value.substr(1));
-            if (v >= av.size())
-                throw (std::string(value + " is not a valid argument"));
+            node = SMART(GeneticalNode)(new GeneticalNode());
+            node->set_type(VALUE);
+            return (node);
+        }
+        else if (value[0] == '$')
+        {
+            if (data->arg.find(value) == data->arg.end())
+                throw (std::string(value + " isn't a valid argument"));
+            v = data->arg[value];
+            if (v >= (int)av.size())
+                throw (std::string(value + " was not found, to few argument"));
             return (av[v]);
         }
         else if (value[0] == '@' || value[0] == '&')
@@ -119,14 +151,9 @@ SMART(GeneticalNode)    NodeMaker::get_value(std::string &value, std::vector<SMA
     }
     catch (boost::bad_lexical_cast)
     {
-        throw (std::string("Syntax Error with : ") + value);
+        throw (std::string("Syntax Error with : ") + value + std::string("."));
     }
     return (node);
-}
-
-std::string     NodeMaker::get_value(unsigned int value)
-{
-    return ("");
 }
 
 unsigned int    NodeMaker::get_var(std::string &str)
@@ -168,7 +195,7 @@ void        NodeMaker::make_node(std::string &name, std::string &str, std::vecto
     Node = get_node(name);
     check_pile(Node);
     str += "begin " + name + "\n";
-    Node->node = read_node(Node->data, pos, str, av);
+    Node->node = read_node(Node, pos, str, av);
     str += "finish " + name + " succesfull\n";
     m_pile.pop_back();
 }

@@ -35,6 +35,10 @@ void            SignalManager::catch_signals()
     get_ready();
 }
 
+void            SignalManager::catch_simple(unsigned int code, void *sig)
+{
+}
+
 void            SignalManager::catch_create(unsigned int code, void *sig)
 {
     ModuleClass             *parent;
@@ -43,11 +47,8 @@ void            SignalManager::catch_create(unsigned int code, void *sig)
     int                     it;
     std::vector<SMART(ObjClass)>    &vct = ((GeneticalNode*)sig)->get_son();
 
-    if (m_parent && (parent = CAST(ModuleClass*)(m_parent)) && code != NEW_HEAD)
-    {
-        while (CAST(ModuleClass*)(parent->get_parent()) && !CAST(Brain*)(parent))
-            parent = CAST(ModuleClass*)(parent->get_parent());
-    }
+    if (m_parent && code != NEW_HEAD)
+        parent = CAST(ModuleClass*)(m_parent);
     else if (CAST(ModuleClass*)(this))
         parent = CAST(ModuleClass*)(this);
     else

@@ -16,7 +16,7 @@ public:
     virtual void    catch_signals();
 
     virtual void    catch_create(unsigned int code, void *sig);
-    virtual void    catch_simple(unsigned int code, void *sig) = 0;
+    virtual void    catch_simple(unsigned int code, void *sig);
     virtual void    catch_duplic(unsigned int, void *sig) = 0;
 
 protected:

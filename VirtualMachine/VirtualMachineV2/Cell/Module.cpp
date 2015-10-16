@@ -8,6 +8,7 @@ ModuleClass::ModuleClass(Object *parent) : Movable(parent)
     m_skel = new Skeleton();
     m_map = new MapController();
     m_sig.insert(std::make_pair(KILL, (SIG_CATCH)(&ModuleClass::catch_kill)));
+    m_sig.insert(std::make_pair(TAKEOUT, (SIG_CATCH)(&ModuleClass::catch_takeout)));
 }
 
 ModuleClass::~ModuleClass()
@@ -22,8 +23,12 @@ void        ModuleClass::add_object(Object *obj)
         get_line()->shared_to_line(obj->get_line());
     obj->set_parent(this);
     if ((!CAST(Decriptor*)(obj) || CAST(Brain*)(this)) && CAST(ObjectMap*)(obj))
+    {
         m_map->add_obj(CAST(ObjectMap*)(obj));
-    m_obj.push_back(obj);
+        m_obj.push_back(obj);
+    }
+    else
+        m_decriptor.push_back(obj);
 }
 
 Skeleton                    *ModuleClass::get_skeleton()
@@ -70,6 +75,8 @@ void        ModuleClass::exec()
     unsigned int            it;
 
     catch_signals();
+    for (it = 0; it < m_decriptor.size(); it++)
+        m_decriptor[it]->exec();
     for (it = 0; it != m_obj.size(); it++)
     {
         m_obj[it]->exec();
@@ -138,12 +145,6 @@ void        ModuleClass::get_move_line(MovableLine *move, Object *from)
     */
 }
 
-void        ModuleClass::catch_simple(unsigned int code, void *sig)
-{
-    (void)code;
-    (void)sig;
-}
-
 void        ModuleClass::catch_duplic(unsigned int code, void *sig)
 {
     (void)code;
@@ -176,6 +177,26 @@ void        ModuleClass::catch_kill(unsigned int code, void *sig)
     m_obj.erase(it);
 }
 
+void        ModuleClass::catch_takeout(unsigned int code, void *sig)
+{
+    ModuleClass             *to;
+    OBJECT_LIST::iterator   it;
+
+    if (m_parent && (to = CAST(ModuleClass*)(m_parent)))
+    {
+        for (it = m_obj.begin(); it != m_obj.end(); it++)
+        {
+            if (sig == *it)
+                break;
+        }
+        if (it == m_obj.end())
+            return ;
+        m_map->remove_object(CAST(ObjectMap*)(*it));
+        to->add_object(*it);
+        m_obj.erase(it);
+    }
+}
+
 void                    ModuleClass::cal_pos()
 {
     unsigned int            it;
@@ -199,10 +220,7 @@ void                    ModuleClass::cal_pos()
         pos.second /= nb;
         m_pos = pos;
     }
-    for (it = 0; it < m_obj.size(); it++)
-    {
-        if (CAST(Decriptor*)(m_obj[it]) && !CAST(Brain*)(this))
-            m_obj[it]->set_pos(m_pos);
-    }
+    for (it = 0; it < m_decriptor.size(); it++)
+        m_decriptor[it]->set_pos(m_pos);
     m_map->clean();
 }

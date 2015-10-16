@@ -29,10 +29,7 @@ void        ClassMap::add_obj(ObjectMap *obj)
         lnk = make_lnk(pos);
     if (!lnk->get_case())
     {
-        /*if (m_size > 150)
-            lnk->set_case(new ClassMap());
-        else*/
-            lnk->set_case(new ClassCase());
+        lnk->set_case(new ClassCase());
         lnk->get_case()->set_lnk(lnk);
         lnk->get_case()->set_size(m_size / 5);
         cross_lnk(lnk, LEFT);
@@ -56,24 +53,21 @@ void        ClassMap::cross_lnk(LnkCase *lnk, LnkDir dir)
     tmp.second = dir < 2 ? lnk->get_pos().second : 0;
     cross = m_map.left.find(tmp)->second.get();
     first = true;
-    /*while ((cross = cross->get_dir(dir)))
-    {*/
-        tmp.first = dir > 1 ? cross->get_pos().first : lnk->get_pos().first;
-        tmp.second = dir < 2 ? cross->get_pos().second : lnk->get_pos().second;
-        tmpdir = (dir > 1 ? (lnk->get_pos().second > cross->get_pos().second ? DOWN : UP) :
-                         (lnk->get_pos().first < cross->get_pos().first ? LEFT : RIGHT));
-        tmpLnk = cross->get_next(tmpdir, tmp, first, false);
-        if (first && tmpLnk != lnk->get_dir(dir) && tmpLnk != lnk)
-        {
-            tmpLnk->set_dir(dir, lnk->get_dir(dir));
-            if (lnk->get_dir(dir))
-                lnk->get_dir(dir)->set_dir(INV_DIR(dir), tmpLnk);
-            tmpLnk->set_dir(INV_DIR(dir), lnk);
-            lnk->set_dir(dir, tmpLnk);
-        }
-        first = false;
-        return ;
-    //}
+    tmp.first = dir > 1 ? cross->get_pos().first : lnk->get_pos().first;
+    tmp.second = dir < 2 ? cross->get_pos().second : lnk->get_pos().second;
+    tmpdir = (dir > 1 ? (lnk->get_pos().second > cross->get_pos().second ? DOWN : UP) :
+                     (lnk->get_pos().first < cross->get_pos().first ? LEFT : RIGHT));
+    tmpLnk = cross->get_next(tmpdir, tmp, first, false);
+    if (first && tmpLnk != lnk->get_dir(dir) && tmpLnk != lnk)
+    {
+        tmpLnk->set_dir(dir, lnk->get_dir(dir));
+        if (lnk->get_dir(dir))
+            lnk->get_dir(dir)->set_dir(INV_DIR(dir), tmpLnk);
+        tmpLnk->set_dir(INV_DIR(dir), lnk);
+        lnk->set_dir(dir, tmpLnk);
+    }
+    first = false;
+    return ;
 }
 
 LnkCase     *ClassMap::make_lnk(std::pair<int, int> &pos)

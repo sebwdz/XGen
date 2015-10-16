@@ -1,43 +1,43 @@
-Set_Prop_Chan<
+Set_Prop_Chan($name $prop)<
 0 (
-        var ( $0 ( $1 ) )
+        var ( $name ( $prop ) )
 )
 >
 
-Make_Chan<
+Make_Chan($name $to $act $type $mode)<
 0 (
-	:Set_Prop_Chan ( $0 type ( $3 $1 $4 ) )
-        :Set_Prop_Chan ( $0 $2 )
+	:Set_Prop_Chan ( $name type ( $type $to $mode ) )
+        :Set_Prop_Chan ( $name $act )
 )
 >
 
-Make_Atr_Mv<
+Make_Atr_Mv($name $to $act1 $act2)<
 0 (
-        :Make_Chan ( $0 $1 act ( $2 $3 ) mv atr )
+        :Make_Chan ( $name $to act ( $act1 $act2 ) mv atr )
 )
 >
 
-Make_Rpls_Mv<
+Make_Rpls_Mv($name $to $act1 $act2)<
 0 (	
-	:Make_Chan ( $0 $1 act ( $2 $3 ) mv rpls )
+	:Make_Chan ( $name $to act ( $act1 $act2 ) mv rpls )
 )
 >
 
-Make_Atr_Chng<
+Make_Atr_Chng($name $to $act1 $act2)<
 0 (
-	:Make_Chan ( $0 $1 act ( $2 $3 ) chng atr )
+	:Make_Chan ( $name $to act ( $act1 $act2 ) chng atr )
 )
 >
 
-Make_Rpls_Chng<
+Make_Rpls_Chng($name $to $act1 $act2)<
 0 (
-	:Make_Chan( $0 $1 act ( $2 $3 ) chng rpls )
+	:Make_Chan( $name $to act ( $act1 $act2 ) chng rpls )
 )
 >
 
-Init_Prop_Chan<
+Init_Prop_Chan($name $pow $dst)<
 0 (
-        :Set_Prop_Chan ( $0 pw ( $1 ) )
-        :Set_Prop_Chan ( $0 dst ( $2 ) )
+        :Set_Prop_Chan ( $name pw ( $pow ) )
+        :Set_Prop_Chan ( $name dst ( $dst ) )
 )
 >

@@ -53,7 +53,7 @@ void        NodeMaker::read_data(std::ifstream &file)
 }
 
 
-SMART(GeneticalNode)               NodeMaker::read_node(std::string &data, std::size_t &pos, std::string &str, std::vector<SMART(GeneticalNode)> &av)
+SMART(GeneticalNode)               NodeMaker::read_node(NodeData *data, std::size_t &pos, std::string &str, std::vector<SMART(GeneticalNode)> &av)
 {
     SMART(GeneticalNode)                                    node;
     SMART(GeneticalNode)                                    son;
@@ -61,43 +61,42 @@ SMART(GeneticalNode)               NodeMaker::read_node(std::string &data, std::
     std::string                                             tmp;
     std::vector<SMART(GeneticalNode)>                       newAv;
 
-    pos = data.find_first_not_of("\t ", pos);
-    found = data.find_first_of("\t ()", pos);
-    if (data[pos] == ':')
+    pos = data->data.find_first_not_of("\t ", pos);
+    found = data->data.find_first_of("\t ()", pos);
+    if (data->data[pos] == ':')
     {
-        tmp = data.substr(pos + 1, found - (pos + 1));
-        pos = data.find_first_not_of("\t ", found + 1);
-        if (data[pos] == '(')
+        tmp = data->data.substr(pos + 1, found - (pos + 1));
+        pos = data->data.find_first_not_of("\t ", found + 1);
+        if (data->data[pos] == '(')
         {
             pos++;
-            pos = data.find_first_not_of("\t ", pos);
-            while (data[pos] != ')')
+            pos = data->data.find_first_not_of("\t ", pos);
+            while (data->data[pos] != ')')
             {
                 son = read_node(data, pos, str, av);
                 newAv.push_back(son);
-                pos = data.find_first_not_of("\t ", pos);
+                pos = data->data.find_first_not_of("\t ", pos);
                 if (std::string::npos == pos)
                     throw (std::string("Error Expected ')'"));
             }
             pos++;
 
         }
-        std::cout << tmp << std::endl;
         make_node(tmp, str, newAv);
         return (get_node(tmp)->node);
     }
-    tmp = data.substr(pos, found - pos);
-    node = get_value(tmp, av);
-    pos = data.find_first_not_of("\t ", found);
-    if (data[pos] == '(')
+    tmp = data->data.substr(pos, found - pos);
+    node = get_value(data, tmp, av);
+    pos = data->data.find_first_not_of("\t ", found);
+    if (data->data[pos] == '(')
     {
         pos++;
-        pos = data.find_first_not_of("\t ", pos);
-        while (data[pos] != ')')
+        pos = data->data.find_first_not_of("\t ", pos);
+        while (data->data[pos] != ')')
         {
             son = read_node(data, pos, str, av);
             node->add_son(son);
-            pos = data.find_first_not_of("\t ", pos);
+            pos = data->data.find_first_not_of("\t ", pos);
             if (std::string::npos == pos)
                 throw (std::string("Error Expected ')'"));
         }

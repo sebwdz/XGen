@@ -36,12 +36,10 @@ class           MovableLine
     void                set_parent(class Movable* parent);
 
     class Movable       *get_parent();
-    CHANPLIST           &get_inter();
     std::pair<int, int>     &get_range();
 
 private:
     std::stack<std::pair<ChanPropriety*, Object*> >     m_stoped;
-    CHANPLIST                                           m_inter;
     std::pair<float, float>                             m_move;
     CHAN_MOVELIST                                       m_change;
     class Movable                                       *m_parent;

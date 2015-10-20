@@ -8,7 +8,7 @@ void        Decriptor::exec()
     Monitor::get_instance()->begin_time(MN_INSTR);
     turn(m_node.get());
     Monitor::get_instance()->end_time(MN_INSTR);
-    if (m_parent && CAST(Brain*)(m_parent))
+    if (m_parent && m_parent->get_type() & TYPE_BRAIN)
     {
         m_state = STATE_EXEC;
         make_move_line();
@@ -170,7 +170,7 @@ int         Decriptor::decript_function(GeneticalNode *node)
 {
     if ((node->get_value() == KILL|| node->get_value() == TAKEOUT) && m_parent)
     {
-        if (!CAST(Brain*)(m_parent) && m_parent->get_parent())
+        if (!(m_parent->get_type() & TYPE_BRAIN) && m_parent->get_parent())
             m_parent->get_parent()->get_line()->add_signal(node->get_value(), m_parent);
         else
             m_parent->get_line()->add_signal(node->get_value(), this);
@@ -234,7 +234,10 @@ void        Decriptor::set_propriety(GeneticalNode *node, ChanPropriety *prop)
         else if (node->get_value() == ACT)
         {
             if (it == 0)
+              {
+                prop->set_chan(get_line()->get_chan(cp->get_value()));
                 prop->set_act(TO, cp->get_value());
+              }
             else
                 prop->set_act(OTH, cp->get_value());
         }

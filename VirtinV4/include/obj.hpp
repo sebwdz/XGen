@@ -6,7 +6,7 @@
 #include    <boost/smart_ptr/shared_ptr.hpp>
 
 #define     SMART(X) boost::shared_ptr<X>
-#define     CAST(X)  dynamic_cast<X>
+#define     CAST(X)  static_cast<X>
 
 #define     OBJ_IT  std::vector<SMART(ObjClass)>::iterator
 

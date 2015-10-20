@@ -2,11 +2,11 @@
 #define SIGNAL_HPP
 
 #include    <boost/unordered_map.hpp>
-#include    "Object/ObjectMap.hpp"
+#include    "Object/Object.hpp"
 
 #define     SIG_CATCH       void (SignalManager::*)(unsigned int, void*)
 
-class       SignalManager : public ObjectMap
+class       SignalManager : public Object
 {
 public:
     SignalManager(Object *parent);

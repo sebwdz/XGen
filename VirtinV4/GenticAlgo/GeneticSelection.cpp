@@ -46,7 +46,7 @@ void            GeneticalAlgo::sort_list()
         move = false;
         for (it = m_son.begin(); it != m_son.end(); it++)
         {
-            if ((it != m_son.begin() && CAST(GeneticalIndividu*)((*it).get())->get_fitness() >
+            if ((it != m_son.begin() && dynamic_cast<GeneticalIndividu*>((*it).get())->get_fitness() >
                     CAST(GeneticalIndividu*)((*prev).get())->get_fitness()))
             {
                 tmp = *it;

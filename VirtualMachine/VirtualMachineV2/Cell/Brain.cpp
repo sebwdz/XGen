@@ -4,6 +4,7 @@
 
 Brain::Brain() : ModuleClass(0)
 {
+  m_type ^= TYPE_BRAIN;
 }
 
 Brain::~Brain()

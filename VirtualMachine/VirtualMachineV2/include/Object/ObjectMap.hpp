@@ -1,20 +1,20 @@
 #ifndef OBJECTMAP_HPP
 #define OBJECTMAP_HPP
 
-# include       "Object.hpp"
-
 typedef class   ClassCase    ClassCase;
 
-class           ObjectMap : public Object
+class           ObjectMap
 {
 public:
-                ObjectMap(Object *parent);
+                ObjectMap();
                 virtual ~ObjectMap();
 
                 ClassCase                       *get_cases();
+                std::pair<float, float>         &get_pos();
+                void                            set_pos(std::pair<float, float> &pos);
                 void                            set_case(ClassCase* mycase);
 protected:
-
+                std::pair<float, float> m_pos;
                 ClassCase                       *m_case;
 };
 

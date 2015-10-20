@@ -81,7 +81,7 @@ GeneticalNode        *GeneticalNode::get_obj(int &move, GeneticalNode *from, int
     }
     if (!parent)
     {
-        if (m_parent && CAST(GeneticalNode*)(m_parent))
+        if (m_parent && dynamic_cast<GeneticalNode*>(m_parent))
             return (CAST(GeneticalNode*)(m_parent)->get_obj(move, this, 0));
         else
             return (get_obj(move, from, 0));

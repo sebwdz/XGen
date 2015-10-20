@@ -5,6 +5,7 @@
 CellClass::CellClass(Object *parent) : ModuleClass(parent)
 {
     m_sig.insert(std::make_pair(DUPLIC, &SignalManager::catch_duplic));
+    m_type ^= TYPE_CELL;
 }
 
 CellClass::~CellClass()

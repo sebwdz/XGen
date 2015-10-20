@@ -22,15 +22,15 @@ void                            ClassCase::set_size(int size)
     m_size = size;
 }
 
-void                            ClassCase::add_obj(ObjectMap* obj)
+void                            ClassCase::add_obj(Object* obj)
 {
     obj->set_case(this);
     m_obj.push_back(obj);
 }
 
-void                            ClassCase::remove_obj(ObjectMap *obj)
+void                            ClassCase::remove_obj(Object *obj)
 {
-    std::list<ObjectMap*>::iterator         it;
+    std::list<Object*>::iterator         it;
 
     for (it = m_obj.begin(); it != m_obj.end(); it++)
     {
@@ -42,7 +42,7 @@ void                            ClassCase::remove_obj(ObjectMap *obj)
     }
 }
 
-std::list<ObjectMap*>       &ClassCase::get_obj()
+std::list<Object*>       &ClassCase::get_obj()
 {
     return (m_obj);
 }
@@ -59,11 +59,11 @@ LnkCase                   *ClassCase::get_lnk()
 
 void                        ClassCase::interact_with(MovableLine *move, Object *obj)
 {
-    std::list<ObjectMap*>::iterator   it;
+    std::list<Object*>::iterator   it;
 
     for (it = m_obj.begin(); it != m_obj.end(); it++)
     {
-        if (CAST(Movable*)(*it) && *it != move->get_parent())
+        if ((*it)->get_type() & TYPE_MOVABLE && *it != move->get_parent())
             move->interact(CAST(Movable*)(*it));
     }
 }
@@ -100,7 +100,8 @@ bool                        ClassCase::get_dist(LnkCase *lnk, MovableLine *move)
     std::pair<float, float> vct;
     std::pair<int, int>     range;
 
-    if (lnk->get_map()) {
+    if (lnk->get_map())
+      {
         range = move->get_range();
         vct.first = (lnk->get_pos().first * (m_size / 5)) - move->get_parent()->get_pos().first;
         vct.second = (lnk->get_pos().second * (m_size / 5)) - move->get_parent()->get_pos().second;

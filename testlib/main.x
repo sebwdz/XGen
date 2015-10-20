@@ -1,60 +1,81 @@
 MAIN<
 (
-   	:Cycle ( #duplic #time3 creat ( :Main_Cell ) 50 5 )
-)
->
-
-Main_Cell<
-(
-	:Cycle ( #crt1 #time1 new_head ( :CELL_1 ) 30 4 )
-	:Cycle ( #crt2 #time2 new_head ( :CELL_2 ) 20 1 )
-
-	and (
+	inf ( ( #canDuplic 1 )
+		:Cycle ( #crt1 #time1 new_head ( :Cytosol ) 3 6 )
+		:Cycle ( #crt3 #time3 new_head ( :Nucleus_Move ) 2 1 )
+	)
+	:Init ( #init 
 		0 (
-			sup ( ( #crt1 29 ) )
-			sup ( ( #crt2 19 ) )
+			new_head ( :Nucleus )
+			inf ( ( @S_Duplic 1 )
+				shared ( @S_Duplic )
+				set ( @S_Duplic 1 )
+				set ( #canDuplic 1 )
+			)
 		)
-		kill
+	)
+	sup ( ( #canDuplic 0 )
+		:Cycle ( #duplic #time duplic ( )  20 30 )
+		sup ( ( #duplic 29 ) kill )
 	)
 )
 >
 
-CELL_1<
+Cytosol<
 (
-	:Init ( #init :Init_Cell1 )
+	:Init ( #init :Init_Cytosol )
 )
 >
 
-CELL_2<
+Nucleus<
 (
-	:Init ( #init :Init_Cell2 )
+	:Init ( #init :Init_Nucleus )
 )
 >
 
-Init_Cell1<
+Nucleus_Move<
 (
-	set ( @ImCell 40 )
-
-        :Make_Rpls_Mv ( &Rpls oth @ImCell @ImCell )
-        :Init_Prop_Chan ( &Rpls 10 10 )
+	:Init ( #init :Init_Nucleus_Move )
+	:Cycle ( #up #time take_out 10 1 )
 )
 >
 
-Init_Cell2<
+Init_Nucleus_Move<
 (
-	set ( @Impulse 10 @ImMaster 10 )
+	set ( @ImLink 10 )
 
-	:Make_Atr_Mv ( &AtrC oth @ImMaster @ImCell )
-	:Init_Prop_Chan ( &AtrC 15 40 )
+        :Set_Prop_Chan ( &Link type ( link ) )
+        :Set_Prop_Chan ( &Link act ( @ImNucleus @block ) )
+        :Set_Prop_Chan ( &Link dst ( 20 ) )                     [ stop when is linked ]
+	
+        :Make_Rpls_Mv ( &Rpls oth @ImLink @ImLink )
+        :Init_Prop_Chan ( &Rpls 10 60 )
 
-	:Make_Rpls_Mv ( &Rpls oth @ImMaster @ImMaster )
-	:Init_Prop_Chan ( &Rpls 10 20 )
+        :Make_Atr_Mv ( &Atr oth @ImLink @ImNucleus )    [ replace with link force ]
+        :Init_Prop_Chan ( &Atr 15 20 )
+)
+>
 
-	:Make_Rpls_Mv ( &RplsCell1 oth @ImMaster @ImCell )
-	:Init_Prop_Chan ( &RplsCell1 10 10 )
+Init_Cytosol<
+(
+	set ( @ImCytosol 30 )
 
-	:Make_Atr_Mv ( &Atr to @ImMaster @impulseStk )
-        :Init_Prop_Chan ( &Atr 4 50 )
-[	take_out ( )]
+        :Make_Rpls_Mv ( &Rpls oth @ImCytosol @ImCytosol )	[ maybe replace with link force ]
+       	:Init_Prop_Chan ( &Rpls 10 10 )
+)
+>
+
+Init_Nucleus<
+(
+	set ( @Impulse 10 @ImNucleus 10 )
+
+	:Make_Atr_Mv ( &AtrC oth @ImNucleus @ImCytosol )	[ maybe replace with force link force ]
+	:Init_Prop_Chan ( &AtrC 5 60 )
+
+	:Make_Rpls_Mv ( &RplsCell1 to @ImNucleus @ImCytosol )
+	:Init_Prop_Chan ( &RplsCell1 2 10 )
+
+	:Make_Rpls_Mv ( &RplsCell2 oth @ImNucleus @ImCytosol )
+        :Init_Prop_Chan ( &RplsCell2 15 10 )
 )
 >

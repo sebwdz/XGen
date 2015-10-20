@@ -12,7 +12,7 @@ ClassMap::~ClassMap()
 {
 }
 
-void        ClassMap::add_obj(ObjectMap *obj)
+void        ClassMap::add_obj(Object *obj)
 {
     std::pair<int, int>     pos;
     LnkCase                 *lnk;
@@ -135,7 +135,7 @@ void                    ClassMap::insert(LnkCase *lnk)
     m_map.insert(boost::bimap<std::pair<int, int>, SMART(LnkCase)>::value_type(lnk->get_pos(), add));
 }
 
-void                    ClassMap::remove_object(ObjectMap *obj)
+void                    ClassMap::remove_object(Object *obj)
 {
     SMART(ObjectMap)        res;
     LnkCase                 *mycase;
@@ -149,7 +149,7 @@ void                    ClassMap::remove_object(ObjectMap *obj)
     ClassCase::remove_obj(obj);
 }
 
-void        ClassMap::move_object(ObjectMap *obj)
+void        ClassMap::move_object(Object *obj)
 {
     remove_object(obj);
     add_obj(obj);
@@ -164,7 +164,7 @@ void        ClassMap::clean()
     it = m_map.begin();
     while (it != m_map.end())
     {
-        if (CAST(ClassMap*)(it->right->get_case()))
+        if (dynamic_cast<ClassMap*>(it->right->get_case()))
             CAST(ClassMap*)(it->right->get_case())->clean();
         if (it->right->get_case() && !it->right->get_case()->get_obj().size())
         {

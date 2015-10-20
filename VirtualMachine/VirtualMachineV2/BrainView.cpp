@@ -63,8 +63,6 @@ void        BrainView::show_map(ClassMap *map)
             rect.setOutlineThickness(0.5);
             draw(rect);
         }
-        if (CAST(ClassMap*)(it->second->get_case()))
-            show_map(CAST(ClassMap*)(it->second->get_case()));
     }
 }
 
@@ -98,7 +96,7 @@ void        BrainView::show_module(ModuleClass *module)
     draw(shape);
     for (it = module->get_begin(); it != module->get_end(); it++)
     {
-        if (CAST(ModuleClass*)(*it))
+        if ((*it)->get_type() & TYPE_MODULE)
             show_module(CAST(ModuleClass*)(*it));
         else
             show_object(*it);

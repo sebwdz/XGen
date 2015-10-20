@@ -13,7 +13,6 @@ public:
     virtual void    move();
     virtual void    exec_move();
     void            make_move_line();
-    virtual void    get_move_line(MovableLine *move, Object *from);
     MovableLine     *get_move_line();
 protected:
     MovableLine     m_moveLine;

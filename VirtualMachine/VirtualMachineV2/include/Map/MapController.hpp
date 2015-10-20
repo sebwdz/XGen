@@ -9,9 +9,9 @@ public:
     MapController();
     ~MapController();
 
-    void            add_obj(ObjectMap *obj);
-    void            move_object(ObjectMap *obj);
-    void            remove_object(ObjectMap *obj);
+    void            add_obj(Object *obj);
+    void            move_object(Object *obj);
+    void            remove_object(Object *obj);
     void            clean();
     ClassMap        *get_map();
 

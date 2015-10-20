@@ -76,7 +76,7 @@ void            Tester::exec()
     gettimeofday(&_all[0], NULL);
 
     Monitor::get_instance()->begin_time(MN_ALL);
-    while (cycle < 3000)
+    while (cycle < 3500)
     {
         if (m_view)
             m_brain->make_skeleton();

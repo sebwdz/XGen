@@ -16,11 +16,11 @@ public:
                 ClassMap();
                 virtual ~ClassMap();
 
-                virtual void                    add_obj(ObjectMap *obj);
+                virtual void                    add_obj(Object *obj);
                 void                            cross_lnk(LnkCase *lnk, LnkDir dir);
                 void                            insert(LnkCase *lnk);
-                void                            remove_object(ObjectMap *obj);
-                void                            move_object(ObjectMap *obj);
+                void                            remove_object(Object *obj);
+                void                            move_object(Object *obj);
                 LnkCase                         *make_lnk(std::pair<int, int> &pos);
                 LnkCase                         *get_near(std::pair<float, float> &pos);
                 void                            clean();

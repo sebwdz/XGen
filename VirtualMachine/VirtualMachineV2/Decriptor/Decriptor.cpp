@@ -5,7 +5,7 @@
 Decriptor::Decriptor(Object *obj) : Movable(obj)
 {
     m_jmp = 0;
-    m_sig.insert(std::make_pair(ATTACH, (SIG_CATCH)(&Decriptor::catch_simple)));
+    m_type ^= TYPE_DECRIPTOR;
 }
 
 Decriptor::~Decriptor()
@@ -15,7 +15,7 @@ Decriptor::~Decriptor()
 
 LineDecript     *Decriptor::get_line()
 {
-    if (m_parent && !CAST(Brain*)(m_parent))
+    if (m_parent && !(m_parent->get_type() & TYPE_BRAIN))
         return (m_parent->get_line());
     return (&m_line);
 }
@@ -65,7 +65,7 @@ void        Decriptor::catch_simple(unsigned int code, void *sig)
     ModuleClass     *parent;
     Object          *obj;
 
-    if (code == ATTACH && (!m_parent || CAST(Brain*)(m_parent)))
+    if (code == ATTACH && (!m_parent || m_parent->get_type() & TYPE_BRAIN))
     {
         parent = static_cast<ModuleClass*>(sig);
         parent->add_object(this);

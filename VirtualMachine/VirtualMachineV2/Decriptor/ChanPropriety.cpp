@@ -11,6 +11,8 @@ ChanPropriety::ChanPropriety()
     m_dir = false;
     m_type = false;
     m_atr = false;
+    m_link = false;
+    m_chan = NULL;
 }
 
 ChanPropriety::~ChanPropriety()
@@ -38,8 +40,10 @@ void            ChanPropriety::set_type(unsigned int type)
         m_atr = false;
     else if (type == ATR)
         m_atr = true;
-     if (type == ATTACH)
+    else if (type == ATTACH)
         m_attach = true;
+    else if (type == LINK)
+        m_link = true;
 }
 
 void            ChanPropriety::set_pow(unsigned int type, float value)
@@ -48,6 +52,11 @@ void            ChanPropriety::set_pow(unsigned int type, float value)
         m_dist = value;
     else if (type == PW)
         m_pow = value;
+}
+
+void            ChanPropriety::set_chan(Chanel *chan)
+{
+  m_chan = chan;
 }
 
 void            ChanPropriety::set_act(unsigned int type, unsigned int chan)
@@ -67,6 +76,10 @@ bool            ChanPropriety::get_type(unsigned int type)
 {
     if (type == ATTACH && m_attach)
         return (true);
+    else if (type == LINK && m_link)
+        return (true);
+    else if (type == LINK)
+        return (false);
     else if (type == ATTACH)
         return (false);
     else if (type == MV && m_type)
@@ -96,4 +109,9 @@ float           ChanPropriety::get_pow(unsigned int type)
 unsigned int    *ChanPropriety::get_act()
 {
     return (m_act);
+}
+
+Chanel          *ChanPropriety::get_chan()
+{
+  return (m_chan);
 }

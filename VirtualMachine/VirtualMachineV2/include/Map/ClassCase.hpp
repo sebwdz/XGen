@@ -13,9 +13,9 @@ public:
 
     void                                    set_lnk(LnkCase *paent);
     void                                    set_size(int size);
-    virtual void                            add_obj(ObjectMap   *obj);
-    virtual void                            remove_obj(ObjectMap *obj);
-    std::list<ObjectMap*>                   &get_obj();
+    virtual void                            add_obj(Object   *obj);
+    virtual void                            remove_obj(Object *obj);
+    std::list<Object*>                      &get_obj();
     int                                     get_size();
     LnkCase                                 *get_lnk();
     bool                                    get_dist(LnkCase *lnk, MovableLine *move);
@@ -23,7 +23,7 @@ public:
     void                                    cross_map(MovableLine *move, Object *obj, LnkCase *lnk);
 
 protected:
-    std::list<ObjectMap*>           m_obj;
+    std::list<Object*>           m_obj;
     int                             m_size;
     LnkCase                         *m_parent;
 };

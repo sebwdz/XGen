@@ -22,8 +22,6 @@ DecriptorManager::DecriptorManager()
     m_opt.insert(std::make_pair(SHARED, &Decriptor::use_function));
     m_opt.insert(std::make_pair(UNSHARED, &Decriptor::use_function));
     m_opt.insert(std::make_pair(FREE, &Decriptor::decript_function));
-    m_opt.insert(std::make_pair(LINK, &Decriptor::creat_function));
-    m_opt.insert(std::make_pair(UNLINK, &Decriptor::creat_function));
     m_opt.insert(std::make_pair(DUPLIC, &Decriptor::creat_function));
     m_opt.insert(std::make_pair(KILL, &Decriptor::decript_function));
     m_opt.insert(std::make_pair(VAR, &Decriptor::set_var_function));

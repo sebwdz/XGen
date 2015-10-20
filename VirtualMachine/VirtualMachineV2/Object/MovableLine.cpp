@@ -15,7 +15,6 @@ void            MovableLine::make()
 {
     m_move.first = 0;
     m_move.second = 0;
-    m_inter.insert(m_parent->get_line()->get_begin_prop(), m_parent->get_line()->get_end_prop());
     make_range();
 }
 
@@ -24,12 +23,16 @@ void            MovableLine::make_range()
     int                                 range[2] = {0};
     CHANPLIST::iterator                 it;
 
-    for (it = m_inter.begin(); it != m_inter.end(); it++)
+    for (it = m_parent->get_line()->get_begin_prop();
+         it != m_parent->get_line()->get_end_prop(); it++)
     {
-        if (it->second->get_pow(DST) > range[1])
-            range[1] = it->second->get_pow(DST);
-        if (range[0] == 0 || it->second->get_pow(DST) < range[0])
-            range[0] = it->second->get_pow(DST);
+        if (it->second->get_pow(PW))
+          {
+            if (it->second->get_pow(DST) > range[1])
+              range[1] = it->second->get_pow(DST);
+            if (range[0] == 0 || it->second->get_pow(DST) < range[0])
+              range[0] = it->second->get_pow(DST);
+          }
     }
     m_range.first = range[0];
     m_range.second = range[1];
@@ -37,33 +40,7 @@ void            MovableLine::make_range()
 
 void            MovableLine::filter(Object *obj, bool stop)
 {
-    CHANPLIST::iterator     it;
-    CHANPLIST::iterator     rm;
 
-    if (stop)
-    {
-        it = m_inter.begin();
-        while (it != m_inter.end())
-        {
-            if (!obj->get_line()->get_value(it->second->get_act()[0], true) ||
-                    !obj->get_line()->get_value(it->second->get_act()[1], true))
-            {
-                m_stoped.push(std::make_pair(it->second, obj));
-                rm = it++;
-                m_inter.erase(rm);
-            }
-            else
-                it++;
-        }
-    }
-    else
-    {
-        while (m_stoped.size() && m_stoped.top().second == obj)
-        {
-            m_inter.insert(std::make_pair(m_stoped.top().first->get_ref(), m_stoped.top().first));
-            m_stoped.pop();
-        }
-    }
 }
 
 void            MovableLine::change_chan(unsigned int ref, sMovableChan *move)
@@ -133,7 +110,7 @@ void            MovableLine::interact_with(class Movable *obj, ChanPropriety *pr
     float                           lentmp;
 
     vct = m_vct;
-    if (prop->get_type(ATTACH))
+    if (prop->get_type(ATTACH) || prop->get_type(LINK))
     {
         check_attach(obj, prop);
         return ;
@@ -143,7 +120,7 @@ void            MovableLine::interact_with(class Movable *obj, ChanPropriety *pr
         vct.first *= -1;
         vct.second *= -1;
     }
-    if ((tmp[0] = m_parent->get_line()->get_value(prop->get_act()[0])) &&
+    if ((tmp[0] = prop->get_chan()->get_value()) &&
             (tmp[1] = obj->get_line()->get_value(prop->get_act()[1])))
     {
         chan.first = tmp[0] + tmp[1];
@@ -173,9 +150,9 @@ void            MovableLine::interact(Movable *obj)
         {
             m_vct.first /= m_len;
             m_vct.second /= m_len;
-            for (it = m_inter.begin(); it != m_inter.end(); it++)
+            for (it = m_parent->get_line()->get_begin_prop(); it != m_parent->get_line()->get_end_prop(); it++)
             {
-                if (it->second->get_pow(DST) >= m_len)
+                if (it->second->get_chan() && it->second->get_pow(DST) >= m_len)
                     interact_with(obj, it->second);
             }
         }
@@ -228,11 +205,16 @@ bool              MovableLine::check_attach(Object *obj, ChanPropriety *prop)
     if (obj->get_line()->get_value(prop->get_act()[0]) > 0 &&
             obj->get_line()->get_value(prop->get_act()[1]) < 1)
     {
-        if (!CAST(Decriptor*)(obj) && CAST(Decriptor*)(m_parent))
+        if (prop->get_type(ATTACH) && !(obj->get_type() & TYPE_DECRIPTOR) && m_parent->get_type() & TYPE_DECRIPTOR)
         {
             m_parent->add_signal(ATTACH, static_cast<void*>(obj));
             return (true);
         }
+        else if (prop->get_type(LINK))
+          {
+            m_parent->add_signal(LINK, static_cast<void*>(obj));
+            return (true);
+          }
     }
     return (false);
 }
@@ -246,11 +228,6 @@ void            MovableLine::set_parent(Movable *parent)
 Movable*        MovableLine::get_parent()
 {
     return (m_parent);
-}
-
-CHANPLIST       &MovableLine::get_inter()
-{
-    return (m_inter);
 }
 
 std::pair<int, int>     &MovableLine::get_range()

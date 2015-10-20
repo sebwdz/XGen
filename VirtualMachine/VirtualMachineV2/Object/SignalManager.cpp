@@ -4,7 +4,7 @@
 #include        "Cell/Module.hpp"
 #include        "Object/Signal.hpp"
 
-SignalManager::SignalManager(Object *parent) : ObjectMap(parent)
+SignalManager::SignalManager(Object *parent) : Object(parent)
 {
     m_sig.insert(std::make_pair(CREAT, &SignalManager::catch_create));
     m_sig.insert(std::make_pair(NEW_HEAD, &SignalManager::catch_create));
@@ -49,7 +49,7 @@ void            SignalManager::catch_create(unsigned int code, void *sig)
 
     if (m_parent && code != NEW_HEAD)
         parent = CAST(ModuleClass*)(m_parent);
-    else if (CAST(ModuleClass*)(this))
+    else if (m_type & TYPE_MOVABLE)
         parent = CAST(ModuleClass*)(this);
     else
         return ;

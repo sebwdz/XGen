@@ -24,10 +24,11 @@ public:
 
     void                        move();
     void                        exec_move();
-    void                        get_move_line(MovableLine *move, Object *from);
+    void                        link(ModuleClass *obj, bool link);
 
     virtual void                catch_duplic(unsigned int code, void *sig);
     virtual void                catch_kill(unsigned int code, void *sig);
+    virtual void                catch_link(unsigned int code, void *sig);
     virtual void                catch_takeout(unsigned int code, void *sig);
     void                        cal_pos();
 
@@ -37,6 +38,7 @@ protected:
     OBJECT_LIST                 m_obj;
     OBJECT_LIST                 m_decriptor;
     MapController               *m_map;
+    std::vector<ModuleClass*>   m_links;
 };
 
 #endif // MODULE_HPP

@@ -5,7 +5,7 @@
 # include        <boost/bimap.hpp>
 # include        "LnkCase.hpp"
 
-# define        MAP             boost::bimap<std::pair<int, int>, SMART(LnkCase)>
+# define        MAP             boost::bimap<std::pair<int, int>, LnkCase*>
 # define        LEFT_MAP        MAP::left_map
 
 typedef class ClassMap          ClassMap;
@@ -18,18 +18,11 @@ public:
 
                 virtual void                    add_obj(Object *obj);
                 void                            cross_lnk(LnkCase *lnk, LnkDir dir);
-                void                            insert(LnkCase *lnk);
                 void                            remove_object(Object *obj);
-                void                            move_object(Object *obj);
                 LnkCase                         *make_lnk(std::pair<int, int> &pos);
-                LnkCase                         *get_near(std::pair<float, float> &pos);
-                void                            clean();
-                LEFT_MAP::iterator              get_begin();
-                LEFT_MAP::iterator              get_end();
 protected:
 
-    SMART(LnkCase)                                    m_begin;
-    boost::bimap<std::pair<int, int>, SMART(LnkCase)> m_map;
+    LnkCase                                     *m_begin;
 };
 
 #endif

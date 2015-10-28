@@ -7,30 +7,10 @@ GeneticalNode::GeneticalNode(GeneticObj *parent) : GeneticObj(parent)
     m_type = 0;
     m_chan = NULL;
     m_function = NULL;
-    if (parent)
-    {
-        set_propriety(parent->get_propriety());
-        if (CAST(GeneticalNode*)(parent))
-            m_len = parent->get_len() + 1;
-    }
 }
 
 GeneticalNode::~GeneticalNode()
 {
-}
-
-void            GeneticalNode::set_len(int len)
-{
-    OBJ_IT      it;
-
-    m_len = len;
-    if (m_len < m_propriety->len)
-    {
-        for (it = m_son.begin(); it != m_son.end(); it++)
-            CAST(GeneticalNode*)((*it).get())->set_len(m_len + 1);
-    }
-    else
-        m_son.clear();
 }
 
 void            GeneticalNode::set_value(unsigned int value)

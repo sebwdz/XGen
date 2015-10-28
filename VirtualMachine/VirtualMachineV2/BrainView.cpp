@@ -40,12 +40,12 @@ void        BrainView::show_tester(MachineTester *tester)
 
 void        BrainView::show_map(ClassMap *map)
 {
-    boost::bimap<std::pair<int, int>, SMART(LnkCase)>::left_map::iterator  it;
+    boost::bimap<std::pair<int, int>, LnkCase*>::left_map::iterator  it;
     OBJECT_LIST::iterator                                                  obj;
     int                                                                    size;
 
     size = map->get_size() / 5;
-    for (it = map->get_begin(); it != map->get_end(); it++)
+    /*for (it = map->get_begin(); it != map->get_end(); it++)
     {
         if (it->second->get_case())
         {
@@ -63,7 +63,7 @@ void        BrainView::show_map(ClassMap *map)
             rect.setOutlineThickness(0.5);
             draw(rect);
         }
-    }
+    }*/
 }
 
 void        BrainView::show_module(ModuleClass *module)

@@ -68,15 +68,20 @@ void                        ClassCase::interact_with(MovableLine *move, Object *
     }
 }
 
-void                        ClassCase::cross_map(MovableLine *move, Object *obj, LnkCase *lnk)
+void                                ClassCase::cross_map(MovableLine *move, Object *obj, LnkCase *lnk)
 {
-    std::vector<LnkCase*>   cases;
-    unsigned int            it;
-    int                     dir;
-    LnkCase*                tmp;
+    static std::vector<LnkCase*>    cases;
+    unsigned int                    it;
+    unsigned int                    nb;
+    int                             dir;
+    LnkCase*                        tmp;
 
-    cases.push_back(lnk);
-    for (it = 0; it < cases.size(); it++)
+    if (cases.size())
+      cases[0] = lnk;
+    else
+      cases.push_back(lnk);
+    nb = 1;
+    for (it = 0; it < nb; it++)
     {
         if ((cases[it]->get_case()))
             cases[it]->get_case()->interact_with(move, obj);
@@ -84,9 +89,13 @@ void                        ClassCase::cross_map(MovableLine *move, Object *obj,
         while (dir < 4) {
             tmp = cases[it]->get_dir((LnkDir)dir);
             if (tmp && get_dist(tmp, move) &&
-                    std::find(cases.begin(), cases.end(), tmp) == cases.end())
+                    std::find(cases.begin(), cases.begin() + nb, tmp) == cases.begin() + nb)
             {
-                cases.push_back(tmp);
+                if (nb < cases.size())
+                  cases[nb] = tmp;
+                else
+                  cases.push_back(tmp);
+                nb++;
             }
             dir++;
         }

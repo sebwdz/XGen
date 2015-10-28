@@ -9,7 +9,7 @@ TEMPLATE = lib
 
 QT += core gui
 
-CONFIG += plugin
+CONFIG += lib
 
 INCLUDEPATH += ../../VirtinV4/include
 INCLUDEPATH += include/

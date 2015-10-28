@@ -2,24 +2,6 @@
 #include        <cstdlib>
 #include        "GeneticalNode.hpp"
 
-void                GeneticalNode::generate()
-{
-    int             nb;
-    GeneticalNode   *node;
-
-    m_value = get_alea_range();
-    if (m_len < m_propriety->len)
-    {
-        nb = rand() % m_propriety->height;
-        for (int it = 0; it < nb; it++)
-        {
-            m_son.push_back(SMART(GeneticalNode)(new GeneticalNode(this)));
-            node = CAST(GeneticalNode*)(m_son.back().get());
-            node->generate();
-        }
-    }
-}
-
 SMART(ObjClass)    GeneticalNode::copy(boost::shared_ptr<ObjClass> cp)
 {
     SMART(GeneticalNode)    node;

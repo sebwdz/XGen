@@ -6,11 +6,11 @@
 
 int make(std::vector<std::string> &conf)
 {
-    NodeMaker       *data = 0;
-    std::ifstream   file;
-    int             it;
-    std::string     str;
-    std::vector<SMART(GeneticalNode)>   av;
+    NodeMaker                        *data = 0;
+    std::ifstream                    file;
+    int                              it;
+    std::string                      str;
+    std::vector<SMART(GeneticObj)>   av;
 
     try
     {

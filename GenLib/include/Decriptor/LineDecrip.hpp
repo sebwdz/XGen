@@ -3,13 +3,12 @@
 
 
 #include    <boost/unordered_map.hpp>
-#include    <Genetic/GeneticalNode.hpp>
+#include    <Genetic/GeneticBlock.hpp>
 
 #include    "chanel.hpp"
 #include    "ChanelPropriety.hpp"
 #include    "Opt.hpp"
 
-#define     USE_LIST        boost::unordered_map<unsigned int, Chanel*>
 #define     SIGNALS_LIST    std::vector<std::pair<unsigned int, void* > >
 
 class               LineDecript

@@ -71,24 +71,23 @@ void        exec(Brain *brain, BrainView *view)
 int         main(int ac, char **av)
 {
   Brain         *brain;
-  GeneticalNode *dna;
+  SMART(GeneticBlock) dna;
   std::string   file;
   BrainView     *view = NULL;
 
-  if (ac < 2)
+  /*if (ac < 2)
     {
       std::cout << "./GenLibTester node_file" << std::endl;
       return (1);
-    }
+    }*/
   if (ac > 2)
     view = new BrainView();
   brain = new Brain();
-  dna = new GeneticalNode();
-  file = av[1];
+  dna = SMART(GeneticBlock)(new GeneticBlock());
+  file = "../testlib2/out.gen"/*av[1]*/;
 
   dna->load_file(file);
-  brain->set_dna(SMART(GeneticalNode)(dna));
-  dna = NULL;
+  brain->set_dna(dna);
 
   exec(brain, view);
 

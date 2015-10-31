@@ -16,6 +16,8 @@ public:
     ObjClass(ObjClass *parent = 0);
     virtual ~ObjClass();
 
+    int             get_type();
+
     void            save_file(std::string &filename);
     virtual void    save(std::ofstream &file) = 0;
 
@@ -35,6 +37,7 @@ protected:
 
     ObjClass                          *m_parent;
     std::vector<SMART(ObjClass)>        m_son;
+    int                               m_type;
 
 };
 

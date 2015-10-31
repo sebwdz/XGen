@@ -13,9 +13,13 @@ public:
     GeneticObj(GeneticObj *parent = 0);
     virtual ~GeneticObj();
 
+    int                 get_type();
+    void                set_type(int type);
+
     virtual void        save(std::ofstream &file) = 0;
     virtual void        load(std::ifstream &file) = 0;
 protected:
+
 };
 
 #endif // GENETICOBJ_HPP

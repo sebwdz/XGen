@@ -1,6 +1,6 @@
 
 #include        <cstdlib>
-#include        "GeneticalNode.hpp"
+#include        "GeneticBlock.hpp"
 
 SMART(ObjClass)    GeneticalNode::copy(boost::shared_ptr<ObjClass> cp)
 {
@@ -8,9 +8,9 @@ SMART(ObjClass)    GeneticalNode::copy(boost::shared_ptr<ObjClass> cp)
     OBJ_IT                  it;
 
     if (!cp)
-        node = SMART(GeneticalNode)(new GeneticalNode(this));
+        node = SMART(GeneticalNode)(new GeneticalNode(NULL));
     else
-        node = boost::dynamic_pointer_cast<GeneticalNode>(cp);
+        node = boost::static_pointer_cast<GeneticalNode>(cp);
     node->m_value = m_value;
     node->m_type = m_type;
     node->m_function = m_function;
@@ -19,5 +19,20 @@ SMART(ObjClass)    GeneticalNode::copy(boost::shared_ptr<ObjClass> cp)
         node->m_son.push_back((*it)->copy());
         node->m_son.back()->set_parent(node.get());
     }
+    return (node);
+}
+
+SMART(ObjClass)    GeneticBlock::copy(boost::shared_ptr<ObjClass> cp)
+{
+    SMART(GeneticBlock)    node;
+
+    if (!cp)
+        node = SMART(GeneticBlock)(new GeneticBlock());
+    else
+        node = boost::static_pointer_cast<GeneticBlock>(cp);
+    node->set_obj(boost::static_pointer_cast<GeneticObj>(get_obj()->copy()));
+    node->set_parent(this);
+    if (node->get_obj()->get_type())
+      CAST(GeneticalNode*)(node->get_obj().get())->set_block(node.get());
     return (node);
 }

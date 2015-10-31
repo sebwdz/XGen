@@ -10,6 +10,11 @@ ObjClass::~ObjClass()
 {
 }
 
+int         ObjClass::get_type()
+{
+  return (m_type);
+}
+
 void        ObjClass::save_file(std::string &filename)
 {
     std::ofstream   file(filename.c_str());

@@ -1,47 +1,41 @@
-MAIN<
-(
-	inf ( ( #canDuplic 1 )
-		:Cycle ( #crt1 #time1 new_head ( :Cytosol ) 3 6 )
-		:Cycle ( #crt3 #time3 new_head ( :Nucleus_Move ) 2 1 )
+MAIN<(
+	inf ( ( #canDuplic 1 ) (
+			:Cycle ( #crt1 #time1 new_head ( :Cytosol ) 3 6 )
+			:Cycle ( #crt3 #time3 new_head ( :Nucleus_Move ) 2 1 )
+		)
 	)
 	:Init ( #init 
 		0 (
 			new_head ( :Nucleus )
-			inf ( ( @S_Duplic 1 )
-				shared ( @S_Duplic )
-				set ( @S_Duplic 1 )
-				set ( #canDuplic 1 )
+			inf ( ( @S_Duplic 1 ) (
+					shared ( @S_Duplic )
+					set ( @S_Duplic 1 )
+					set ( #canDuplic 1 )
+				)
 			)
 		)
 	)
-	sup ( ( #canDuplic 0 )
-		:Cycle ( #duplic #time duplic ( )  20 30 )
-		sup ( ( #duplic 29 ) kill )
+	sup ( ( #canDuplic 0 ) (
+			:Cycle ( #duplic #time duplic ( )  20 30 )
+			sup ( ( #duplic 29 ) kill )
+		)
 	)
-)
->
+)>
 
-Cytosol<
-(
+Cytosol<(
 	:Init ( #init :Init_Cytosol )
-)
->
+)>
 
-Nucleus<
-(
+Nucleus<(
 	:Init ( #init :Init_Nucleus )
-)
->
+)>
 
-Nucleus_Move<
-(
+Nucleus_Move<(
 	:Init ( #init :Init_Nucleus_Move )
 	:Cycle ( #up #time take_out 10 1 )
-)
->
+)>
 
-Init_Nucleus_Move<
-(
+Init_Nucleus_Move<(
 	set ( @ImLink 10 )
 
         :Set_Prop_Chan ( &Link type ( link ) )
@@ -53,20 +47,16 @@ Init_Nucleus_Move<
 
         :Make_Atr_Mv ( &Atr oth @ImLink @ImNucleus )    [ replace with link force ]
         :Init_Prop_Chan ( &Atr 15 20 )
-)
->
+)>
 
-Init_Cytosol<
-(
+Init_Cytosol<(
 	set ( @ImCytosol 30 )
 
         :Make_Rpls_Mv ( &Rpls oth @ImCytosol @ImCytosol )	[ maybe replace with link force ]
        	:Init_Prop_Chan ( &Rpls 10 10 )
-)
->
+)>
 
-Init_Nucleus<
-(
+Init_Nucleus<(
 	set ( @Impulse 10 @ImNucleus 10 )
 
 	:Make_Atr_Mv ( &AtrC oth @ImNucleus @ImCytosol )	[ maybe replace with force link force ]
@@ -77,5 +67,4 @@ Init_Nucleus<
 
 	:Make_Rpls_Mv ( &RplsCell2 oth @ImNucleus @ImCytosol )
         :Init_Prop_Chan ( &RplsCell2 15 10 )
-)
->
+)>

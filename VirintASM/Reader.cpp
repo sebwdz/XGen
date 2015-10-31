@@ -53,15 +53,15 @@ void        NodeMaker::read_data(std::ifstream &file)
 }
 
 
-SMART(GeneticalNode)               NodeMaker::read_node(NodeData *data, std::size_t &pos, std::string &str, std::vector<SMART(GeneticalNode)> &av)
+SMART(GeneticObj)               NodeMaker::read_node(NodeData *data, std::size_t &pos,
+                                                     std::string &str, std::vector<SMART(GeneticObj)> &av)
 {
-    SMART(GeneticalNode)                                    node;
-    SMART(GeneticalNode)                                    son;
+    SMART(GeneticObj)                                    node;
+    SMART(GeneticObj)                                    son;
     std::size_t                                             found;
     std::string                                             tmp;
-    std::vector<SMART(GeneticalNode)>                       newAv;
+    std::vector<SMART(GeneticObj)>                          newAv;
 
-    pos = data->data.find_first_not_of("\t ", pos);
     found = data->data.find_first_of("\t ()", pos);
     if (data->data[pos] == ':')
     {
@@ -83,7 +83,7 @@ SMART(GeneticalNode)               NodeMaker::read_node(NodeData *data, std::siz
 
         }
         make_node(tmp, str, newAv);
-        return (get_node(tmp)->node);
+        return (get_node(tmp)->block);
     }
     tmp = data->data.substr(pos, found - pos);
     node = get_value(data, tmp, av);

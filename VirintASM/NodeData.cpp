@@ -56,11 +56,11 @@ NodeMaker::~NodeMaker()
 
 void        NodeMaker::extract_arg(NodeData *dataN, std::string str)
 {
-    int     it2 = 0;
+    unsigned int     it2 = 0;
 
-    for (int it = 0; it < (int)str.size(); it++)
+    for (unsigned int it = 0; it < str.size(); it++)
     {
-        while (it < (int)str.size() && str[it] != ' ')
+        while (it < str.size() && str[it] != ' ')
             it++;
         if (str[it] == ' ')
             it--;
@@ -97,7 +97,7 @@ NodeData        *NodeMaker::get_node(std::string &name)
     return (0);
 }
 
-SMART(GeneticalNode)    NodeMaker::get_value(NodeData *data, std::string &value, std::vector<SMART(GeneticalNode)> &av)
+boost::shared_ptr<GeneticObj> NodeMaker::get_value(NodeData *data, std::string &value, std::vector<SMART(GeneticObj)> &av)
 {
     std::string             tmp;
     SMART(GeneticalNode)    node;
@@ -116,7 +116,7 @@ SMART(GeneticalNode)    NodeMaker::get_value(NodeData *data, std::string &value,
             if (data->arg.find(value) == data->arg.end())
                 throw (std::string(value + " isn't a valid argument"));
             v = data->arg[value];
-            if (v >= (int)av.size())
+            if (v >= av.size())
                 throw (std::string(value + " was not found, to few argument"));
             return (av[v]);
         }
@@ -127,11 +127,14 @@ SMART(GeneticalNode)    NodeMaker::get_value(NodeData *data, std::string &value,
             node->set_value(get_var(tmp));
             node->set_type(GLOBAL_CHAN);
         }
-        else if (value[0] == '#')
+        else if (value[0] == '#' || value[0] == '!')
         {
             node = SMART(GeneticalNode)(new GeneticalNode());
+            if (value[0] == '#')
+              node->set_type(FAST_CHAN);
+            else
+              node->set_type(LOCAL_CHAN);
             node->set_value(Chanel::hash(value.substr(1)));
-            node->set_type(FAST_CHAN);
         }
         else
         {
@@ -153,7 +156,7 @@ SMART(GeneticalNode)    NodeMaker::get_value(NodeData *data, std::string &value,
     {
         throw (std::string("Syntax Error with : ") + value + std::string("."));
     }
-    return (node);
+    return (boost::static_pointer_cast<GeneticObj>(node));
 }
 
 unsigned int    NodeMaker::get_var(std::string &str)
@@ -187,7 +190,7 @@ void        NodeMaker::dasm(std::ofstream &file, GeneticalNode* node)
     }*/
 }
 
-void        NodeMaker::make_node(std::string &name, std::string &str, std::vector<SMART(GeneticalNode)> &av)
+void        NodeMaker::make_node(std::string &name, std::string &str, std::vector<SMART(GeneticObj)> &av)
 {
     NodeData    *Node;
     std::size_t pos = 0;
@@ -195,7 +198,8 @@ void        NodeMaker::make_node(std::string &name, std::string &str, std::vecto
     Node = get_node(name);
     check_pile(Node);
     str += "begin " + name + "\n";
-    Node->node = read_node(Node, pos, str, av);
+    Node->block = SMART(GeneticBlock)(new GeneticBlock());
+    Node->block->set_obj(read_node(Node, pos, str, av));
     str += "finish " + name + " succesfull\n";
     m_pile.pop_back();
 }
@@ -212,11 +216,11 @@ void            NodeMaker::check_pile(NodeData *data)
 
 void            NodeMaker::save(std::string &out)
 {
-    SMART(GeneticalNode)    res;
+    SMART(GeneticBlock)    res;
     std::ofstream   file(out.c_str(), std::ios_base::binary);
 
     if (!file.is_open())
         throw (std::string("Can't open out file"));
-    res = get_node(m_main)->node;
+    res = get_node(m_main)->block;
     res->save(file);
 }

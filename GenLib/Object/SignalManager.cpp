@@ -63,7 +63,7 @@ void            SignalManager::catch_create(unsigned int code, void *sig)
     for (it = 0; it < (int)vct.size(); it++)
     {
         decript = new Decriptor(parent);
-        decript->set_node(boost::static_pointer_cast<GeneticalNode>(vct[it]->copy()));
+        decript->set_block(boost::static_pointer_cast<GeneticObj>(vct[it]->copy()));
         decript->get_line()->shared_to_line(get_line());
         decript->set_pos(get_pos());
         parent->add_object(decript);

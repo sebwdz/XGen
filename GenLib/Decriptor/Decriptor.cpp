@@ -21,9 +21,9 @@ LineDecript     *Decriptor::get_line()
     return (&m_line);
 }
 
-void        Decriptor::set_node(boost::shared_ptr<GeneticalNode> node)
+void        Decriptor::set_block(SMART(GeneticObj) block)
 {
-    m_node = node;
+    m_block = block;
 }
 
 unsigned int    Decriptor::get_value(GeneticalNode *node)
@@ -51,8 +51,20 @@ Chanel*         Decriptor::get_chan(GeneticalNode *node)
             chan = it->second;
         node->set_chan(chan);
     }
-    else
+    else if (node->get_type() == LOCAL_CHAN) {
+        if ((it = node->get_block()->get_chan().find(node->get_value())) == node->get_block()->get_chan().end())
+        {
+            chan = new Chanel();
+            chan->set_ref(node->get_value());
+            node->get_block()->get_chan().insert(std::make_pair(node->get_value(), chan));
+        }
+        else
+            chan = it->second;
+        node->set_chan(chan);
+    }
+    else {
         node->set_chan(get_line()->get_chan(node->get_value()));
+      }
     return (node->get_chan());
 }
 

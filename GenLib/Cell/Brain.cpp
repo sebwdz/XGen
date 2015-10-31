@@ -12,12 +12,12 @@ Brain::~Brain()
 
 }
 
-void        Brain::set_dna(SMART(GeneticalNode) node)
+void        Brain::set_dna(boost::shared_ptr<GeneticObj> block)
 {
     CellClass       *cell;
 
     cell = new CellClass(this);
-    cell->set_dna(node);
+    cell->set_dna(block);
     add_object(cell);
 }
 

@@ -3,8 +3,9 @@
 
 #include    "Genetic/GeneticObj.hpp"
 
-typedef class Decriptor Decriptor;
-typedef class Chanel    Chanel;
+typedef class Decriptor     Decriptor;
+typedef class Chanel        Chanel;
+typedef class GeneticBlock  GeneticBlock;
 
 class   GeneticalNode : public GeneticObj
 {
@@ -15,14 +16,14 @@ class   GeneticalNode : public GeneticObj
         void        load(std::ifstream &stream);
         void        save(std::ofstream &stream);
 
+        void            set_block(GeneticBlock *block);
         void            set_value(unsigned int value);
         void            set_chan(Chanel *chan);
-        void            set_type(unsigned char type);
-        void            set_function(int (Decriptor::*fonction)(GeneticalNode *));
+        void            set_function(int (Decriptor::*fonction)(GeneticalNode*));
         unsigned int    get_value();
-        unsigned char   get_type();
         int             (Decriptor::*get_function())(GeneticalNode *);
         Chanel          *get_chan();
+        GeneticBlock    *get_block();
 
         virtual SMART(ObjClass)    copy(SMART(ObjClass) cp = SMART(ObjClass)());
 
@@ -31,9 +32,9 @@ class   GeneticalNode : public GeneticObj
     protected:
 
         unsigned int                            m_value;
-        unsigned char                           m_type;
         int                                     (Decriptor::*m_function)(GeneticalNode*);
         Chanel                                  *m_chan;
+        GeneticBlock                            *m_block;
 };
 
 #endif // GENETICALNODE_HPP_INCLUDED

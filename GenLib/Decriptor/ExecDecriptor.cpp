@@ -5,8 +5,12 @@
 
 void        Decriptor::exec()
 {
+    GeneticObj        *block;
+
     Monitor::get_instance()->begin_time(MN_INSTR);
-    turn(m_node.get());
+    block = get_next_node(m_block.get());
+    if (block)
+        turn(CAST(GeneticalNode*)(block));
     Monitor::get_instance()->end_time(MN_INSTR);
     if (m_parent && m_parent->get_type() & TYPE_BRAIN)
     {
@@ -15,10 +19,21 @@ void        Decriptor::exec()
     }
 }
 
+GeneticalNode     *Decriptor::get_next_node(GeneticObj *obj)
+{
+  while (obj && !obj->get_type())
+    obj = CAST(GeneticBlock*)(obj)->get_obj().get();
+  if (!obj)
+    return (NULL);
+  return (CAST(GeneticalNode*)(obj));
+}
+
 void        Decriptor::turn(GeneticalNode *node)
 {
     int             (Decriptor::*fct)(GeneticalNode*);
 
+    if (!node)
+      return ;
     if (node->get_type() == INSTRU)
     {
         if (!node->get_function())
@@ -41,7 +56,7 @@ int             Decriptor::nothing(GeneticalNode *node)
     std::vector<SMART(ObjClass)>    &vct = node->get_son();
 
     for (it = 0; it < (int)vct.size(); it++)
-        turn(CAST(GeneticalNode*)(vct[it].get()));
+        turn(CAST(GeneticalNode*)(get_next_node(CAST(GeneticObj*)(vct[it].get()))));
     return (0);
 }
 
@@ -57,9 +72,9 @@ int        Decriptor::set_function(GeneticalNode *node)
     value2 = 0;
     for (it = 0; it + 1 < vct.size(); it++)
     {
-        tmp = get_chan(CAST(GeneticalNode*)(vct[it++].get()));
+        tmp = get_chan(get_next_node(CAST(GeneticObj*)(vct[it++].get())));
         value1 = tmp->get_value();
-        value2 = get_value(CAST(GeneticalNode*)(vct[it].get()));
+        value2 = get_value(get_next_node(CAST(GeneticObj*)(vct[it].get())));
         if (node->get_value() == SET)
             value1 = value2;
         else if (node->get_value() == ADD)
@@ -88,7 +103,7 @@ int         Decriptor::comparator(GeneticalNode *node, GeneticalNode *content)
     {
         for (it = 0; it < vct.size(); it++)
         {
-            value1 = comp_funcion(CAST(GeneticalNode*)(vct[it].get()));
+            value1 = comp_funcion(get_next_node(CAST(GeneticObj*)(vct[it].get())));
             if (value2 && value1 && node->get_value() == XOR)
                 return (0);
             if (node->get_value() == AND && !value1)
@@ -100,11 +115,11 @@ int         Decriptor::comparator(GeneticalNode *node, GeneticalNode *content)
             return (0);
     }
     else if (node->get_value() == NO && vct.size() > 0)
-        return (comp_funcion(CAST(GeneticalNode*)(vct[it].get())) ? 0 : 1);
+        return (comp_funcion(get_next_node(CAST(GeneticObj*)(vct[it].get()))) ? 0 : 1);
     else if (vct.size() > 1)
     {
-        value1 = get_value(CAST(GeneticalNode*)(vct[it++].get()));
-        value2 = get_value(CAST(GeneticalNode*)(vct[it].get()));
+        value1 = get_value(get_next_node(CAST(GeneticObj*)(vct[it++].get())));
+        value2 = get_value(get_next_node(CAST(GeneticObj*)(vct[it].get())));
         if (node->get_value() == SUP && value1 <= value2)
             return (0);
         else if (node->get_value() == INF && value1 >= value2)
@@ -126,17 +141,17 @@ int        Decriptor::comp_funcion(GeneticalNode *node)
     it = 0;
     if (vct.size() > 0)
     {
-        content = CAST(GeneticalNode*)(vct[0].get());
+        content = get_next_node(CAST(GeneticObj*)(vct[0].get()));
         if (comparator(node, content))
           {
             if (vct.size() > 1)
-              turn(CAST(GeneticalNode*)(vct[1].get()));
+              turn(get_next_node(CAST(GeneticObj*)(vct[1].get())));
             return (1);
           }
         else
           {
             if (vct.size() > 2)
-              turn(CAST(GeneticalNode*)(vct[2].get()));
+              turn(get_next_node(CAST(GeneticObj*)(vct[2].get())));
             return (0);
           }
     }
@@ -165,9 +180,9 @@ int         Decriptor::use_function(GeneticalNode *node)
     for (it = 0; it < (int)vct.size(); it++)
     {
         if (!mode)
-            get_chan(CAST(GeneticalNode*)(vct[it].get()))->set_use(use);
+            get_chan(get_next_node(CAST(GeneticObj*)(vct[it].get())))->set_use(use);
         else
-            get_chan(CAST(GeneticalNode*)(vct[it].get()))->set_shared(use);
+            get_chan(get_next_node(CAST(GeneticObj*)(vct[it].get())))->set_shared(use);
     }
     return (0);
 }
@@ -200,7 +215,7 @@ int             Decriptor::set_var_function(GeneticalNode *node)
     for (it = 0; it < (int)vct.size(); it++)
     {
         Monitor::get_instance()->add_val(MN_INSTR);
-        cur = CAST(GeneticalNode*)(vct[it].get());
+        cur = get_next_node(CAST(GeneticObj*)(vct[it].get()));
         set_chan(cur);
     }
     return (0);
@@ -217,7 +232,7 @@ void        Decriptor::set_chan(GeneticalNode *node)
     for (it = 0; it < (int)vct.size(); it++)
     {
         Monitor::get_instance()->add_val(MN_INSTR);
-        cp = CAST(GeneticalNode*)(vct[it].get());
+        cp = get_next_node(CAST(GeneticObj*)(vct[it].get()));
         set_propriety(cp, prop);
     }
 }
@@ -231,7 +246,7 @@ void        Decriptor::set_propriety(GeneticalNode *node, ChanPropriety *prop)
     for (it = 0; it < (int)vct.size(); it++)
     {
         Monitor::get_instance()->add_val(MN_INSTR);
-        cp = CAST(GeneticalNode*)(vct[it].get());
+        cp = get_next_node(CAST(GeneticObj*)(vct[it].get()));
         if (node->get_value() == TYPE)
             prop->set_type(cp->get_value());
         else if (node->get_value() == DST || node->get_value() == PW) {

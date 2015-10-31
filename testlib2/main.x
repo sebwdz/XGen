@@ -1,50 +1,53 @@
-MAIN<(
-	 inf ( ( #canDuplic 1 ) (
-			:Cycle ( #crt1 #time1 new_head ( :Cytosol ) 1 4 )
-			:Cycle ( #crt3 #time3 new_head ( :Nucleus_Move ) 2 1 )
-			:Cycle ( #kill #timex kill 1400 1 )
+Init_Main<(
+	inf ( ( @S_Duplic 1 ) (
+			shared ( @S_Duplic )
+                        set ( @S_Duplic 1 )
+                        set ( #canDuplic 1 )
+      		)
+	)
+	inf ( ( #canDuplic 1 ) (
+			new_head ( :Nucleus )
 		)
 	)
-	:Init ( #init 0 (
-			inf ( ( @S_Duplic 1 ) (
-					shared ( @S_Duplic )
-					set ( @S_Duplic 1 )
-					set ( #canDuplic 1 )
-				)
-			)
-			inf ( ( #canDuplic 1 ) new_head ( :Nucleus ) )
+)>
+
+MAIN<( 
+	:Init ( :Init_Main )
+	inf ( ( #canDuplic 1 ) (
+			:CycleL ( new_head ( :Cytosol ) 1 4 )
+			:CycleL ( new_head ( :Nucleus_Move ) 2 1 )
+			:Cycle ( kill 1400 )
 		)
 	)
 	sup ( ( #canDuplic 0 ) (
-			:Cycle ( #duplic #time duplic ( ) 50 0 )
+			:Cycle_S ( #duplic !time duplic 50 0 )
 			sup ( ( #duplic 500 ) kill )
 		)
 	)
 )>
 
 Cytosol<(
-	:Init ( #init :Init_Cytosol )
+	:Init ( :Init_Cytosol )
 )>
 
 Nucleus<(
-	:Init ( #init :Init_Nucleus )
+	:Init ( :Init_Nucleus )
 )>
 
 Nucleus_Move<(
-	:Init ( #init :Init_Nucleus_Move )
-	:Cycle ( #up #time take_out 10 1 )
-	:Cycle ( #stplink #toml :Set_Prop_Chan ( &Link dst ( 0 ) ) 20 1 )
-	:Cycle ( #kill #time2 kill 1400 1 )
-
-	:Cycle ( #atrb #time4 0 (
+	:Init ( :Init_Nucleus_Move )
+	:CycleL ( take_out 10 1 )
+	:CycleL ( :Set_Prop_Chan ( &Link dst ( 0 ) ) 20 1 )
+	:Cycle ( kill 1400 1 )
+	:Cycle ( (
 			:Set_Prop_Chan ( &Rpls type ( atr to ) )
 			:Set_Prop_Chan ( &Rpls dst ( 40 ) )
-		) 50 0 )
+		) 50 )
 
-	:Cycle ( #atrb2 #time5 0 (
+	:Cycle ( (
 			:Set_Prop_Chan ( &Rpls type ( rpls oth ) )
 			:Set_Prop_Chan ( &Rpls dst ( 40 ) )
-		) 40 0 ) 
+		) 40 )
 )>
 
 Init_Nucleus_Move<(

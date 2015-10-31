@@ -1,7 +1,6 @@
 #ifndef DRECRIPTOR_HPP
 #define DRECRIPTOR_HPP
 
-#include        "Genetic/GeneticalNode.hpp"
 #include        "Object/Movable.hpp"
 
 class           Decriptor : public Movable
@@ -11,12 +10,13 @@ public:
     Decriptor(Object *obj);
     ~Decriptor();
 
-    void            set_node(SMART(GeneticalNode) node);
+    void            set_block(boost::shared_ptr<GeneticObj> block);
     LineDecript     *get_line();
 
     virtual void    exec();
     virtual void    catch_signals();
     void            turn(GeneticalNode *node);
+    GeneticalNode     *get_next_node(GeneticObj *obj);
 
     /* value */
 
@@ -46,7 +46,7 @@ public:
 
 private:
 
-    SMART(GeneticalNode)    m_node;
+    SMART(GeneticObj)     m_block;
     unsigned int            m_jmp;
     USE_LIST                m_fast;
 };

@@ -21,13 +21,18 @@ Cycle_S($count $time $code $wait $limit)<(
         or ( (
 			inf ( ( $count $limit ) )
 			inf ( ( $limit 1 ) )
-		)
-		(
+		) (
                 	sup ( ( $time $wait ) ( $code
-					add ( $count 1 ) set ( $time 0 )
-				)
+				add ( $count 1 ) set ( $time 0 ) )
 			)
                 	add ( $time 1 )
 		)
+	)
+)>
+
+Set_Takein($cond $affct $value)<(
+	sup ( $cond
+		0 ( set ( $affct 0 ) )
+                ( set ( $affct $value ) )
 	)
 )>

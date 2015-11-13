@@ -17,7 +17,6 @@ void        ClassMap::add_obj(Object *obj)
 {
     std::pair<int, int>     pos;
     LnkCase                 *lnk;
-    boost::bimap<std::pair<int, int>, LnkCase*>::left_map::iterator  it;
 
     pos = obj->get_pos();
     pos.first += pos.first < 0 ? -m_size / 10 : m_size / 10;
@@ -46,7 +45,7 @@ void        ClassMap::cross_lnk(LnkCase *lnk, LnkDir dir)
     LnkCase                     *tmpLnk;
     bool                        first;
     LnkDir                      tmpdir;
-return ;
+
     tmp.first = dir > 1 ? lnk->get_pos().first : 0;
     tmp.second = dir < 2 ? lnk->get_pos().second : 0;
     cross = make_lnk(tmp);
@@ -106,11 +105,10 @@ void                    ClassMap::remove_object(ObjectMap *obj)
 {
     SMART(ObjectMap)        res;
     LnkCase                 *mycase;
-    unsigned int            it;
-    LnkCase                 *tmp;
 
     mycase = obj->get_cases()->get_lnk();
     mycase->get_case()->remove_obj(obj);
+    obj->set_case(NULL);
     ClassCase::remove_obj(obj);
     if (mycase->get_case()->get_obj().size() < 1)
       {

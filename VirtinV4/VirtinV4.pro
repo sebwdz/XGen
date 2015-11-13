@@ -24,3 +24,9 @@ HEADERS += \
     include/Genetic/GeneticObj.hpp \
     include/Genetic/GeneticalNode.hpp \
     include/Genetic/GeneticBlock.hpp
+
+QMAKE_CXXFLAGS_RELEASE -= -O
+QMAKE_CXXFLAGS_RELEASE -= -O1
+QMAKE_CXXFLAGS_RELEASE -= -O2
+
+QMAKE_CXXFLAGS_RELEASE += -O3

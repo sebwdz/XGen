@@ -31,7 +31,7 @@ SMART(ObjClass)    GeneticBlock::copy(boost::shared_ptr<ObjClass> cp)
     else
         node = boost::static_pointer_cast<GeneticBlock>(cp);
     node->set_obj(boost::static_pointer_cast<GeneticObj>(get_obj()->copy()));
-    node->set_parent(this);
+    node->get_obj()->set_parent(node.get());
     if (node->get_obj()->get_type())
       CAST(GeneticalNode*)(node->get_obj().get())->set_block(node.get());
     return (node);

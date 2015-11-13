@@ -8,7 +8,20 @@ CONFIG += staticlib
 INCLUDEPATH += ../VirtinV4/include
 INCLUDEPATH += include/
 
-LIBS += ../../build-VirtinV4-Desktop-Debug/libVirtinV4.a -lboost_thread
+QMAKE_CXXFLAGS_RELEASE -= -O
+QMAKE_CXXFLAGS_RELEASE -= -O1
+QMAKE_CXXFLAGS_RELEASE -= -O2
+
+QMAKE_CXXFLAGS_RELEASE *= -O3
+
+CONFIG(debug, debug|release) {
+    LIBS += ../build-VirtinV4-Desktop-Debug/libVirtinV4.a
+}
+CONFIG(release, debug|release) {
+    LIBS += ../build-VirtinV4-Desktop-Release/libVirtinV4.a
+}
+
+LIBS += -lboost_thread
 
 SOURCES += \
     Cell/Module.cpp \

@@ -4,11 +4,10 @@
 
 Chanel::Chanel()
 {
-    m_value = 0;
-    m_use = true;
-    m_wgth = 0;
-    m_ref = 0;
-    m_shared = false;
+  m_value = 0;
+  m_use = true;
+  m_ref = 0;
+  m_shared = false;
 }
 
 Chanel::~Chanel()
@@ -17,64 +16,55 @@ Chanel::~Chanel()
 
 unsigned int    Chanel::hash(std::string str)
 {
-    unsigned int                res;
-    boost::hash<std::string>    hsh;
+  unsigned int                res;
+  boost::hash<std::string>    hsh;
 
-    res = hsh(str);
-    return (res);
+  res = hsh(str);
+  return (res);
 }
 
 void        Chanel::set_ref(unsigned int ref)
 {
-    m_ref = ref;
-}
-
-void        Chanel::set_wgth(unsigned int wgth)
-{
-    m_wgth = wgth;
+  m_ref = ref;
 }
 
 void        Chanel::set_value(float value)
 {
-    if (value < 0)
-        value = 0;
-    if (m_use)
-        m_value = value;
+  if (value < 0)
+    value = 0;
+  if (m_use)
+    m_value = value;
 }
 
 void        Chanel::set_use(bool use)
 {
-    m_use = use;
-    if (!m_use)
-        m_value = 0;
+  m_use = use;
+  if (!m_use)
+    m_value = 0;
 }
 
 void        Chanel::set_shared(bool shared)
 {
-    m_shared = shared;
+  m_shared = shared;
 }
 
-bool        Chanel::get_use()
+bool        Chanel::get_use() const
 {
-    return (m_use);
+  return (m_use);
 }
 
-float       Chanel::get_value()
+float       Chanel::get_value() const
 {
-    return (m_value);
+  return (m_value);
 }
 
-unsigned int    Chanel::get_ref()
+unsigned int    Chanel::get_ref() const
 {
-    return (m_ref);
+  return (m_ref);
 }
 
-unsigned int    Chanel::get_wgth()
-{
-    return (m_wgth);
-}
 
-bool            Chanel::get_shared()
+bool            Chanel::get_shared() const
 {
-    return (m_shared);
+  return (m_shared);
 }

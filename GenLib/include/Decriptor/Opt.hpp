@@ -41,12 +41,14 @@
 #define         FREE            11 + OPT_RANGE
 
 #define         LINK            12 + OPT_RANGE
-#define         UNLINK          13 + OPT_RANGE
+#define         COMIN           13 + OPT_RANGE
 #define         TAKEOUT         14 + OPT_RANGE
 
 #define         KILL            15 + OPT_RANGE
 #define         DESTROY         18 + OPT_RANGE
+
 #define         DUPLIC          16 + OPT_RANGE
+#define         SPLIT           26 + OPT_RANGE
 
 /* SHARE */
 
@@ -72,6 +74,7 @@
 
 /* Node type */
 
+#define         BLOCK           0
 #define         INSTRU          1
 #define         GLOBAL_CHAN     2
 #define         LOCAL_CHAN      3

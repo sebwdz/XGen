@@ -35,12 +35,12 @@ void        BrainView::show_module(ModuleClass *module)
     int                     index = 0;
 
     res = Chanel::hash(str);
-    res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value() * 20;
+    res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value() * 10;
     res = res > 254 ? 254 : res;
     sf::Color cl(res, 0, 0);
     str = "impulseStk";
     res = Chanel::hash(str);
-    res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value() * 20;
+    res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value() * 10;
     res = res > 254 ? 254 : res;
     cl.g = res;
     cl.a = 100;

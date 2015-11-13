@@ -14,6 +14,8 @@ public:
   ~GeneticBlock();
 
   void          set_obj(SMART(GeneticObj) obj);
+  void          set_next(GeneticalNode *next);
+  GeneticalNode *get_next();
 
   SMART(GeneticObj) get_obj();
   USE_LIST      &get_chan();
@@ -26,6 +28,7 @@ public:
 private:
   USE_LIST                m_chan;
   SMART(GeneticObj)       m_obj;
+  GeneticalNode           *m_next;
 };
 
 #endif // GENETICBLOCK_HPP

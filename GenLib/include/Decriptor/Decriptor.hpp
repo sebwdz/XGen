@@ -11,6 +11,7 @@ public:
     ~Decriptor();
 
     void            set_block(boost::shared_ptr<GeneticObj> block);
+    SMART(GeneticObj) get_block() const;
     LineDecript     *get_line();
 
     virtual void    exec();
@@ -36,7 +37,8 @@ public:
     /* chan */
 
     void            set_chan(GeneticalNode *node);
-    ChanPropriety   *get_propriety_chan(GeneticalNode *node, Chanel *chan, unsigned int ref);
+    void            set_attach(bool attach);
+    void            reset(boost::shared_ptr<GeneticObj> obj);
     void            set_propriety(GeneticalNode *node, ChanPropriety *prop);
 
     /* signals */
@@ -49,6 +51,7 @@ private:
     SMART(GeneticObj)     m_block;
     unsigned int            m_jmp;
     USE_LIST                m_fast;
+    bool                    m_attach;
 };
 
 #endif // DRECRIPTOR_HPP

@@ -39,7 +39,7 @@ void        NodeMaker::read_data(std::ifstream &file)
         buff += line + " ";
     buff = remove_comment(buff);
     pos = 0;
-    pos = buff.find_first_not_of("\t ");
+    pos = buff.find_first_not_of("\t\n ");
     while ((found = buff.find_first_of("<", pos)) != std::string::npos)
     {
         name = buff.substr(pos, found - pos);
@@ -47,7 +47,7 @@ void        NodeMaker::read_data(std::ifstream &file)
         found = buff.find_first_of(">", pos);
         data = buff.substr(pos, found - pos);
         pos = found + 1;
-        pos = buff.find_first_not_of("\t ", pos);
+        pos = buff.find_first_not_of("\t\n ", pos);
         add_data(name, data);
     }
 }
@@ -66,37 +66,36 @@ SMART(GeneticObj)               NodeMaker::read_node(NodeData *data, std::size_t
     if (data->data[pos] == ':')
     {
         tmp = data->data.substr(pos + 1, found - (pos + 1));
-        pos = data->data.find_first_not_of("\t ", found + 1);
+        pos = data->data.find_first_not_of("\t\n ", found + 1);
         if (data->data[pos] == '(')
         {
             pos++;
-            pos = data->data.find_first_not_of("\t ", pos);
+            pos = data->data.find_first_not_of("\t\n ", pos);
             while (data->data[pos] != ')')
             {
                 son = read_node(data, pos, str, av);
                 newAv.push_back(son);
-                pos = data->data.find_first_not_of("\t ", pos);
+                pos = data->data.find_first_not_of("\t\n ", pos);
                 if (std::string::npos == pos)
                     throw (std::string("Error Expected ')'"));
             }
             pos++;
-
         }
         make_node(tmp, str, newAv);
         return (get_node(tmp)->block);
     }
     tmp = data->data.substr(pos, found - pos);
     node = get_value(data, tmp, av);
-    pos = data->data.find_first_not_of("\t ", found);
+    pos = data->data.find_first_not_of("\t \n", found);
     if (data->data[pos] == '(')
     {
         pos++;
-        pos = data->data.find_first_not_of("\t ", pos);
+        pos = data->data.find_first_not_of("\t\n ", pos);
         while (data->data[pos] != ')')
         {
             son = read_node(data, pos, str, av);
             node->add_son(son);
-            pos = data->data.find_first_not_of("\t ", pos);
+            pos = data->data.find_first_not_of("\t\n ", pos);
             if (std::string::npos == pos)
                 throw (std::string("Error Expected ')'"));
         }

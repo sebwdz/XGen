@@ -6,6 +6,7 @@ GeneticBlock::GeneticBlock() : GeneticObj()
 {
   m_obj = SMART(GeneticalNode)();
   m_type = 0;
+  m_next = NULL;
 }
 
 GeneticBlock::~GeneticBlock()
@@ -27,6 +28,16 @@ SMART(GeneticObj) GeneticBlock::get_obj()
 USE_LIST      &GeneticBlock::get_chan()
 {
   return (m_chan);
+}
+
+void          GeneticBlock::set_next(GeneticalNode *next)
+{
+  m_next = next;
+}
+
+GeneticalNode  *GeneticBlock::get_next()
+{
+  return (m_next);
 }
 
 void          GeneticBlock::load(std::ifstream &file)

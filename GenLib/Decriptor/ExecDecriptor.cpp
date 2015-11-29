@@ -69,8 +69,8 @@ int             Decriptor::nothing(GeneticalNode *node)
 
 int        Decriptor::set_function(GeneticalNode *node)
 {
-  unsigned int    value1;
-  unsigned int    value2;
+  float           value1;
+  float           value2;
   unsigned int    it;
   Chanel          *tmp;
   std::vector<SMART(ObjClass)>    &vct = node->get_son();
@@ -86,6 +86,13 @@ int        Decriptor::set_function(GeneticalNode *node)
         value1 = value2;
       else if (node->get_value() == ADD)
         value1 += value2;
+      else if (node->get_value() == MULT)
+        value1 *= value2;
+      else if (node->get_value() == DIV)
+        {
+          if (value2 != 0)
+            value1 /= value2;
+        }
       else if (value1 > value2)
         value1 -= value2;
       else

@@ -21,7 +21,7 @@ public:
 
     /* value */
 
-    unsigned int    get_value(GeneticalNode *node);
+    float           get_value(GeneticalNode *node);
     Chanel*         get_chan(GeneticalNode *node);
 
     int             nothing(GeneticalNode *node);
@@ -48,7 +48,7 @@ public:
 
 private:
 
-    SMART(GeneticObj)     m_block;
+    SMART(GeneticObj)       m_block;
     unsigned int            m_jmp;
     USE_LIST                m_fast;
     bool                    m_attach;

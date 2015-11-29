@@ -23,8 +23,6 @@ void        Brain::set_dna(boost::shared_ptr<GeneticObj> block)
 
 void        Brain::exec()
 {
-  unsigned int    it;
-
   ModuleClass::exec();
   make_move_line();
   move();

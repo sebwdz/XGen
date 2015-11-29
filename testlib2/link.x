@@ -10,16 +10,19 @@ Init_Base_Link($to)<(
 	:Init_Prop_Chan ( &AtrElm 10 20 )
 )>
 
+Install_Base_Link($link)<(
+	:CycleL ( :Set_Prop_Chan ( &LinkTo dst ( 0 ) ) 5 1 )
+        :CycleL ( :Make_Spe_Chan ( &CominLink $link @Block comin 40 ) 10 1 ) 
+        :CycleL ( :Set_Prop_Chan ( &CominLink dst ( 0 ) ) 15 1 )
+        :CycleL ( :Init_Prop_Chan ( &GiveBase 20 250 ) 20 1 )
+        :CycleL ( :Set_Prop_Chan ( &GiveBase dst ( 0 ) ) 35 1 )
+        :CycleL ( set ( #finish 1 ) 35 1 )
+)>
+
 Base_Link($to $link)<(
 	:Init ( :Init_Base_Link ( $to ) )
-	inf ( ( #finish 1 ) (
-			:CycleL ( :Set_Prop_Chan ( &LinkTo dst ( 0 ) ) 5 1 )
-			:CycleL ( :Make_Spe_Chan ( &CominLink $link @Block comin 40 ) 10 1 ) 
-			:CycleL ( :Set_Prop_Chan ( &CominLink dst ( 0 ) ) 15 1 )
-			:CycleL ( :Init_Prop_Chan ( &GiveBase 20 250 ) 20 1 )
-			:CycleL ( :Set_Prop_Chan ( &GiveBase dst ( 0 ) ) 35 1 )
-			:CycleL ( set ( #finish 1 ) 35 1 )
-		)
+	inf ( ( #finish 1 )
+		( :Install_Base_Link ( $link ) )
 	)
 )>
 
@@ -42,9 +45,7 @@ Init_Head_Link<(
 	inf ( ( @ImSplit 1 ) (
 			set ( @ImMain 10 )
 			set ( @ImSplit 10 )
-		) (
-			set ( @ImMain 0 )
-		)
+		) ( set ( @ImMain 0 ) )
 	)
 )>
 
@@ -73,10 +74,7 @@ Init_Head_Link_Code<(
         :Init_Prop_Chan ( &AtrHead 10 50 )
 
 	:Make_Atr_Mv ( &AtrToHead oth @ImHeadLink @ImHeadLinkSplit )
-        :Init_Prop_Chan ( &AtrToHead 10 40 )
-
-	[:Make_Rpls_Mv ( &Rpls to @ImHeadLink @ImBaseLink )
-	:Init_Prop_Chan ( &Rpls 10 30 )]
+        :Init_Prop_Chan ( &AtrToHead 10 50 )
 )>
 
 Init_Head_Link_Split<(
@@ -84,7 +82,4 @@ Init_Head_Link_Split<(
 	unshared ( @ImSplit )
 
 	:Make_Spe_Chan ( &Link @ImHeadLink @Block link 50 )
-
-[	:Make_Rpls_Mv ( &Rpls to @ImHeadLinkSplit @ImCell )
-        :Init_Prop_Chan ( &Rpls 10 100 )]
 )>

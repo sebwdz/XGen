@@ -46,16 +46,14 @@ void            MovableLine::change_chan(unsigned int ref, sMovableChan *move)
   LineDecript                                     *line;
   float                                           tmp;
   float                                           all;
-  float                                           use;
 
   it = move->obj.begin();
   end = move->obj.end();
   all = 0;
-  use = move->total < move->have ? move->have : move->total;
   tmp = 0;
   while (it != end)
     {
-      if (it->second > 0)
+      if (it->second > 0 && move->total > 0)
         {
           line = it->first->get_line();
           if (move->total < move->have)
@@ -63,8 +61,7 @@ void            MovableLine::change_chan(unsigned int ref, sMovableChan *move)
           else
             tmp = (it->second / move->total) * move->have;
           all += tmp;
-          tmp = tmp + line->get_chan(ref)->get_value();
-          line->get_chan(ref)->set_value(tmp);
+          line->get_chan(ref)->set_value(tmp + line->get_chan(ref)->get_value());
           it->second = 0;
         }
       it++;
@@ -72,6 +69,7 @@ void            MovableLine::change_chan(unsigned int ref, sMovableChan *move)
   m_parent->get_line()->get_chan(ref)->set_value(m_parent->get_line()->get_chan(ref)->get_value() - all);
   move->life = 0;
   move->total = 0;
+  move->have = 0;
   move->obj.clear();
 }
 
@@ -128,7 +126,7 @@ void            MovableLine::interact_with(class Movable *obj, ChanPropriety *pr
       chan.first *= prop->get_pow(PW) / 100;
       chan.first *= prop->get_type(RPLS) ? -1 : 1;
       lentmp = (prop->get_pow(DST) - m_len) / prop->get_pow(DST);
-      chan.first *= lentmp * 3.14 / 4;
+      chan.first *= (lentmp * lentmp) * 3.14 / 4;
       chan.second = prop->get_type(OTH) ? prop->get_act()[1] : prop->get_act()[0];
       if (prop->get_type(OTH))
         obj->get_move_line()->apply(m_parent, prop, vct, chan);
@@ -151,7 +149,7 @@ void            MovableLine::interact(Movable *obj)
         {
           m_vct.first /= m_len;
           m_vct.second /= m_len;
-          if (m_parent == obj->get_parent() || obj == m_parent->get_parent())
+          if (m_parent == obj->get_parent() || obj == m_parent->get_parent() || m_len < 1)
             m_len = 1;
           for (it = m_parent->get_line()->get_begin_prop(); it != m_parent->get_line()->get_end_prop(); it++)
             {
@@ -166,6 +164,7 @@ void            MovableLine::apply(Movable *from, ChanPropriety *prop, std::pair
 {
   sMovableChan            *move;
   float                   tmp;
+  CHAN_MOVELIST::iterator it;
 
   if (prop->get_type(MV))
     {
@@ -174,32 +173,32 @@ void            MovableLine::apply(Movable *from, ChanPropriety *prop, std::pair
     }
   else
     {
-      if (m_change.find(chan.second) == m_change.end())
+      if ((it = m_change.find(chan.second)) == m_change.end())
         {
           move = new sMovableChan;
           move->life = 0;
           move->total = 0;
-          move->have =  m_parent->get_line()->get_chan(chan.second)->get_value();
           m_change.insert(std::make_pair(chan.second, move));
         }
-      if (m_change[chan.second]->obj.find(from) == m_change[chan.second]->obj.end())
-        m_change[chan.second]->obj.insert(std::make_pair(from, 0));
+      else
+        move = it->second;
+      if (move->obj.find(from) == move->obj.end())
+        move->obj.insert(std::make_pair(from, 0));
       tmp = 0;
-      if (m_change[chan.second]->obj[from] < 0 && chan.first > 0 && chan.first > m_change[chan.second]->obj[from] * -1)
+      if (move->obj[from] < 0 && chan.first > 0 && chan.first > move->obj[from] * -1)
+          tmp = chan.first + move->obj[from];
+      else if (move->obj[from] > 0 && chan.first < 0)
         {
-          tmp = chan.first + m_change[chan.second]->obj[from];
-        }
-      else if (m_change[chan.second]->obj[from] > 0 && chan.first < 0)
-        {
-          if (m_change[chan.second]->obj[from] > chan.first - 1)
-            tmp = chan.first + m_change[chan.second]->obj[from];
+          if (move->obj[from] > chan.first - 1)
+            tmp = chan.first + move->obj[from];
           else
             tmp = chan.first;
         }
       else if (chan.first > 0)
         tmp = chan.first;
-      m_change[chan.second]->obj[from] += chan.first;
-      m_change[chan.second]->total += tmp;
+      move->obj[from] += chan.first;
+      move->total += tmp;
+      move->have = m_parent->get_line()->get_chan(chan.second)->get_value();
     }
 }
 

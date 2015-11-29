@@ -21,6 +21,8 @@ NodeMaker::NodeMaker(std::string &maind, bool asmn)
     m_opt.push_back(std::make_pair("ADD", ADD));
     m_opt.push_back(std::make_pair("SUB", SUB));
     m_opt.push_back(std::make_pair("SET", SET));
+    m_opt.push_back(std::make_pair("MULT", MULT));
+    m_opt.push_back(std::make_pair("DIV", DIV));
     m_opt.push_back(std::make_pair("CREAT", CREAT));
     m_opt.push_back(std::make_pair("DETACH", DETACH));
     m_opt.push_back(std::make_pair("NEW_HEAD", NEW_HEAD));

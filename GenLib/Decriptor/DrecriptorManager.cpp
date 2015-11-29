@@ -7,6 +7,8 @@ DecriptorManager::DecriptorManager()
   m_opt.insert(std::make_pair(SET, &Decriptor::set_function));
   m_opt.insert(std::make_pair(ADD, &Decriptor::set_function));
   m_opt.insert(std::make_pair(SUB, &Decriptor::set_function));
+  m_opt.insert(std::make_pair(MULT, &Decriptor::set_function));
+  m_opt.insert(std::make_pair(DIV, &Decriptor::set_function));
   m_opt.insert(std::make_pair(SUP, &Decriptor::comp_funcion));
   m_opt.insert(std::make_pair(INF, &Decriptor::comp_funcion));
   m_opt.insert(std::make_pair(EGAL, &Decriptor::comp_funcion));

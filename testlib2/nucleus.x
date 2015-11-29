@@ -23,7 +23,7 @@ InitNucleusCode<(
 	:Init_Prop_Chan ( &AtrSplit 15 60 )
 
 	:Make_Give_Chan ( &GiveOutImpulse @Impulse @IsNegAxonBase )
-	:Set_Prop_Chan ( &GiveOutImpulse pw ( 50 ) )
+	:Set_Prop_Chan ( &GiveOutImpulse pw ( 1000 ) )
 )>
 
 NucleusCode<(
@@ -41,6 +41,10 @@ NucleusCode<(
 		)
 	)
 	:Cycle ( :Set_Takein ( ( @Impulse 350 ) @IsNegNucleus 10 ) 20 )
+	sup ( ( @NoAxon 0 ) (
+			:Make_Give_Chan ( &GiveOutImpulse @Impulse @AtrImpulse )
+		)
+	)
 	:Cycle ( :Give_Cycle ( &GiveOutImpulse @Impulse 50 0 ) 20 )
 )>
 
@@ -62,4 +66,5 @@ SplitNucleus<(
 	sup ( ( @ImAct 2 )
 		( set ( @ImFreeNucleusSplit 0 ) )
 	)
+	:CycleL ( :Set_Prop_Chan ( &RplsSplit dst ( 0 ) ) 1000 1 )
 )>

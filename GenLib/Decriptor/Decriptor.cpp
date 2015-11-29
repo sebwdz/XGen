@@ -53,7 +53,7 @@ SMART(GeneticObj)     Decriptor::get_block() const
   return (m_block);
 }
 
-unsigned int    Decriptor::get_value(GeneticalNode *node)
+float    Decriptor::get_value(GeneticalNode *node)
 {
   if (node->get_type() != VALUE)
     return (get_chan(node)->get_value());

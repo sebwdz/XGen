@@ -23,7 +23,8 @@ Cycle_S($count $time $code $wait $limit)<(
 			inf ( ( $limit 1 ) )
 		) (
                 	sup ( ( $time $wait ) ( $code
-				add ( $count 1 ) set ( $time 0 ) )
+				add ( $count 1 )
+				set ( $time 0 ) )
 			)
                 	add ( $time 1 )
 		)

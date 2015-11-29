@@ -58,7 +58,7 @@ LnkCase                   *ClassCase::get_lnk() const
   return (m_parent);
 }
 
-void                        ClassCase::interact_with(MovableLine *move, Object *obj)
+void                        ClassCase::interact_with(MovableLine *move)
 {
   std::list<Object*>::iterator   it;
   std::list<Object*>::iterator   end = m_obj.end();
@@ -70,7 +70,7 @@ void                        ClassCase::interact_with(MovableLine *move, Object *
     }
 }
 
-void                                ClassCase::cross_map(MovableLine *move, Object *obj, LnkCase *lnk)
+void                                ClassCase::cross_map(MovableLine *move, LnkCase *lnk)
 {
   static std::vector<LnkCase*>    cases;
   unsigned int                    it;
@@ -86,7 +86,7 @@ void                                ClassCase::cross_map(MovableLine *move, Obje
   for (it = 0; it < nb; it++)
     {
       if ((cases[it]->get_case()))
-        cases[it]->get_case()->interact_with(move, obj);
+        cases[it]->get_case()->interact_with(move);
       dir = 0;
       while (dir < 4) {
           tmp = cases[it]->get_dir((LnkDir)dir);

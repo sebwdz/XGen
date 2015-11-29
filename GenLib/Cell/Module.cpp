@@ -53,6 +53,7 @@ void        ModuleClass::attach_decriptor(Decriptor *decriptor)
   for (unsigned int it = 0; it < m_split.size(); it++)
     {
       cp = new Decriptor(m_split[it]);
+      cp->get_line()->shared_to_line(decriptor->get_line());
       cp->set_block(boost::static_pointer_cast<GeneticObj>(CAST(Decriptor*)(decriptor)->get_block()->copy()));
       m_split[it]->attach_decriptor(cp);
     }
@@ -222,6 +223,7 @@ void        ModuleClass::catch_takeout(unsigned int code, void *sig)
   OBJECT_LIST::iterator   it;
   OBJECT_LIST::iterator   end = m_obj.end();
 
+  (void)code;
   if (m_parent && m_parent->get_type() & TYPE_MODULE)
     {
       to = CAST(ModuleClass*)(m_parent);
@@ -281,6 +283,7 @@ void          ModuleClass::catch_link(unsigned int code, void *sig)
 {
   ModuleClass *oth;
 
+  (void)code;
   oth = static_cast<ModuleClass*>(sig);
   if (oth->get_begin() != oth->get_end() || m_obj.size())
     return ;

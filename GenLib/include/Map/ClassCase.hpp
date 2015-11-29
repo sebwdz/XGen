@@ -19,8 +19,8 @@ public:
     int                                     get_size() const;
     LnkCase                                 *get_lnk() const;
     bool                                    get_dist(LnkCase *lnk, MovableLine *move) const;
-    void                                    interact_with(MovableLine *move, Object *obj);
-    void                                    cross_map(MovableLine *move, Object *obj, LnkCase *lnk);
+    void                                    interact_with(MovableLine *move);
+    void                                    cross_map(MovableLine *move, LnkCase *lnk);
 
 protected:
     std::list<Object*>            m_obj;

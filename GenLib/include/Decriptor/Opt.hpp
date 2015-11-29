@@ -13,6 +13,8 @@
 #define         SET             0 + OPT_RANGE
 #define         ADD             1 + OPT_RANGE
 #define         SUB             2 + OPT_RANGE
+#define         DIV             95 + OPT_RANGE
+#define         MULT            96 + OPT_RANGE
 
 /* compare opt */
 
@@ -67,10 +69,11 @@
 #define         CHNG            9 + OPT_CHAN_RANGE
 #define         TYPE            10 + OPT_CHAN_RANGE
 #define         ACT             11 + OPT_CHAN_RANGE
-#define         PW              4 + OPT_CHAN_RANGE
-#define         DST             5 + OPT_CHAN_RANGE
 #define         ATR             1 + OPT_CHAN_RANGE
 #define         RPLS            2 + OPT_CHAN_RANGE
+
+#define         PW              4 + OPT_CHAN_RANGE
+#define         DST             5 + OPT_CHAN_RANGE
 
 /* Node type */
 

@@ -75,12 +75,25 @@ void        exec_view(Brain *brain)
                 if (event.key.code == sf::Keyboard::Escape)
                     view->close();
                 if (event.key.code == sf::Keyboard::A)
-                  act[0]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(60);
+                  act[0]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(260);
                 if (event.key.code == sf::Keyboard::Z)
-                  act[1]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(60);
+                  act[1]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(260);
                 if (event.key.code == sf::Keyboard::E)
-                  act[2]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(60);
+                  act[2]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(260);
+                if (event.key.code == sf::Keyboard::K)
+                  sens[0]->get_line()->get_chan(Chanel::hash("Active"))->set_value(10);
+                if (event.key.code == sf::Keyboard::L)
+                  sens[1]->get_line()->get_chan(Chanel::hash("Active"))->set_value(10);
+                if (event.key.code == sf::Keyboard::M)
+                  sens[2]->get_line()->get_chan(Chanel::hash("Active"))->set_value(10);
             }
+        }
+      if (sens[0]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() > 0 ||
+            sens[1]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() > 0 ||
+            sens[2]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value()) {
+          std::cout << sens[0]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() << " " <<
+          sens[1]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() << " " <<
+          sens[2]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() << std::endl;
         }
       time = show[0].getElapsedTime();
       if (time.asMilliseconds() / 1000.0 >= 24 / 1000.0)
@@ -92,7 +105,14 @@ void        exec_view(Brain *brain)
       time = show[1].getElapsedTime();
       if (time.asSeconds() >= 1)
         {
-          std::cout << "\r" << cycle << " " << (cycle - prev[0]) / (time.asMilliseconds() / 1000.0) << " c/s    " << ((sleep * 1000) * (cycle - prev[0])) / 10 << "% sleep        " << std::flush;
+          std::cout << "\r\r" << cycle << " " << (cycle - prev[0]) / (time.asMilliseconds() / 1000.0) << " c/s    " << ((sleep * 1000) * (cycle - prev[0])) / 10 << "% sleep        " << std::flush;
+          if (sens[0]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() > 0 ||
+                sens[1]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() > 0 ||
+                sens[2]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value()) {
+              std::cout << sens[0]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() << " " <<
+              sens[1]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() << " " <<
+              sens[2]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() << std::endl;
+            }
           prev[0] = cycle;
           show[1].restart();
         }

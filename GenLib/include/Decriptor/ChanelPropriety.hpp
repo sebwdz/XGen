@@ -35,6 +35,7 @@ private:
     bool            m_link;
     bool            m_comin;
     float           m_dist;
+    float           m_mindst;
     float           m_pow;
     unsigned int    m_act[2];
     Chanel          *m_chan;

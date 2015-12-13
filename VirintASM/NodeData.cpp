@@ -40,6 +40,7 @@ NodeMaker::NodeMaker(std::string &maind, bool asmn)
     m_opt.push_back(std::make_pair("ATR", ATR));
     m_opt.push_back(std::make_pair("RPLS", RPLS));
     m_opt.push_back(std::make_pair("DST", DST));
+    m_opt.push_back(std::make_pair("MINDST", MINDST));
     m_opt.push_back(std::make_pair("PW", PW));
     m_opt.push_back(std::make_pair("OTH", OTH));
     m_opt.push_back(std::make_pair("TO", TO));

@@ -74,6 +74,7 @@
 
 #define         PW              4 + OPT_CHAN_RANGE
 #define         DST             5 + OPT_CHAN_RANGE
+#define         MINDST          31 + OPT_CHAN_RANGE
 
 /* Node type */
 

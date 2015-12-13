@@ -48,6 +48,7 @@ Make_Spe_Chan($name $act1 $act2 $type $dst)<(
 
 Make_Give_Chan($name $from $to)<(
 	:Make_Chan ( $name type ( chng atr to ) act ( $from $to ) )
+	:Set_Prop_Chan ( $name pw ( 10 ) )
 )>
 
 Give_Cycle($name $active $dstOn $dstOff)<(

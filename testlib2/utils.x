@@ -3,9 +3,7 @@ Init($code)<(
 )>
 
 Init_S($exec $code)<(
-        inf ( ( $exec 1 )
-		( $code set ( $exec 1 ) )
-	)
+        inf ( ( $exec 1 ) ( $code set ( $exec 1 ) ) )
 )>
 
 
@@ -32,8 +30,36 @@ Cycle_S($count $time $code $wait $limit)<(
 )>
 
 Set_Takein($cond $affct $value)<(
-	sup ( $cond
-		0 ( set ( $affct 0 ) )
+	sup ( $cond 0 ( set ( $affct 0 ) )
                 ( set ( $affct $value ) )
 	)
+)>
+
+Limit($chan $biais)<(
+	sup ( ( $chan $biais )
+		( set ( $chan $biais ) )
+	)
+)>
+
+Reduce($chan $rate $min)<(
+	set ( !sub $chan )
+	set ( !min 1 )
+	div ( !min $min )
+       	div ( !sub $rate )
+        inf ( ( !sub !min )
+              	( sub ( $chan !min ) )
+                ( sub ( $chan !sub ) )
+        )
+)>
+
+TransformTo($from $to $limit)<(
+	sup ( ( $from 0 ) (
+			add ( $to $from )
+			:Limit ( $to $limit )
+		)
+	)
+)>
+
+OnlyOne($master $min)<(
+	sup ( ( $master 0 ) ( set ( $min 0 ) ) )
 )>

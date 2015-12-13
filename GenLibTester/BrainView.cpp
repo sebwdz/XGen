@@ -35,14 +35,19 @@ void        BrainView::show_module(ModuleClass *module)
     int                     index = 0;
 
     res = Chanel::hash(str);
-    res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value() * 10;
+    res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value() * 20.0;
     res = res > 254 ? 254 : res;
-    sf::Color cl(res, 0, 0);
+    sf::Color cl(0, 0, res);
     str = "Dopamine";
     res = Chanel::hash(str);
-    res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value() * 10;
+    res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value() * 10.0;
     res = res > 254 ? 254 : res;
     cl.g = res;
+    str = "Peptide";
+    res = Chanel::hash(str);
+    res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value() * 10.0;
+    res = res > 254 ? 254 : res;
+    cl.r = res;
     cl.a = 100;
     shape.setPointCount(module->get_skeleton()->get_size());
     for (pt = module->get_skeleton()->get_begin(); pt != module->get_skeleton()->get_end(); pt++)

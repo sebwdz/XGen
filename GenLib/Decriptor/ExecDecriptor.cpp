@@ -261,7 +261,7 @@ void        Decriptor::set_propriety(GeneticalNode *node, ChanPropriety *prop)
       cp = get_next_node(CAST(GeneticObj*)(vct[it].get()));
       if (node->get_value() == TYPE)
         prop->set_type(cp->get_value());
-      else if (node->get_value() == DST || node->get_value() == PW) {
+      else if (node->get_value() == DST || node->get_value() == PW || node->get_value() == MINDST) {
           prop->set_pow(node->get_value(), get_value(cp));
         }
       else if (node->get_value() == ACT)

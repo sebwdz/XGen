@@ -74,27 +74,32 @@ void        exec_view(Brain *brain)
             {
                 if (event.key.code == sf::Keyboard::Escape)
                     view->close();
+                // stimulie
                 if (event.key.code == sf::Keyboard::A)
-                  act[0]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(260);
+                  act[0]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(60);
                 if (event.key.code == sf::Keyboard::Z)
-                  act[1]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(260);
+                  act[1]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(60);
                 if (event.key.code == sf::Keyboard::E)
-                  act[2]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(260);
-                if (event.key.code == sf::Keyboard::K)
-                  sens[0]->get_line()->get_chan(Chanel::hash("Active"))->set_value(10);
-                if (event.key.code == sf::Keyboard::L)
-                  sens[1]->get_line()->get_chan(Chanel::hash("Active"))->set_value(10);
-                if (event.key.code == sf::Keyboard::M)
-                  sens[2]->get_line()->get_chan(Chanel::hash("Active"))->set_value(10);
+                  act[2]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(60);
+                // reponse positif et negatif
+                if (event.key.code == sf::Keyboard::K) {
+                  sens[0]->get_line()->get_chan(Chanel::hash("Active"))->set_value(60);
+                  sens[1]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(60);
+                  sens[2]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(60);
+                  }
+                if (event.key.code == sf::Keyboard::L) {
+                  sens[1]->get_line()->get_chan(Chanel::hash("Active"))->set_value(60);
+                  sens[0]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(60);
+                  sens[2]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(60);
+                  }
+                if (event.key.code == sf::Keyboard::M) {
+                  sens[2]->get_line()->get_chan(Chanel::hash("Active"))->set_value(60);
+                  sens[1]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(60);
+                  sens[0]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(60);
+                  }
             }
         }
-      if (sens[0]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() > 0 ||
-            sens[1]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() > 0 ||
-            sens[2]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value()) {
-          std::cout << sens[0]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() << " " <<
-          sens[1]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() << " " <<
-          sens[2]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() << std::endl;
-        }
+
       time = show[0].getElapsedTime();
       if (time.asMilliseconds() / 1000.0 >= 24 / 1000.0)
         {
@@ -106,13 +111,6 @@ void        exec_view(Brain *brain)
       if (time.asSeconds() >= 1)
         {
           std::cout << "\r\r" << cycle << " " << (cycle - prev[0]) / (time.asMilliseconds() / 1000.0) << " c/s    " << ((sleep * 1000) * (cycle - prev[0])) / 10 << "% sleep        " << std::flush;
-          if (sens[0]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() > 0 ||
-                sens[1]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() > 0 ||
-                sens[2]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value()) {
-              std::cout << sens[0]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() << " " <<
-              sens[1]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() << " " <<
-              sens[2]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() << std::endl;
-            }
           prev[0] = cycle;
           show[1].restart();
         }
@@ -122,12 +120,19 @@ void        exec_view(Brain *brain)
         {
           speedclock[0].restart();
           brain->exec();
+          if (sens[0]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() > 0 ||
+                sens[1]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() > 0 ||
+                sens[2]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() > 0) {
+              std::cout << sens[0]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() << " " <<
+              sens[1]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() << " " <<
+              sens[2]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() << std::endl;
+            }
           cycle++;
         }
       if (cycle - prev[1] > 25)
-        {/*0.00567*/
+        {//0.00567
           time = speedclock[1].getElapsedTime();
-          sleep = (sleep + 0.00567 - ((time.asMicroseconds() / 1000000.0) / 25.0)) / 2;
+          sleep = (sleep + 0.00607 - ((time.asMicroseconds() / 1000000.0) / 25.0)) / 2;
           speedclock[1].restart();
           prev[1] = cycle;
           if (sleep < 0)
@@ -179,12 +184,12 @@ int         main(int ac, char **av)
   brain->set_dna(dna);
 
   add_act(brain, std::make_pair(70.0, -60.0));
-  add_act(brain, std::make_pair(70.0, 0.0));
+  add_act(brain, std::make_pair(90.0, 0.0));
   add_act(brain, std::make_pair(70.0, 60.0));
 
   /* Sensor */
   add_act(brain, std::make_pair(-70.0, -60.0), true);
-  add_act(brain, std::make_pair(-70.0, 0.0), true);
+  add_act(brain, std::make_pair(-90.0, 0.0), true);
   add_act(brain, std::make_pair(-70.0, 60.0), true);
 
   if (ac > 2)

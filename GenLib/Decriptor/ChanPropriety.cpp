@@ -8,6 +8,7 @@ ChanPropriety::ChanPropriety()
   m_dist = 0;
   m_act[0] = 0;
   m_act[1] = 0;
+  m_mindst = 0;
   m_dir = false;
   m_type = false;
   m_atr = false;
@@ -55,6 +56,8 @@ void            ChanPropriety::set_pow(unsigned int type, float value)
     m_dist = value;
   else if (type == PW)
     m_pow = value;
+  else if (type == MINDST)
+    m_mindst = value;
 }
 
 void            ChanPropriety::set_chan(Chanel *chan)
@@ -115,6 +118,8 @@ float           ChanPropriety::get_pow(unsigned int type) const
     return (m_dist);
   else if (type == PW)
     return (m_pow);
+  else if (type == MINDST)
+    return (m_mindst);
   return (0);
 }
 

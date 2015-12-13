@@ -126,7 +126,7 @@ void            MovableLine::interact_with(class Movable *obj, ChanPropriety *pr
       chan.first *= prop->get_pow(PW) / 100;
       chan.first *= prop->get_type(RPLS) ? -1 : 1;
       lentmp = (prop->get_pow(DST) - m_len) / prop->get_pow(DST);
-      chan.first *= (lentmp * lentmp) * 3.14 / 4;
+      chan.first *= (lentmp * lentmp) * (3.14 / 4);
       chan.second = prop->get_type(OTH) ? prop->get_act()[1] : prop->get_act()[0];
       if (prop->get_type(OTH))
         obj->get_move_line()->apply(m_parent, prop, vct, chan);
@@ -153,7 +153,9 @@ void            MovableLine::interact(Movable *obj)
             m_len = 1;
           for (it = m_parent->get_line()->get_begin_prop(); it != m_parent->get_line()->get_end_prop(); it++)
             {
-              if (it->second->get_chan() && it->second->get_pow(DST) >= m_len)
+              if (it->second->get_chan() &&
+                  it->second->get_pow(DST) >= m_len &&
+                  it->second->get_pow(MINDST) <= m_len)
                 interact_with(obj, it->second);
             }
         }

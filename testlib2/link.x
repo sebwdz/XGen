@@ -8,6 +8,10 @@ Init_Base_Link($to)<(
 
 	:Make_Atr_Mv ( &AtrElm to @ImBaseLink $to )
 	:Init_Prop_Chan ( &AtrElm 10 20 )
+[
+	:Make_Atr_Mv ( &AtrHead oth @ImBaseLink @ImHeadLink )
+	:Init_Prop_Chan ( &AtrHead 20 150 )
+	:Set_Prop_Chan ( &AtrHead mindst ( 100 ) )]
 )>
 
 Install_Base_Link($link)<(
@@ -21,9 +25,7 @@ Install_Base_Link($link)<(
 
 Base_Link($to $link)<(
 	:Init ( :Init_Base_Link ( $to ) )
-	inf ( ( #finish 1 )
-		( :Install_Base_Link ( $link ) )
-	)
+	inf ( ( #finish 1 ) ( :Install_Base_Link ( $link ) ) )
 )>
 
 Init_Link($to $link $base)<(
@@ -51,6 +53,7 @@ Init_Head_Link<(
 
 Head_Link<(
 	:Init ( :Init_Head_Link ( ) )
+
         sup ( ( @ImMain 0 ) (
 			:Init ( :Init_Head_Link_Code ( ) )
 			:Init ( split ( ) )
@@ -71,10 +74,10 @@ Init_Head_Link_Code<(
 	set ( @ImHeadLink 10 )
 
 	:Make_Atr_Mv ( &AtrHead to @ImHeadLink @ImHeadLinkSplit )
-        :Init_Prop_Chan ( &AtrHead 10 50 )
+        :Init_Prop_Chan ( &AtrHead 20 70 )
 
 	:Make_Atr_Mv ( &AtrToHead oth @ImHeadLink @ImHeadLinkSplit )
-        :Init_Prop_Chan ( &AtrToHead 10 50 )
+        :Init_Prop_Chan ( &AtrToHead 20 70 )
 )>
 
 Init_Head_Link_Split<(

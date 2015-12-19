@@ -30,7 +30,7 @@ Init_AttachAct<(
 	set ( @AtrImpulse 10 )
 	shared ( @ISSENSOR )
 	inf ( ( @ISSENSOR 1 ) (
-			:Make_Give_Chan ( &GiveOutImpulse @Impulse @ImNeg )
+			:Make_Give_Chan ( &GiveOutImpulse @Impulse @IsNegCytosol )
 			:Set_Prop_Chan ( &GiveOutImpulse pw ( 1000 ) )
 		) (
 			:Make_Give_Chan ( &GiveOutActive @Active @ImNucleus )
@@ -56,7 +56,7 @@ AttachAct<(
 	sup ( ( @ISSENSOR 0 ) (
 		set ( @ImpulseStk @Impulse )
 		set ( @Impulse 0 )
-	) )
+	) ( set ( @ImpulseStk 0 ) ) )
 	:CycleL ( detach ( :AttachCompnent ) 10 1 )
 	:Cycle ( :Give_Cycle ( &GiveAct @ImAttach 10 0 ) 50 )
 )>

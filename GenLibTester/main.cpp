@@ -59,9 +59,11 @@ void        exec_view(Brain *brain)
   sf::Event event;
   sf::Clock show[2];
   sf::Clock speedclock[2];
+  sf::Clock response;
   sf::Time  time;
   float     sleep;
   unsigned int cycle = 0;
+  unsigned int crep = 0;
   unsigned int prev[2] = {0};
 
   sleep = 0.007;
@@ -97,6 +99,8 @@ void        exec_view(Brain *brain)
                   sens[1]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(60);
                   sens[0]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(60);
                   }
+                crep = 0;
+                response.restart();
             }
         }
 
@@ -126,7 +130,9 @@ void        exec_view(Brain *brain)
               std::cout << sens[0]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() << " " <<
               sens[1]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() << " " <<
               sens[2]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() << std::endl;
+              std::cout << response.getElapsedTime().asMilliseconds() << " " << crep << std::endl;
             }
+          crep++;
           cycle++;
         }
       if (cycle - prev[1] > 25)

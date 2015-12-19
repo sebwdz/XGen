@@ -25,10 +25,10 @@ InitNucleusCode<(
 	:Make_Give_Chan ( &GiveOutImpulse @Impulse @IsNegAxonBase )
 	:Set_Prop_Chan ( &GiveOutImpulse pw ( 1000 ) )
 
-	:Make_Give_Chan ( &GiveDopamine @Dopamine @ImNucleusSplit )
+	:Make_Give_Chan ( &GiveDopamine @Dopamine @ImCytosol )
 	:Set_Prop_Chan ( &GiveDopamine pw ( 100 ) )
 
-	:Make_Give_Chan ( &GivePeptide @Peptide @ImNucleusSplit )
+	:Make_Give_Chan ( &GivePeptide @Peptide @ImCytosol )
 	:Set_Prop_Chan ( &GivePeptide pw ( 100 ) )
 )>
 
@@ -54,12 +54,21 @@ NucleusCode<(
 					:Set_Prop_Chan ( &GiveOutImpulse pw ( 1000 ) )
 				)
 			)
+         		inf ( ( #born 1 ) ( add ( @Dopamine 20 ) ) )
+              		:CycleL ( set ( #born 1 ) 2100 1 )
 		)
 	)
 	:Cycle ( :Give_Cycle ( &GiveOutImpulse @Impulse 50 0 ) 5 )
 	:Reduce ( @Dopamine 20 1 )
 	:Cycle ( :Give_Cycle ( &GiveDopamine @Dopamine 30 0 ) 10 )
 	:Cycle ( :Give_Cycle ( &GivePeptide @Peptide 30 0 ) 10 )
+[	sup ( ( @Impulse 1 )
+                (
+                        echo ( #prev 32 78 32 @Impulse 10 )
+                        set ( #prev @Impulse )
+                ) ( set ( #prev 0 ) )
+        )
+]
 )>
 
 InitSplitNucleus<(
@@ -70,13 +79,7 @@ InitSplitNucleus<(
 	:Make_Rpls_Mv ( &RplsSplit to @ImNucleusSplit @ImNucleusSplit )
 	:Init_Prop_Chan ( &RplsSplit 10 50 )
 
-	:Make_Atr_Mv ( &AtrByDopamine oth @DopamineAct @ImAxonHeadSplit )
-	:Set_Prop_Chan ( &AtrByDopamine pw ( 1 ) )
-
 	:Make_Spe_Chan ( &LinkNucleus @ImNucleus @block link 10 )
-
-	:Make_Give_Chan ( &GiveDopamine @Dopamine @ImAxonHeadSplit )
-	:Make_Give_Chan ( &GivePeptide @Peptide @ImAxonHeadSplit )
 
 	inf ( ( @ImAct 2 )
 		( :Set_Prop_Chan ( &GiveDopamine pw ( 10 ) ) )
@@ -89,30 +92,5 @@ SplitNucleus<(
 	:CycleL ( take_out 20 1 )
 	:CycleL ( :Set_Prop_Chan ( &LinkNucleus dst ( 0 ) ) 20 1 )
 	sup ( ( @ImAct 2 ) ( set ( @ImFreeNucleusSplit 0 ) ) )
-	:CycleL ( :Set_Prop_Chan ( &RplsSplit dst ( 0 ) ) 1000 1 )
-
-	:TransformTo ( @Dopamine @DopamineAct 10 )
-	:TransformTo ( @Peptide @PeptideAct 10 )
-
-	:OnlyOne ( @Dopamine @Peptide )
-	:OnlyOne ( @DopamineAct @PeptideAct )
-
-	sup ( ( @DopamineAct 0 ) (
-			:Cycle ( sub ( @DopamineAct 1 ) 5 )
-			:Cycle ( :Reduce ( @Dopamine 20 1 ) 5 )
-		)
-	)
-	sup ( ( @PeptideAct 0 ) (
-			:Cycle ( sub ( @PeptideAct 1 ) 5 )
-			:Cycle ( :Reduce ( @Peptide 20 1 ) 5 )
-		)
-	)
-	sup ( ( @ISSENSOR 0 ) (
-			inf ( ( #born 1 ) ( add ( @Dopamine 20 ) ) )
-			:CycleL ( set ( #born 1 ) 2100 1 )
-		)
-	)
-	:Cycle ( :Give_Cycle ( &GiveDopamine @Dopamine 50 0 ) 10 )
-	:Cycle ( :Give_Cycle ( &GivePeptide @Peptide 20 0 ) 10 )
-	:Cycle ( :Give_Cycle ( &AtrByDopamine @DopamineAct 100 0 ) 10 )
+	[:CycleL ( :Set_Prop_Chan ( &RplsSplit dst ( 0 ) ) 1000 1 )]
 )>

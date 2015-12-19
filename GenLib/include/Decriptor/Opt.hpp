@@ -65,6 +65,7 @@
 
 #define         TO              6 + OPT_CHAN_RANGE
 #define         OTH             7 + OPT_CHAN_RANGE
+#define         BI              12 + OPT_CHAN_RANGE
 #define         MV              8 + OPT_CHAN_RANGE
 #define         CHNG            9 + OPT_CHAN_RANGE
 #define         TYPE            10 + OPT_CHAN_RANGE
@@ -75,6 +76,10 @@
 #define         PW              4 + OPT_CHAN_RANGE
 #define         DST             5 + OPT_CHAN_RANGE
 #define         MINDST          31 + OPT_CHAN_RANGE
+
+/* OTHER */
+
+#define         ECHO            32 + OPT_CHAN_RANGE
 
 /* Node type */
 

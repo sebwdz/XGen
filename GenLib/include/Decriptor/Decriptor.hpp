@@ -33,6 +33,7 @@ public:
     int             decript_function(GeneticalNode *node);
     int             jmp_function(GeneticalNode *node);
     int             set_var_function(GeneticalNode *node);
+    int             echo(GeneticalNode *node);
 
     /* chan */
 

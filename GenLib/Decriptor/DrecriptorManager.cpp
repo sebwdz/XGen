@@ -29,6 +29,7 @@ DecriptorManager::DecriptorManager()
   m_opt.insert(std::make_pair(VAR, &Decriptor::set_var_function));
   m_opt.insert(std::make_pair(TAKEOUT, &Decriptor::decript_function));
   m_opt.insert(std::make_pair(SPLIT, &Decriptor::decript_function));
+  m_opt.insert(std::make_pair(ECHO, &Decriptor::echo));
 }
 
 DecriptorManager::~DecriptorManager()

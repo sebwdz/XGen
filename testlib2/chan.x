@@ -53,7 +53,7 @@ Make_Give_Chan($name $from $to)<(
 
 Give_Cycle($name $active $dstOn $dstOff)<(
 	:Set_Prop_Chan ( $name dst ( $dstOff ) )
-	sup ( ( $active 0 )
+	sup ( ( $active 1 )
 		( :Set_Prop_Chan ( $name dst ( $dstOn ) ) )
 	)
 )>

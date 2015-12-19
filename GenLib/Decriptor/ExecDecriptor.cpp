@@ -218,6 +218,26 @@ int     Decriptor::jmp_function(GeneticalNode *node)
   return (nothing(node));
 }
 
+int             Decriptor::echo(GeneticalNode *node)
+{
+  unsigned int           it;
+  std::vector<SMART(ObjClass)>    &vct = node->get_son();
+  GeneticalNode                   *son;
+
+  for (it = 0; it < vct.size(); it++)
+    {
+      son = CAST(GeneticalNode*)(vct[it].get());
+      if (son->get_type() == GLOBAL_CHAN || son->get_type() == LOCAL_CHAN ||
+          son->get_type() == FAST_CHAN)
+        {
+          std::cout << get_value(son);
+        }
+      else
+        std::cout << (char)son->get_value();
+    }
+  return (0);
+}
+
 int             Decriptor::set_var_function(GeneticalNode *node)
 {
   int              it;

@@ -164,8 +164,8 @@ void        Skeleton::finish()
       add = rand() % 30;
       for (int it = 0; it < 5; it++)
         {
-          tmp.first = 3.0 * cos(((360 / 5) * it + add) * 3.14 / 180);
-          tmp.second = 3.0 * sin(((360 / 5) * it + add) * 3.14 / 180);
+          tmp.first = 2.0 * cos(((360 / 5) * it + add) * 3.14 / 180);
+          tmp.second = 2.0 * sin(((360 / 5) * it + add) * 3.14 / 180);
           tmp.first += m_pos.first;
           tmp.second += m_pos.second;
           m_pt.push_back(tmp);

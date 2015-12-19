@@ -128,9 +128,9 @@ void            MovableLine::interact_with(class Movable *obj, ChanPropriety *pr
       lentmp = (prop->get_pow(DST) - m_len) / prop->get_pow(DST);
       chan.first *= (lentmp * lentmp) * (3.14 / 4);
       chan.second = prop->get_type(OTH) ? prop->get_act()[1] : prop->get_act()[0];
-      if (prop->get_type(OTH))
+      if (prop->get_type(OTH) || prop->get_type(BI))
         obj->get_move_line()->apply(m_parent, prop, vct, chan);
-      else
+      if (prop->get_type(TO) || prop->get_type(BI))
         apply(obj, prop, vct, chan);
     }
 }

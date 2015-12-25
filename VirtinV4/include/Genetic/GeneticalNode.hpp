@@ -7,6 +7,12 @@ typedef class Decriptor     Decriptor;
 typedef class Chanel        Chanel;
 typedef class GeneticBlock  GeneticBlock;
 
+typedef union u_nodeValue {
+  float         _f;
+  unsigned char _uc;
+  unsigned int  _ui;
+} nodeValue;
+
 class   GeneticalNode : public GeneticObj
 {
     public :
@@ -17,10 +23,10 @@ class   GeneticalNode : public GeneticObj
         void        save(std::ofstream &stream);
 
         void            set_block(GeneticBlock *block);
-        void            set_value(unsigned int value);
+        void            set_value(nodeValue &value);
         void            set_chan(Chanel *chan);
         void            set_function(int (Decriptor::*fonction)(GeneticalNode*));
-        unsigned int    get_value();
+        nodeValue       &get_value();
         int             (Decriptor::*get_function())(GeneticalNode *);
         Chanel          *get_chan();
         GeneticBlock    *get_block();
@@ -31,7 +37,7 @@ class   GeneticalNode : public GeneticObj
 
     protected:
 
-        unsigned int                            m_value;
+        nodeValue                               m_value;
         int                                     (Decriptor::*m_function)(GeneticalNode*);
         Chanel                                  *m_chan;
         GeneticBlock                            *m_block;

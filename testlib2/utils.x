@@ -63,3 +63,14 @@ TransformTo($from $to $limit)<(
 OnlyOne($master $min)<(
 	sup ( ( $master 0 ) ( set ( $min 0 ) ) )
 )>
+
+Debug($chan $id)<(
+	or ( (
+			sup ( ( $chan 1 ) )
+			sup ( ( !prev 1 ) )
+		) (
+                        echo ( !prev 32 $id 32 $chan 10 )
+                        set ( !prev $chan )
+                ) ( set ( !prev 0 ) )
+        )
+)>

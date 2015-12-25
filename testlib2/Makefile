@@ -17,7 +17,9 @@ BEGIN =		MAIN
 
 all:
 	$(CC) $(BEGIN) $(TARGET) $(SRC)
-#	$(CC) Test test.gen test.x chan.x utils.x
+
+test:
+	$(CC) Test test.gen test.x chan.x utils.x
 
 
 

@@ -13,7 +13,7 @@ Init_Axon<(
 
 Axon<(
 	:Init ( :Init_Axon ( ) )
-	:Link ( @ImNucleus @ImAxon :Axon_Base ( ) :Axon_Head ( ) )
+	:Link ( @ImNucleus @ImAxon :Axon_Base :Axon_Head )
 	:Cycle ( :Set_Takein ( ( @Impulse 150 ) @IsNegAxon 80 ) 20 )
 	:Cycle ( :Give_Cycle ( &GiveOutImpulse @Impulse 50 0 ) 5 ) 
 	:Cycle ( :Give_Cycle ( &GiveDopamine @Dopamine 50 0 ) 10 )
@@ -33,8 +33,12 @@ Init_Axon_Base<(
 	:Set_Prop_Chan ( &GivePeptide pw ( 100 ) )
 
 	:Make_Atr_Mv ( &AtrHead oth @ImAxonBase @ImAxonHead )
-	:Init_Prop_Chan ( &AtrHead 10 120 )
-	:Set_Prop_Chan ( &AtrHead mindst ( 70 ) )
+	:Init_Prop_Chan ( &AtrHead 10 160 )
+	:Set_Prop_Chan ( &AtrHead mindst ( 80 ) )
+
+	:Make_Atr_Mv ( &AtrByHead to @ImAxonBase @ImAxonHead )
+	:Init_Prop_Chan ( &AtrByHead 4 160 )
+	:Set_Prop_Chan ( &AtrByHead mindst ( 80 ) )
 )>
 
 Axon_Base<(
@@ -59,6 +63,10 @@ Init_Axon_Head_Code<(
 
 	:Make_Give_Chan ( &GivePeptide @Peptide @ImLink )
 	:Set_Prop_Chan ( &GivePeptide pw ( 100 ) )
+
+	:Make_Atr_Mv ( &AtrByBase to @PeptideAct @ImAxonBase )
+	:Init_Prop_Chan ( &AtrByBase 100 160 )
+	:Set_Prop_Chan ( &AtrByBase mindst ( 20 ) )
 )>
 
 Init_Axon_Head_Split<(
@@ -73,6 +81,9 @@ Init_Axon_Head_Split<(
 
 	:Make_Give_Chan ( &GivePeptide @Peptide @ImAxonHead )
 	:Set_Prop_Chan ( &GivePeptide pw ( 100 ) )
+
+	:Make_Rpls_Mv ( &RplsCell to @ImAxonHeadSplit @ImCell )
+	:Init_Prop_Chan ( &RplsCell 10 20 )
 )>
 
 Axon_Head<(
@@ -88,7 +99,9 @@ Axon_Head_Code<(
 	:Cycle ( :Set_Takein ( ( @Impulse 150 ) @IsNegAxonHead 10 ) 5 )
 	:Cycle ( :Give_Cycle ( &GiveDopamine @Dopamine 30 0 ) 10 )
 	:Cycle ( :Give_Cycle ( &GivePeptide @Peptide 30 0 ) 10 )
-	:CycleL ( :Init_Prop_Chan ( &RplsBase 10 30 ) 100 1 )
+	:CycleL ( :Init_Prop_Chan ( &RplsBase 5 50 ) 100 1 )
+	:TransformTo ( @Peptide @PeptideAct 40 )
+	:Reduce ( @PeptideAct 20 1 )
 )>
 
 Axon_Head_Split<(
@@ -103,29 +116,28 @@ Axon_Head_Split<(
 
 Init_Grow_Axon<(
 	:Make_Atr_Mv ( &AtrDopamine to @ImInGrow @DopamineAct )
-        :Init_Prop_Chan ( &AtrDopamine 10 60 )
-	:Set_Prop_Chan ( &AtrDopamine mindst ( 30 ) )
+        :Init_Prop_Chan ( &AtrDopamine 5 40 )
+
+	:Make_Atr_Mv ( &AtrDendrite oth @ImInGrow @ImDendriteHeadSplit )
+	:Init_Prop_Chan ( &AtrDendrite 5 20 )
 
 	:Make_Rpls_Mv ( &RplsPeptide to @ImInGrow @PeptideAct )
 	:Init_Prop_Chan ( &RplsPeptide 10 40 )
 
 	:Make_Rpls_Mv ( &RplsFromOth to @ImAxonHeadSplit @ImAxonHeadSplit )
-	:Init_Prop_Chan ( &RplsFromOth 10 20 )
-
-	:Make_Atr_Mv ( &AtrCell to @ImInGrow @ImDendriteHeadSplit )
-	:Init_Prop_Chan ( &AtrCell 5 25 )
+	:Init_Prop_Chan ( &RplsFromOth 20 40 )
 
 	:Make_Rpls_Mv ( &RplsOth oth @ImInGrow @ImAxonHeadSplit )
-	:Init_Prop_Chan ( &RplsOth 5 30 )
+	:Init_Prop_Chan ( &RplsOth 30 30 )
 )>
 
 Grow_Axon<(
 	:Init ( :Init_Grow_Axon ( ) )
 
-	sup ( ( @Impulse 0 ) ( set ( @ImInGrow 20 ) ) )
+	sup ( ( @Impulse 0 ) ( set ( @ImInGrow 10 ) ) )
 	sup ( ( @ImInGrow 0 ) (
-			:Reduce ( @ImInGrow 5 1 )
-			:Reduce ( @Impulse 20 1 )
+			:Reduce ( @ImInGrow 10 1 )
+			:Reduce ( @Impulse 10 1 )
 		)
 	)
 )>

@@ -17,9 +17,11 @@ Nucleus<(
 
 InitNucleusCode<(
 	set ( @ImNucleus 10 )
-	set ( @ImCytosol 10 )
 
-	:Make_Atr_Mv ( &AtrSplit to @ImNucleus @ImNucleusSplit )
+	:Make_Atr_Mv ( &AtrBySplit to @ImNucleus @ImNucleusSplit )
+	:Init_Prop_Chan ( &AtrBySplit 15 60 )
+
+	:Make_Atr_Mv ( &AtrSplit oth @ImNucleus @ImNucleusSplit )
 	:Init_Prop_Chan ( &AtrSplit 15 60 )
 
 	:Make_Give_Chan ( &GiveOutImpulse @Impulse @IsNegAxonBase )
@@ -30,6 +32,8 @@ InitNucleusCode<(
 
 	:Make_Give_Chan ( &GivePeptide @Peptide @ImCytosol )
 	:Set_Prop_Chan ( &GivePeptide pw ( 100 ) )
+
+	set ( @IsNegNucleus 80 )
 )>
 
 NucleusCode<(
@@ -39,36 +43,15 @@ NucleusCode<(
 	and ( (
 			inf ( ( #haveAxon 1 ) )
 			inf ( ( @NoAxon 1 ) )
-		) (
-			:CycleL ( (
-                        	creat ( :Axon ) 
-                        	set ( #haveAxon 1 )
-				set ( @Impulse 50 )
-                	) 900 1 )
-		)
-	)
-	:Cycle ( :Set_Takein ( ( @Impulse 350 ) @IsNegNucleus 10 ) 10 )
-	sup ( ( @NoAxon 0 ) (
-			:Init ( (
-					:Make_Give_Chan ( &GiveOutImpulse @Impulse @AtrImpulse )
-					:Set_Prop_Chan ( &GiveOutImpulse pw ( 1000 ) )
-				)
-			)
-         		inf ( ( #born 1 ) ( add ( @Dopamine 20 ) ) )
-              		:CycleL ( set ( #born 1 ) 2100 1 )
-		)
+		) ( :CycleL ( ( creat ( :Axon ) set ( #haveAxon 1 ) ) 900 1 ) )
 	)
 	:Cycle ( :Give_Cycle ( &GiveOutImpulse @Impulse 50 0 ) 5 )
-	:Reduce ( @Dopamine 20 1 )
 	:Cycle ( :Give_Cycle ( &GiveDopamine @Dopamine 30 0 ) 10 )
 	:Cycle ( :Give_Cycle ( &GivePeptide @Peptide 30 0 ) 10 )
-[	sup ( ( @Impulse 1 )
-                (
-                        echo ( #prev 32 78 32 @Impulse 10 )
-                        set ( #prev @Impulse )
-                ) ( set ( #prev 0 ) )
-        )
-]
+	inf ( ( @NoDendrite 1 )
+		( :CycleL ( creat ( :Dendrite ) 900 2 ) )
+		( set ( @Dopamine 0 ) set ( @Peptide 0 ) )
+	) 
 )>
 
 InitSplitNucleus<(
@@ -77,12 +60,12 @@ InitSplitNucleus<(
 	unshared ( @ImSplit )
 
 	:Make_Rpls_Mv ( &RplsSplit to @ImNucleusSplit @ImNucleusSplit )
-	:Init_Prop_Chan ( &RplsSplit 10 50 )
+	:Init_Prop_Chan ( &RplsSplit 40 50 )
 
 	:Make_Spe_Chan ( &LinkNucleus @ImNucleus @block link 10 )
 
 	inf ( ( @ImAct 2 )
-		( :Set_Prop_Chan ( &GiveDopamine pw ( 10 ) ) )
+		( :Set_Prop_Chan ( &GiveDopamine pw ( 50 ) ) )
 		( :Set_Prop_Chan ( &GiveDopamine pw ( 100 ) ) )
 	)
 )>
@@ -92,5 +75,4 @@ SplitNucleus<(
 	:CycleL ( take_out 20 1 )
 	:CycleL ( :Set_Prop_Chan ( &LinkNucleus dst ( 0 ) ) 20 1 )
 	sup ( ( @ImAct 2 ) ( set ( @ImFreeNucleusSplit 0 ) ) )
-	[:CycleL ( :Set_Prop_Chan ( &RplsSplit dst ( 0 ) ) 1000 1 )]
 )>

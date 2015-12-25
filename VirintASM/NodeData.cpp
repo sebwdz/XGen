@@ -61,7 +61,7 @@ NodeMaker::~NodeMaker()
 
 void        NodeMaker::extract_arg(NodeData *dataN, std::string str)
 {
-    unsigned int     it2 = 0;
+    unsigned int      it2 = 0;
 
     for (unsigned int it = 0; it < str.size(); it++)
     {
@@ -107,6 +107,7 @@ boost::shared_ptr<GeneticObj> NodeMaker::get_value(NodeData *data, std::string &
     std::string             tmp;
     SMART(GeneticalNode)    node;
     unsigned int            v;
+    nodeValue               val;
 
     try
     {
@@ -114,6 +115,8 @@ boost::shared_ptr<GeneticObj> NodeMaker::get_value(NodeData *data, std::string &
         {
             node = SMART(GeneticalNode)(new GeneticalNode());
             node->set_type(VALUE);
+            val._ui = 0;
+            node->set_value(val);
             return (node);
         }
         else if (value[0] == '$')
@@ -129,7 +132,8 @@ boost::shared_ptr<GeneticObj> NodeMaker::get_value(NodeData *data, std::string &
         {
             node = SMART(GeneticalNode)(new GeneticalNode());
             tmp = value.substr(1);
-            node->set_value(get_var(tmp));
+            val._ui = get_var(tmp);
+            node->set_value(val);
             node->set_type(GLOBAL_CHAN);
         }
         else if (value[0] == '#' || value[0] == '!')
@@ -139,7 +143,8 @@ boost::shared_ptr<GeneticObj> NodeMaker::get_value(NodeData *data, std::string &
               node->set_type(FAST_CHAN);
             else
               node->set_type(LOCAL_CHAN);
-            node->set_value(Chanel::hash(value.substr(1)));
+            val._ui = Chanel::hash(value.substr(1));
+            node->set_value(val);
         }
         else
         {
@@ -148,13 +153,15 @@ boost::shared_ptr<GeneticObj> NodeMaker::get_value(NodeData *data, std::string &
             {
                 if (!strcasecmp(m_opt[it].first.c_str(), value.c_str()))
                 {
+                    val._uc = m_opt[it].second;
                     node->set_type(INSTRU);
-                    node->set_value(m_opt[it].second);
+                    node->set_value(val);
                     return (node);
                 }
             }
             node->set_type(VALUE);
-            node->set_value(boost::lexical_cast<unsigned int>(value));
+            val._f = boost::lexical_cast<float>(value);
+            node->set_value(val);
         }
     }
     catch (boost::bad_lexical_cast)

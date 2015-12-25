@@ -86,18 +86,18 @@ void        exec_view(Brain *brain)
                 // reponse positif et negatif
                 if (event.key.code == sf::Keyboard::K) {
                   sens[0]->get_line()->get_chan(Chanel::hash("Active"))->set_value(60);
-                  sens[1]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(60);
-                  sens[2]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(60);
+                  sens[1]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(40);
+                  sens[2]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(40);
                   }
                 if (event.key.code == sf::Keyboard::L) {
                   sens[1]->get_line()->get_chan(Chanel::hash("Active"))->set_value(60);
-                  sens[0]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(60);
-                  sens[2]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(60);
+                  sens[0]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(40);
+                  sens[2]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(40);
                   }
                 if (event.key.code == sf::Keyboard::M) {
                   sens[2]->get_line()->get_chan(Chanel::hash("Active"))->set_value(60);
-                  sens[1]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(60);
-                  sens[0]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(60);
+                  sens[1]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(40);
+                  sens[0]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(40);
                   }
                 crep = 0;
                 response.restart();
@@ -118,7 +118,7 @@ void        exec_view(Brain *brain)
           prev[0] = cycle;
           show[1].restart();
         }
-      usleep((sleep * 1000) * 1000);
+      //usleep((sleep * 1000) * 1000);
       time = speedclock[0].getElapsedTime();
       if (time.asMicroseconds() / 1000000.0 >= sleep)
         {
@@ -138,7 +138,7 @@ void        exec_view(Brain *brain)
       if (cycle - prev[1] > 25)
         {//0.00567
           time = speedclock[1].getElapsedTime();
-          sleep = (sleep + 0.00607 - ((time.asMicroseconds() / 1000000.0) / 25.0)) / 2;
+          sleep = (sleep + 0.00907 - ((time.asMicroseconds() / 1000000.0) / 25.0)) / 2;
           speedclock[1].restart();
           prev[1] = cycle;
           if (sleep < 0)
@@ -189,14 +189,14 @@ int         main(int ac, char **av)
   dna->load_file(file);
   brain->set_dna(dna);
 
-  add_act(brain, std::make_pair(70.0, -60.0));
+  add_act(brain, std::make_pair(90.0, -60.0));
   add_act(brain, std::make_pair(90.0, 0.0));
-  add_act(brain, std::make_pair(70.0, 60.0));
+  add_act(brain, std::make_pair(90.0, 60.0));
 
   /* Sensor */
-  add_act(brain, std::make_pair(-70.0, -60.0), true);
+  add_act(brain, std::make_pair(-90.0, -60.0), true);
   add_act(brain, std::make_pair(-90.0, 0.0), true);
-  add_act(brain, std::make_pair(-70.0, 60.0), true);
+  add_act(brain, std::make_pair(-90.0, 60.0), true);
 
   if (ac > 2)
     exec_view(brain);

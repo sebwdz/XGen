@@ -57,7 +57,7 @@ float    Decriptor::get_value(GeneticalNode *node)
 {
   if (node->get_type() != VALUE)
     return (get_chan(node)->get_value());
-  return (node->get_value());
+  return (node->get_value()._f);
 }
 
 Chanel*         Decriptor::get_chan(GeneticalNode *node)
@@ -68,29 +68,29 @@ Chanel*         Decriptor::get_chan(GeneticalNode *node)
   if (node->get_chan())
     return (node->get_chan());
   if (node->get_type() == FAST_CHAN) {
-      if ((it = m_fast.find(node->get_value())) == m_fast.end())
+      if ((it = m_fast.find(node->get_value()._ui)) == m_fast.end())
         {
           chan = new Chanel();
-          chan->set_ref(node->get_value());
-          m_fast.insert(std::make_pair(node->get_value(), chan));
+          chan->set_ref(node->get_value()._ui);
+          m_fast.insert(std::make_pair(node->get_value()._ui, chan));
         }
       else
         chan = it->second;
       node->set_chan(chan);
     }
   else if (node->get_type() == LOCAL_CHAN) {
-      if ((it = node->get_block()->get_chan().find(node->get_value())) == node->get_block()->get_chan().end())
+      if ((it = node->get_block()->get_chan().find(node->get_value()._ui)) == node->get_block()->get_chan().end())
         {
           chan = new Chanel();
-          chan->set_ref(node->get_value());
-          node->get_block()->get_chan().insert(std::make_pair(node->get_value(), chan));
+          chan->set_ref(node->get_value()._ui);
+          node->get_block()->get_chan().insert(std::make_pair(node->get_value()._ui, chan));
         }
       else
         chan = it->second;
       node->set_chan(chan);
     }
   else {
-      node->set_chan(get_line()->get_chan(node->get_value()));
+      node->set_chan(get_line()->get_chan(node->get_value()._ui));
     }
   return (node->get_chan());
 }

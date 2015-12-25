@@ -48,8 +48,8 @@ int     (Decriptor::*DecriptorManager::get_function(GeneticalNode* node))(Geneti
 {
   if (node->get_type() == INSTRU)
     {
-      if (m_opt.find(node->get_value()) != m_opt.end())
-        return (m_opt.at(node->get_value()));
+      if (m_opt.find(node->get_value()._uc) != m_opt.end())
+        return (m_opt.at(node->get_value()._uc));
     }
   return (&Decriptor::nothing);
 }

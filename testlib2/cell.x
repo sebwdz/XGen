@@ -3,8 +3,15 @@ Init_Main<(
 	set ( @IM_MAIN 10 )
 
 	:Make_Atr_Mv ( &AtrAxonHead oth @IM_MAIN @ImAxonHeadSplit )
-	:Init_Prop_Chan ( &AtrAxonHead 10 400 )
+	:Init_Prop_Chan ( &AtrAxonHead 20 400 )
 	:Set_Prop_Chan ( &AtrAxonHead mindst ( 60 ) )
+
+	:Make_Atr_Mv ( &AtrCell oth @IM_MAIN @ImNucleusSplit )
+	:Init_Prop_Chan ( &AtrCell 40 500 )
+	:Set_Prop_Chan ( &AtrCell mindst ( 100 ) )
+
+	:Make_Rpls_Mv ( &RplsCell oth @IM_MAIN @ImSplitNucleusAct )
+        :Init_Prop_Chan ( &RplsCell 50 100 )
 )>
 
 MAIN<(
@@ -17,7 +24,7 @@ MAIN<(
 			:Cycle_S ( #crtCenter !time creat ( :Cell ) 30 0 )
 		)
 	)
-	:CycleL ( :Set_Prop_Chan ( &AtrAxonHead dst ( 0 ) ) 1200 1 )
+	:CycleL ( :Set_Prop_Chan ( &AtrAxonHead mindst ( 100 ) ) 1200 1 )
 	:CycleL ( :Set_Prop_Chan ( &RplsAxonHead dst ( 0 ) ) 1200 1 )
 	sup ( ( #crtCenter 5 ) (
 			set ( #center 0 )
@@ -54,6 +61,5 @@ CellInit<(
 Cell<(
 	:Init ( :CellInit )
 	:CycleL ( new_head ( :Cytosol ) 30 2 )
-	:CycleL ( new_head ( :Dendrite ) 400 2 )
 )>
 

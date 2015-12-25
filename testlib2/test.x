@@ -1,3 +1,4 @@
+
 Test<(
 	:Init ( :InitTest )
 	sup ( ( @ImInstall 0 ) ( :AttachAct ) )
@@ -14,7 +15,7 @@ InitTest<(
 	:Init_Prop_Chan ( &attach 10 20 )
 
 	:Make_Atr_Mv ( &atr oth @ImAct @ImFreeNucleusSplit )
-	:Init_Prop_Chan ( &atr 3 150 )
+	:Init_Prop_Chan ( &atr 10 150 )
 )>
 
 Attach<(
@@ -64,7 +65,8 @@ AttachAct<(
 AttachCompnent<(
 	sup ( ( @ImNucleus 0 ) (
 			:Init ( :InitCompnentNucleus )
-			sup ( ( @ISSENSOR 0 ) ( :ActiveSensor ( ) ) )
+			sup ( ( @ISSENSOR 0 ) ( :ActiveSensor ) )
+			:NucleusComptent ( )
 		) (
 			sup ( ( @ImNucleusSplit 0 ) (
                         		:NucleusSplitCompnent ( )
@@ -72,6 +74,26 @@ AttachCompnent<(
 			)
 		)
 	)
+)>
+
+NucleusComptent<(
+	:Cycle ( ( set ( #end 10 ) ) 2000 )
+	inf ( ( #end 1 )
+		(
+			sup ( ( @ISSENSOR 0 )
+				(
+           				:Init ( (
+	                			:Make_Give_Chan ( &GiveOutImpulse @Impulse @AtrImpulse )
+                        			:Set_Prop_Chan ( &GiveOutImpulse pw ( 1000 ) )
+                			) )
+         	       			:CycleL ( ( set ( @Dopamine 10 ) ) 10 0 )
+               	 		) (
+					:CycleL ( ( set ( @Impulse 60 ) ) 70 0 )
+				)
+			)
+     		)
+	)
+	inf ( ( @ISSENSOR 1 ) ( set ( @NoDendrite 1 ) ) )
 )>
 
 NucleusSplitCompnent<(
@@ -92,11 +114,17 @@ ActiveSensor<(
                 	set ( @Active 0 )
 		)
 	)
-	sup ( ( @SubActive 0 ) ( add ( @Peptide 10 )
-			:Limit ( @Peptide 1000 )
+	and ( (
+			sup ( ( @SubActive 0 ) )
+			sup ( ( @Impulse 0 ) )
+		) (
+			echo ( @Impulse 65 65 10 )
+			add ( @Peptide 70 )
+			set ( @Impulse 0 )
 			set ( @SubActive 0 )
 		)
 	)
+	:Reduce ( @SubActive 5 1 )
 )>
 
 InitAttachCompnent<(
@@ -108,6 +136,9 @@ InitCompnentNucleusSplit<(
 	
 	:Set_Prop_Chan ( &attach dst ( 0 ) )
 	:Set_Prop_Chan ( &atr dst ( 0 ) )
+
+	:Make_Rpls_Mv ( &RplsAct to @ImSplitNucleusAct @ImSplitNucleusAct )
+	:Init_Prop_Chan ( &RplsAct 10 70 )
 )>
 
 InitCompnentNucleus<(

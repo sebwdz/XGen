@@ -26,7 +26,8 @@ Init_Cytosol<(
 	:Init_Prop_Chan ( &Rpls 20 10 )
 
 	:Make_Atr_Mv ( &AtrNcl to @ImCytosol @ImNucleus )
-	:Init_Prop_Chan ( &AtrNcl 10 40 )
+	:Init_Prop_Chan ( &AtrNcl 30 40 )
+	:Set_Prop_Chan ( &AtrNcl mindst ( 5 ) )
 
 	:Make_Give_Chan ( &GiveImpulse @Impulse @IsNegNucleus )
 	:Set_Prop_Chan ( &GiveImpulse pw ( 1000 ) )
@@ -36,4 +37,8 @@ Init_Cytosol<(
 
         :Make_Give_Chan ( &GivePeptide @Peptide @ImDendriteBase )
         :Set_Prop_Chan ( &GivePeptide pw ( 100 ) )
+
+	:Make_Atr_Mv ( &AtrNucleus oth @ImCytosol @ImNucleus )
+	:Init_Prop_Chan ( &AtrNucleus 10 30 )
+	:Set_Prop_Chan ( &AtrNucleus mindst ( 7 ) )
 )>

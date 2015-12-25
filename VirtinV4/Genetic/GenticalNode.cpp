@@ -3,7 +3,7 @@
 
 GeneticalNode::GeneticalNode(GeneticObj *parent) : GeneticObj(parent)
 {
-    m_value = 0;
+    m_value._f = 0;
     m_type = 4;
     m_chan = NULL;
     m_function = NULL;
@@ -24,7 +24,7 @@ void            GeneticalNode::set_block(GeneticBlock *block)
     }
 }
 
-void            GeneticalNode::set_value(unsigned int value)
+void            GeneticalNode::set_value(nodeValue &value)
 {
     m_value = value;
 }
@@ -39,7 +39,7 @@ void            GeneticalNode::set_chan(Chanel *chan)
     m_chan = chan;
 }
 
-unsigned int    GeneticalNode::get_value()
+nodeValue &GeneticalNode::get_value()
 {
     return (m_value);
 }
@@ -64,7 +64,7 @@ void        GeneticalNode::load(std::ifstream &stream)
     unsigned int     nb;
     int             type;
 
-    stream.read(reinterpret_cast<char*>(&m_value), sizeof(unsigned int));
+    stream.read(reinterpret_cast<char*>(&m_value), sizeof(nodeValue));
     stream.read(reinterpret_cast<char*>(&nb), sizeof(unsigned int));
     for (unsigned int it = 0; it < nb; it++)
     {
@@ -84,7 +84,7 @@ void        GeneticalNode::save(std::ofstream &stream)
     unsigned int    size;
 
     size = m_son.size();
-    stream.write(reinterpret_cast<const char*>(&m_value), sizeof(unsigned int));
+    stream.write(reinterpret_cast<const char*>(&m_value), sizeof(nodeValue));
     stream.write(reinterpret_cast<const char*>(&size), sizeof(unsigned int));
     for (it = m_son.begin(); it != m_son.end(); it++)
     {

@@ -23,7 +23,7 @@ Attach<(
 	set ( @ImInstall 10 )
 
 	:Make_Atr_Mv ( &atr to @ImAttach @ImNucleus )
-        :Init_Prop_Chan ( &atr 15 80 )
+        :Init_Prop_Chan ( &atr 40 80 )
 	:Make_Spe_Chan ( &enter @ImCell @ImAct comin 20 )
 )>
 
@@ -60,6 +60,7 @@ AttachAct<(
 	) ( set ( @ImpulseStk 0 ) ) )
 	:CycleL ( detach ( :AttachCompnent ) 10 1 )
 	:Cycle ( :Give_Cycle ( &GiveAct @ImAttach 10 0 ) 50 )
+	:Cycle ( :Set_Prop_Chan ( &atr type ( oth ) ) 200 )
 )>
 
 AttachCompnent<(
@@ -119,12 +120,11 @@ ActiveSensor<(
 			sup ( ( @Impulse 0 ) )
 		) (
 			echo ( @Impulse 65 65 10 )
-			add ( @Peptide 70 )
+			add ( @Peptide 10 )
 			set ( @Impulse 0 )
-			set ( @SubActive 0 )
 		)
 	)
-	:Reduce ( @SubActive 5 1 )
+	:Reduce ( @SubActive 2 2 )
 )>
 
 InitAttachCompnent<(

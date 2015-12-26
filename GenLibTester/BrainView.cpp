@@ -18,7 +18,7 @@ void        BrainView::show_tester(Brain *brain)
     sf::View                view;
 
     clear();
-    view = sf::View(sf::Vector2f(0, 0), sf::Vector2f(400, 400));
+    view = sf::View(sf::Vector2f(brain->get_pos().first, brain->get_pos().second), sf::Vector2f(400, 400));
     view.zoom(1);
     setView(view);
     show_module(brain);
@@ -39,6 +39,12 @@ void        BrainView::show_module(ModuleClass *module)
     res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value() * 200.0;
     res = res > 254 ? 254 : res;
     sf::Color cl(0, 0, res);
+
+    str = "ImNucleusSplit";
+    res = Chanel::hash(str);
+    res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value() * 20.0;
+    if (res > 0)
+      cl = sf::Color(200, 200, 200);
     str = "Dopamine";
     res = Chanel::hash(str);
     res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value() * 20.0;
@@ -46,13 +52,15 @@ void        BrainView::show_module(ModuleClass *module)
     res2 = Chanel::hash(str);
     res2 = module->get_line()->get_chan(res2 + CHANNEL_RANGE)->get_value() * 10.0;*/
     res = res > 254 ? 254 : res;
-    cl.g = res;
+    if (res > 0)
+      cl.g = res;
     str = "Peptide";
     res = Chanel::hash(str);
     res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value() * 50.0;
     res = res > 254 ? 254 : res;
-    cl.r = res;
-    cl.a = 100;
+    if (res > 0)
+      cl.r = res;
+    cl.a = 200;
     shape.setPointCount(module->get_skeleton()->get_size());
     for (pt = module->get_skeleton()->get_begin(); pt != module->get_skeleton()->get_end(); pt++)
     {

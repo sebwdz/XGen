@@ -7,10 +7,10 @@ Init_Base_Link($to)<(
 	:Make_Give_Chan ( &GiveBase @ImBase @ImLink )
 
 	:Make_Atr_Mv ( &AtrElm oth @ImBaseLink $to )
-	:Init_Prop_Chan ( &AtrElm 10 70 )
+	:Init_Prop_Chan ( &AtrElm 20 50 )
 
-	:Make_Atr_Mv ( &AtrTo to @ImBaselink $to )
-	:Init_Prop_Chan ( &AtrTo 20 70 )
+	:Make_Atr_Mv ( &AtrToMain to @ImBaseLink $to )
+	:Init_Prop_Chan ( &AtrToMain 20 50 )
 )>
 
 Install_Base_Link($link)<(

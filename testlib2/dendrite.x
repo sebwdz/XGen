@@ -29,12 +29,12 @@ Init_Dendrite_Base<(
 
 	:Make_Atr_Mv ( &AtrDendriteHead oth @ImDendriteBase @ImDendriteHead )
 	:Init_Prop_Chan ( &AtrDendriteHead 30 120 )
-	:Set_Prop_Chan ( &AtrDendriteHead mindst ( 30 ) )
-
-	:Make_Atr_Mv ( &AtrByDendritre to @ImDendriteBase @ImDendriteHead )
-	:Init_Prop_Chan ( &AtrByDendriteHead 10 120 )
-	:Set_Prop_Chan ( &AtrByDendrite mindst ( 30 ) )
-
+	:Set_Prop_Chan ( &AtrDendriteHead mindst ( 20 ) )
+[
+	:Make_Atr_Mv ( &AtrByDendritreHead to @ImDendriteBase @ImDendriteHead )
+	:Init_Prop_Chan ( &AtrByDendritHead 40 120 )
+	:Set_Prop_Chan ( &AtrByDendriteHead mindst ( 0 ) )
+]
 	:Make_Give_Chan ( &GiveImpulse @Impulse @IsNegCytosol )
 	:Set_Prop_Chan ( &GiveImpulse pw ( 1000 ) )
 
@@ -84,14 +84,11 @@ Init_Dendrite_Head_Split<(
 	:Init_Prop_Chan ( &RplsCell 10 20 )
 
 	:Make_Atr_Mv ( &AtrByInGrow to @DopamineAct @ImInGrow )
-	:Init_Prop_Chan ( &AtrByInGrow 5 60 )
-
-	:Make_Atr_Mv ( &AtrByAxon to @ImDendriteHeadSplit @ImAxonHeadSplit )
-	:Init_Prop_Chan ( &AtrByAxon 2 50 )
+	:Init_Prop_Chan ( &AtrByInGrow 10 80 )
 
 	:Make_Rpls_Mv ( &RplsDendriteHeadSplit to
 				@ImDendriteHeadSplit @ImDendriteHeadSplit )
-	:Init_Prop_Chan ( &RplsDendriteHeadSplit 10 30 )
+	:Init_Prop_Chan ( &RplsDendriteHeadSplit 10 20 )
 
 	:Make_Give_Chan ( &GiveImpulse @Impulse @IsNegDendriteHead )
 	:Set_Prop_Chan ( &GiveImpulse pw ( 1000 ) )
@@ -99,9 +96,12 @@ Init_Dendrite_Head_Split<(
 	:Make_Give_Chan ( &GiveDopamine @Dopamine @ImAxonHeadSplit )
 	:Set_Prop_Chan ( &GiveDopamine pw ( 100 ) )
         :Make_Give_Chan ( &GivePeptide @Peptide @ImAxonHeadSplit )
-
+[
 	:Make_Atr_Mv ( &AtrByDopamine oth @DopamineAct @ImConductor )
-	:Set_Prop_Chan ( &AtrByDopamine pw ( 0.5 ) )
+	:Set_Prop_Chan ( &AtrByDopamine pw ( 1 ) )
+]
+	:Make_Atr_Mv ( &AtrByGrow to @ImDendriteHeadSplit @ImInGrow )
+	:Init_Prop_Chan ( &AtrByGrow 5 50 )
 
 	:Make_Atr_Mv ( &AtrAxonHead to @ImDendriteHeadSplit @ImAxonHeadSplit )
 	:Init_Prop_Chan ( &AtrAxonHead 5 20 )

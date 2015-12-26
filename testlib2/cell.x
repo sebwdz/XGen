@@ -3,15 +3,15 @@ Init_Main<(
 	set ( @IM_MAIN 10 )
 
 	:Make_Atr_Mv ( &AtrAxonHead oth @IM_MAIN @ImAxonHeadSplit )
-	:Init_Prop_Chan ( &AtrAxonHead 20 400 )
+	:Init_Prop_Chan ( &AtrAxonHead 20 200 )
 	:Set_Prop_Chan ( &AtrAxonHead mindst ( 60 ) )
 
 	:Make_Atr_Mv ( &AtrCell oth @IM_MAIN @ImNucleusSplit )
-	:Init_Prop_Chan ( &AtrCell 40 500 )
-	:Set_Prop_Chan ( &AtrCell mindst ( 100 ) )
+	:Init_Prop_Chan ( &AtrCell 100 500 )
+	:Set_Prop_Chan ( &AtrCell mindst ( 110 ) )
 
 	:Make_Rpls_Mv ( &RplsCell oth @IM_MAIN @ImSplitNucleusAct )
-        :Init_Prop_Chan ( &RplsCell 50 100 )
+        :Init_Prop_Chan ( &RplsCell 50 90 )
 )>
 
 MAIN<(
@@ -24,11 +24,9 @@ MAIN<(
 			:Cycle_S ( #crtCenter !time creat ( :Cell ) 30 0 )
 		)
 	)
-	:CycleL ( :Set_Prop_Chan ( &AtrAxonHead mindst ( 100 ) ) 1200 1 )
-	:CycleL ( :Set_Prop_Chan ( &RplsAxonHead dst ( 0 ) ) 1200 1 )
-	sup ( ( #crtCenter 5 ) (
+	:CycleL ( :Set_Prop_Chan ( &AtrAxonHead mindst ( 120 ) ) 1200 1 )
+	sup ( ( #crtCenter 7 ) (
 			set ( #center 0 )
-			:Cycle ( set ( @IM_MAIN 0 ) 900 )
 		)
 	)
 )>

@@ -19,10 +19,10 @@ InitNucleusCode<(
 	set ( @ImNucleus 10 )
 
 	:Make_Atr_Mv ( &AtrBySplit to @ImNucleus @ImNucleusSplit )
-	:Init_Prop_Chan ( &AtrBySplit 15 60 )
+	:Init_Prop_Chan ( &AtrBySplit 50 60 )
 
 	:Make_Atr_Mv ( &AtrSplit oth @ImNucleus @ImNucleusSplit )
-	:Init_Prop_Chan ( &AtrSplit 15 60 )
+	:Init_Prop_Chan ( &AtrSplit 20 60 )
 
 	:Make_Give_Chan ( &GiveOutImpulse @Impulse @IsNegAxonBase )
 	:Set_Prop_Chan ( &GiveOutImpulse pw ( 1000 ) )
@@ -51,7 +51,7 @@ NucleusCode<(
 	inf ( ( @NoDendrite 1 )
 		( :CycleL ( creat ( :Dendrite ) 900 2 ) )
 		( set ( @Dopamine 0 ) set ( @Peptide 0 ) )
-	) 
+	)
 )>
 
 InitSplitNucleus<(
@@ -63,7 +63,11 @@ InitSplitNucleus<(
 	:Init_Prop_Chan ( &RplsSplit 40 50 )
 
 	:Make_Spe_Chan ( &LinkNucleus @ImNucleus @block link 10 )
-
+[
+	:Make_Atr_Mv ( &AtrByNucleus to @ImNucleusSplit @ImNucleusSplit )
+	:Init_Prop_Chan ( &AtrByNucleus 2 110 )
+	:Set_Prop_Chan ( &AtrByNucleus mindst ( 90 ) )
+]
 	inf ( ( @ImAct 2 )
 		( :Set_Prop_Chan ( &GiveDopamine pw ( 50 ) ) )
 		( :Set_Prop_Chan ( &GiveDopamine pw ( 100 ) ) )

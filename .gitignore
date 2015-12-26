@@ -1,4 +1,5 @@
 *.o
 *.pro.user*
 *build*
+ASM
 

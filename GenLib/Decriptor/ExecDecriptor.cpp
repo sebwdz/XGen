@@ -5,12 +5,8 @@
 
 void        Decriptor::exec()
 {
-  GeneticObj        *block;
-
   Monitor::get_instance()->begin_time(MN_INSTR);
-  block = get_next_node(m_block.get());
-  if (block)
-    turn(CAST(GeneticalNode*)(block));
+  turn(m_block.get());
   Monitor::get_instance()->end_time(MN_INSTR);
   if (!m_attach)
     {
@@ -19,28 +15,15 @@ void        Decriptor::exec()
     }
 }
 
-GeneticalNode     *Decriptor::get_next_node(GeneticObj *obj)
+GeneticalNode     *Decriptor::get_next_node(GeneticalNode *obj)
 {
-  GeneticObj      *tmp;
-
-  tmp = obj;
-  if (!tmp->get_type() && CAST(GeneticBlock*)(obj)->get_next())
-    return (CAST(GeneticBlock*)(obj)->get_next());
-  while (obj && !obj->get_type())
-    obj = CAST(GeneticBlock*)(obj)->get_obj().get();
-  if (!obj)
-    return (NULL);
-  if (!tmp->get_type())
-    CAST(GeneticBlock*)(tmp)->set_next(CAST(GeneticalNode*)(obj));
-  return (CAST(GeneticalNode*)(obj));
+  return (obj);
 }
 
 void        Decriptor::turn(GeneticalNode *node)
 {
   int             (Decriptor::*fct)(GeneticalNode*);
 
-  if (!node)
-    return ;
   if (node->get_type() == INSTRU)
     {
       if (!node->get_function())
@@ -60,43 +43,66 @@ void        Decriptor::turn(GeneticalNode *node)
 int             Decriptor::nothing(GeneticalNode *node)
 {
   int         it;
-  std::vector<SMART(ObjClass)>    &vct = node->get_son();
+  std::vector<SMART(GeneticalNode)>    &vct = node->get_son();
 
   for (it = 0; it < (int)vct.size(); it++)
-    turn(CAST(GeneticalNode*)(get_next_node(CAST(GeneticObj*)(vct[it].get()))));
+    turn(get_next_node(vct[it].get()));
+  return (0);
+}
+
+int        Decriptor::copy(GeneticalNode *node)
+{
+  std::vector<SMART(GeneticalNode)>    &vct = node->get_son();
+  SMART(GeneticalNode)               cp;
+
+  if (vct.size() > 1)
+    {
+      cp = get_chan(vct[0].get());
+      if (vct[1]->get_type() != VALUE)
+        get_chan(vct[1].get())->copy(cp);
+      else
+        vct[1]->copy(cp);
+    }
   return (0);
 }
 
 int        Decriptor::set_function(GeneticalNode *node)
 {
-  float           value1;
-  float           value2;
-  unsigned int    it;
-  Chanel          *tmp;
-  std::vector<SMART(ObjClass)>    &vct = node->get_son();
+  nodeValue                           value1;
+  float                               value2;
+  unsigned int                        it;
+  GeneticalNode                        *tmp;
+  std::vector<SMART(GeneticalNode)>   &vct = node->get_son();
 
   it = 0;
   value2 = 0;
   for (it = 0; it + 1 < vct.size(); it++)
     {
-      tmp = get_chan(get_next_node(CAST(GeneticObj*)(vct[it++].get())));
+      tmp = get_chan(get_next_node(vct[it++].get())).get();
       value1 = tmp->get_value();
-      value2 = get_value(get_next_node(CAST(GeneticObj*)(vct[it].get())));
+      value2 = get_value(get_next_node(vct[it].get()));
       if (node->get_value()._uc == SET)
-        value1 = value2;
+        value1._f = value2;
       else if (node->get_value()._uc == ADD)
-        value1 += value2;
+        value1._f += value2;
       else if (node->get_value()._uc == MULT)
-        value1 *= value2;
-      else if (node->get_value()._uc == DIV)
+        value1._f *= value2;
+      else if (node->get_value()._uc == DIV || node->get_value()._uc == MOD)
         {
           if (value2 != 0)
-            value1 /= value2;
+            {
+              if (node->get_value()._uc == DIV)
+                value1._f /= value2;
+              else
+                value1._f = fmod(value1._f, value2);
+            }
+          else
+            value1._f = 0;
         }
-      else if (value1 > value2)
-        value1 -= value2;
+      else if (value1._f > value2)
+        value1._f -= value2;
       else
-        value1 = 0;
+        value1._f = 0;
       tmp->set_value(value1);
     }
   return (0);
@@ -107,7 +113,7 @@ int         Decriptor::comparator(GeneticalNode *node, GeneticalNode *content)
   unsigned int                    it;
   float                           value1;
   float                           value2;
-  std::vector<SMART(ObjClass)>    &vct = content->get_son();
+  std::vector<SMART(GeneticalNode)>    &vct = content->get_son();
 
   value2 = 0;
   value1 = 0;
@@ -117,7 +123,7 @@ int         Decriptor::comparator(GeneticalNode *node, GeneticalNode *content)
     {
       for (it = 0; it < vct.size(); it++)
         {
-          value1 = comp_funcion(get_next_node(CAST(GeneticObj*)(vct[it].get())));
+          value1 = comp_funcion(get_next_node(vct[it].get()));
           if (value2 && value1 && node->get_value()._uc == XOR)
             return (0);
           if (node->get_value()._uc == AND && !value1)
@@ -131,11 +137,11 @@ int         Decriptor::comparator(GeneticalNode *node, GeneticalNode *content)
         return (0);
     }
   else if (node->get_value()._uc == NO && vct.size() > 0)
-    return (comp_funcion(get_next_node(CAST(GeneticObj*)(vct[it].get()))) ? 0 : 1);
+    return (comp_funcion(get_next_node(vct[it].get())) ? 0 : 1);
   else if (vct.size() > 1)
     {
-      value1 = get_value(get_next_node(CAST(GeneticObj*)(vct[it++].get())));
-      value2 = get_value(get_next_node(CAST(GeneticObj*)(vct[it].get())));
+      value1 = get_value(get_next_node(vct[it++].get()));
+      value2 = get_value(get_next_node(vct[it].get()));
       if (node->get_value()._uc == SUP && value1 <= value2)
         return (0);
       else if (node->get_value()._uc == INF && value1 >= value2)
@@ -150,23 +156,39 @@ int         Decriptor::comparator(GeneticalNode *node, GeneticalNode *content)
 
 int        Decriptor::comp_funcion(GeneticalNode *node)
 {
-  std::vector<SMART(ObjClass)>    &vct = node->get_son();
+  std::vector<SMART(GeneticalNode)>    &vct = node->get_son();
   GeneticalNode                   *content;
 
   if (vct.size() > 0)
     {
-      content = get_next_node(CAST(GeneticObj*)(vct[0].get()));
+      content = get_next_node(vct[0].get());
       if (comparator(node, content))
         {
           if (vct.size() > 1)
-            turn(get_next_node(CAST(GeneticObj*)(vct[1].get())));
+            turn(get_next_node(vct[1].get()));
           return (1);
         }
       else
         {
           if (vct.size() > 2)
-            turn(get_next_node(CAST(GeneticObj*)(vct[2].get())));
-          return (0);
+            turn(get_next_node(vct[2].get()));
+        }
+    }
+  return (0);
+}
+
+int         Decriptor::loop(GeneticalNode *node)
+{
+  std::vector<SMART(GeneticalNode)>    &vct = node->get_son();
+  GeneticalNode                   *comp;
+  GeneticalNode                   *code;
+
+  if (vct.size() > 1)
+    {
+      comp = get_next_node(vct[0].get());
+      code = get_next_node(vct[1].get());
+      while (comp_funcion(comp)) {
+          turn(code);
         }
     }
   return (0);
@@ -182,21 +204,18 @@ int         Decriptor::use_function(GeneticalNode *node)
 {
   int     it;
   bool    use;
-  bool    mode;
-  std::vector<SMART(ObjClass)>        &vct = node->get_son();
+  std::vector<SMART(GeneticalNode)>        &vct = node->get_son();
 
   use = false;
   if (node->get_value()._uc == USE || node->get_value()._uc == SHARED)
     use = true;
-  mode = true;
-  if (node->get_value()._uc == USE || node->get_value()._uc == UNUSE)
-    mode = false;
   for (it = 0; it < (int)vct.size(); it++)
     {
-      if (!mode)
-        get_chan(get_next_node(CAST(GeneticObj*)(vct[it].get())))->set_use(use);
+      if (use)
+        get_line()->get_shared()->set_ass(boost::static_pointer_cast<GeneticObj>(vct[it])->get_value()._ui,
+                                        boost::static_pointer_cast<GeneticalNode>(get_line()->get_chan()->get_ass(boost::static_pointer_cast<GeneticObj>(vct[it])->get_value()._ui)));
       else
-        get_chan(get_next_node(CAST(GeneticObj*)(vct[it].get())))->set_shared(use);
+        get_line()->get_shared()->remove_ass(boost::static_pointer_cast<GeneticObj>(vct[it])->get_value()._ui);
     }
   return (0);
 }
@@ -220,15 +239,15 @@ int     Decriptor::jmp_function(GeneticalNode *node)
 
 int             Decriptor::echo(GeneticalNode *node)
 {
-  unsigned int           it;
-  std::vector<SMART(ObjClass)>    &vct = node->get_son();
-  GeneticalNode                   *son;
+  unsigned int                      it;
+  std::vector<SMART(GeneticalNode)> &vct = node->get_son();
+  GeneticalNode                     *son;
 
   for (it = 0; it < vct.size(); it++)
     {
       son = CAST(GeneticalNode*)(vct[it].get());
       if (son->get_type() == GLOBAL_CHAN || son->get_type() == LOCAL_CHAN ||
-          son->get_type() == FAST_CHAN)
+          son->get_type() == FAST_CHAN || son->get_type() == INTERACTION)
         {
           std::cout << get_value(son);
         }
@@ -236,63 +255,4 @@ int             Decriptor::echo(GeneticalNode *node)
         std::cout << (char)son->get_value()._f;
     }
   return (0);
-}
-
-int             Decriptor::set_var_function(GeneticalNode *node)
-{
-  int              it;
-  GeneticalNode   *cur;
-  std::vector<SMART(ObjClass)>    &vct = node->get_son();
-
-  for (it = 0; it < (int)vct.size(); it++)
-    {
-      Monitor::get_instance()->add_val(MN_INSTR);
-      cur = get_next_node(CAST(GeneticObj*)(vct[it].get()));
-      set_chan(cur);
-    }
-  return (0);
-}
-
-void        Decriptor::set_chan(GeneticalNode *node)
-{
-  GeneticalNode   *cp;
-  ChanPropriety   *prop;
-  int             it;
-  std::vector<SMART(ObjClass)>    &vct = node->get_son();
-
-  prop = get_line()->get_prop(node->get_value()._ui);
-  for (it = 0; it < (int)vct.size(); it++)
-    {
-      Monitor::get_instance()->add_val(MN_INSTR);
-      cp = get_next_node(CAST(GeneticObj*)(vct[it].get()));
-      set_propriety(cp, prop);
-    }
-}
-
-void        Decriptor::set_propriety(GeneticalNode *node, ChanPropriety *prop)
-{
-  unsigned int  it;
-  GeneticalNode   *cp;
-  std::vector<SMART(ObjClass)>    &vct = node->get_son();
-
-  for (it = 0; it < vct.size(); it++)
-    {
-      Monitor::get_instance()->add_val(MN_INSTR);
-      cp = get_next_node(CAST(GeneticObj*)(vct[it].get()));
-      if (node->get_value()._uc == TYPE)
-        prop->set_type(cp->get_value()._uc);
-      else if (node->get_value()._uc == DST || node->get_value()._uc == PW || node->get_value()._uc == MINDST) {
-          prop->set_pow(node->get_value()._uc, get_value(cp));
-        }
-      else if (node->get_value()._uc == ACT)
-        {
-          if (it == 0)
-            {
-              prop->set_chan(get_line()->get_chan(cp->get_value()._ui));
-              prop->set_act(TO, cp->get_value()._ui);
-            }
-          else
-            prop->set_act(OTH, cp->get_value()._ui);
-        }
-    }
 }

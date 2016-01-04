@@ -8,12 +8,11 @@ Decriptor::Decriptor(Object *obj) : Movable(obj)
   m_type ^= TYPE_DECRIPTOR;
   m_sig.insert(std::make_pair(ATTACH, (SIG_CATCH)(&Decriptor::catch_simple)));
   m_attach = false;
+  m_fast = SMART(GeneticalNode)(new GeneticalNode());
 }
 
 Decriptor::~Decriptor()
 {
-  for (USE_LIST::iterator it = m_fast.begin(); it != m_fast.end(); it++)
-    delete it->second;
 }
 
 LineDecript     *Decriptor::get_line()
@@ -23,7 +22,7 @@ LineDecript     *Decriptor::get_line()
   return (&m_line);
 }
 
-void        Decriptor::set_block(SMART(GeneticObj) block)
+void        Decriptor::set_block(SMART(GeneticalNode) block)
 {
   m_block = block;
 }
@@ -34,21 +33,16 @@ void        Decriptor::set_attach(bool attach)
   reset(m_block);
 }
 
-void        Decriptor::reset(SMART(GeneticObj) obj)
+void        Decriptor::reset(SMART(GeneticalNode) obj)
 {
-  std::vector<SMART(ObjClass)>  son = obj->get_son();
+  std::vector<SMART(GeneticalNode)>  son = obj->get_son();
 
-  if (obj->get_type() != BLOCK)
-    {
-      static_cast<GeneticalNode*>(obj.get())->set_chan(NULL);
-      for (unsigned int it = 0; it < son.size(); it++)
-        reset(boost::static_pointer_cast<GeneticObj>(son[it]));
-    }
-  else
-    reset(CAST(GeneticBlock*)(obj.get())->get_obj());
+  static_cast<GeneticalNode*>(obj.get())->set_chan(SMART(GeneticalNode)());
+  for (unsigned int it = 0; it < son.size(); it++)
+    reset(son[it]);
 }
 
-SMART(GeneticObj)     Decriptor::get_block() const
+SMART(GeneticalNode)     Decriptor::get_block() const
 {
   return (m_block);
 }
@@ -56,42 +50,47 @@ SMART(GeneticObj)     Decriptor::get_block() const
 float    Decriptor::get_value(GeneticalNode *node)
 {
   if (node->get_type() != VALUE)
-    return (get_chan(node)->get_value());
+      return (get_chan(node)->get_value()._f);
   return (node->get_value()._f);
 }
 
-Chanel*         Decriptor::get_chan(GeneticalNode *node)
+SMART(GeneticalNode)    Decriptor::get_chan(GeneticalNode *node)
 {
-  USE_LIST::iterator  it;
-  Chanel              *chan;
+  unsigned int                        it;
+  unsigned int                        var;
+  SMART(GeneticalNode)                chan;
+  GeneticalNode                       *tmp;
+  std::vector<SMART(GeneticalNode)>   &vct = node->get_son();
 
   if (node->get_chan())
     return (node->get_chan());
-  if (node->get_type() == FAST_CHAN) {
-      if ((it = m_fast.find(node->get_value()._ui)) == m_fast.end())
-        {
-          chan = new Chanel();
-          chan->set_ref(node->get_value()._ui);
-          m_fast.insert(std::make_pair(node->get_value()._ui, chan));
-        }
+  if (node->get_type() == FAST_CHAN)
+    chan = m_fast;
+  else if (node->get_type() == LOCAL_CHAN && node->get_block())
+    chan = node->get_block()->get_local();
+  else if (node->get_type() == INTERACTION)
+    chan = get_line()->get_interaction();
+  else
+    chan = get_line()->get_chan();
+  var = 0;
+  for (it = 0; it < vct.size(); it++) {
+      if (vct[it]->get_type() == EMPTY_CHAN)
+        chan = chan->get_ass(vct[it]->get_value()._ui);
+      else if (vct[it]->get_type() == VALUE)
+        chan = chan->get_son_ref((unsigned int)vct[it]->get_value()._f);
       else
-        chan = it->second;
-      node->set_chan(chan);
-    }
-  else if (node->get_type() == LOCAL_CHAN) {
-      if ((it = node->get_block()->get_chan().find(node->get_value()._ui)) == node->get_block()->get_chan().end())
         {
-          chan = new Chanel();
-          chan->set_ref(node->get_value()._ui);
-          node->get_block()->get_chan().insert(std::make_pair(node->get_value()._ui, chan));
+          var = 1;
+          tmp = get_chan(vct[it].get()).get();
+          if (tmp->get_type() == VALUE)
+            chan = chan->get_son_ref((unsigned int)tmp->get_value()._f);
+          else
+            chan = chan->get_ass(tmp->get_value()._ui);
         }
-      else
-        chan = it->second;
-      node->set_chan(chan);
     }
-  else {
-      node->set_chan(get_line()->get_chan(node->get_value()._ui));
-    }
+  if (var)
+      return (chan);
+  node->set_chan(chan);
   return (node->get_chan());
 }
 

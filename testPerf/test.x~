@@ -1,0 +1,58 @@
+<
+	?dst		0
+	?mindst		1
+	?pw		2
+	?act		3
+	?type		4
+	?target		5
+	?dir		6
+
+	?mv		0
+	?chng		1
+
+	?oth		0
+	?to		1
+
+	?rpls		0
+	?atr		1
+>
+
+MAIN<(
+	set ( #val 10 )
+	set ( #length 1000 )
+
+	inf ( ( #it #length ) ( :BCL ) )
+	add ( #it 1 )
+)>
+
+BCL<(
+	set ( !it 0 )
+
+	while ( inf ( ( !it #length ) ) (
+			echo ( #it 32 !it 10 )
+			set ( ! ( /tab #it !it ) #val )
+			add ( !it 1 )
+		)
+	)
+)>
+
+[ byte code - state 1 ]
+
+:MAIN ( 0 (
+		set ( # ( /val ) 10 )
+		set ( # ( /length ) 1000 )
+		inf ( ( # ( /it ) # ( /length ) ) (
+				:BCL ( 0 (
+						set ( ! ( /it ) 0 )
+						while ( inf ( ( ! ( /it ) # ( /length ) ) ) (
+								echo ( # ( /it ) 32 ! ( /it ) 10 )
+								set ( ! ( /tab # ( /it ) ! ( /it ) ) )
+								add ( ! ( /it ) 1 )
+							)
+						)
+					)
+				)
+			)
+		)
+	)
+)

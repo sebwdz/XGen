@@ -2,7 +2,7 @@ syntax "gen" "\.x*"
 
 color green "(set|add|sub|div|mult|creat|duplic|new_head|attach|detach|use|unuse|inf)"
 color green "(sup|egal|shared|unshared||kill|destroy|type|var|mv|chng|oth|to|rpls|atr|act|pw|dst)"
-color green "(or|and|xor|no|take_out|link||comin|split|scope|parent|son|mindst|echo)"
+color green "(or|and|xor|no|take_out|link||comin|split|scope|parent|son|mindst|echo|mod|while)"
 color green "(ref)"
 color brightgreen "\#[A-Za-z0-9_]*"
 color black,cyan "%[A-Za-z_0-9]*"

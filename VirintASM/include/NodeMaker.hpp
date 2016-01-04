@@ -1,15 +1,14 @@
 #ifndef NODEMAKER_HPP
 #define NODEMAKER_HPP
 
-#include        <boost/unordered_map.hpp>
-#include        "Genetic/GeneticBlock.hpp"
+#include        "Genetic/GeneticalNode.hpp"
 
 typedef struct  NodeData
 {
     std::string                         name;
     std::string                         data;
     boost::unordered_map<std::string, unsigned int>   arg;
-    SMART(GeneticBlock)                        block;
+    SMART(GeneticalNode)                block;
 } NodeData;
 
 class   NodeMaker
@@ -25,12 +24,14 @@ public:
     NodeData        *get_node(std::string &name);
     void            read_data(std::ifstream &file);
     void            dasm(std::ofstream &file, GeneticalNode *node);
-    void            make_node(std::string &name, std::string &str, std::vector<boost::shared_ptr<GeneticObj> > &av);
-    boost::shared_ptr<GeneticObj>    get_value(NodeData *data, std::string &value, std::vector<boost::shared_ptr<GeneticObj> > &av);
-    SMART(GeneticObj) read_node(NodeData *data, std::size_t &pos, std::string &str, std::vector<boost::shared_ptr<GeneticObj> > &av);
+    void            make_node(std::string &name, std::string &str, std::vector<SMART(GeneticalNode)> &av);
+    SMART(GeneticalNode)    get_value(NodeData *data, std::string &value, std::vector<SMART(GeneticalNode)> &av);
+    SMART(GeneticalNode) read_node(NodeData *data, std::size_t &pos, std::string &str, std::vector<SMART(GeneticalNode)> &av);
     void            check_pile(NodeData *data);
     unsigned int    get_var(std::string &str);
     void        extract_arg(NodeData *dataN, std::string str);
+    void        read_define(std::string &data);
+    void        apply_define();
 
 private:
 
@@ -41,6 +42,7 @@ private:
     std::vector<NodeData*>   m_pile;
     bool                    m_asm;
     unsigned int            m_size;
+    boost::unordered_map<std::string, std::string>      m_define;
 };
 
 #endif // NODEMAKER_HPP

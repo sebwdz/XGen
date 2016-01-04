@@ -96,10 +96,10 @@ Init_Dendrite_Head_Split<(
 	:Make_Give_Chan ( &GiveDopamine @Dopamine @ImAxonHeadSplit )
 	:Set_Prop_Chan ( &GiveDopamine pw ( 100 ) )
         :Make_Give_Chan ( &GivePeptide @Peptide @ImAxonHeadSplit )
-[
+
 	:Make_Atr_Mv ( &AtrByDopamine oth @DopamineAct @ImConductor )
 	:Set_Prop_Chan ( &AtrByDopamine pw ( 1 ) )
-]
+
 	:Make_Atr_Mv ( &AtrByGrow to @ImDendriteHeadSplit @ImInGrow )
 	:Init_Prop_Chan ( &AtrByGrow 5 50 )
 
@@ -115,12 +115,12 @@ Dendrite_Head_Split<(
 
 	:Cycle ( :Give_Cycle ( &GiveDopamine @Dopamine 40 0 ) 10 )
         :Cycle ( :Give_Cycle ( &GivePeptide @Peptide 30 0 ) 10 )
-        :Cycle ( :Give_Cycle ( &AtrByDopamine @DopamineAct 70 0 ) 10 )
+        :Cycle ( :Give_Cycle ( &AtrByDopamine @DopamineAct 80 0 ) 10 )
 )>
 
 Dendrite_Head_React<(
-	:TransformTo ( @Dopamine @DopamineAct 40 )
-        :TransformTo ( @Peptide @PeptideAct 40 )
+	:TransformTo ( @Dopamine @DopamineAct 20 )
+        :TransformTo ( @Peptide @PeptideAct 20 )
 
         :OnlyOne ( @Dopamine @Peptide )
         :OnlyOne ( @DopamineAct @PeptideAct )

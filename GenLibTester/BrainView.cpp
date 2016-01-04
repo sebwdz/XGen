@@ -36,18 +36,18 @@ void        BrainView::show_module(ModuleClass *module)
     int                     index = 0;
 
     res = Chanel::hash(str);
-    res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value() * 200.0;
+    res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value()._f * 200.0;
     res = res > 254 ? 254 : res;
     sf::Color cl(0, 0, res);
 
     str = "ImNucleusSplit";
     res = Chanel::hash(str);
-    res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value() * 20.0;
+    res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value()._f * 20.0;
     if (res > 0)
       cl = sf::Color(200, 200, 200);
     str = "Dopamine";
     res = Chanel::hash(str);
-    res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value() * 20.0;
+    res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value()._f * 20.0;
  /*   str = "DopamineAct";
     res2 = Chanel::hash(str);
     res2 = module->get_line()->get_chan(res2 + CHANNEL_RANGE)->get_value() * 10.0;*/
@@ -56,7 +56,7 @@ void        BrainView::show_module(ModuleClass *module)
       cl.g = res;
     str = "Peptide";
     res = Chanel::hash(str);
-    res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value() * 50.0;
+    res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value()._f * 50.0;
     res = res > 254 ? 254 : res;
     if (res > 0)
       cl.r = res;

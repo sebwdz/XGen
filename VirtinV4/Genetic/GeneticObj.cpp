@@ -20,3 +20,14 @@ void            GeneticObj::set_type(int type)
 {
     m_type = type;
 }
+
+
+void            GeneticObj::set_value(nodeValue value)
+{
+    m_value = value;
+}
+
+nodeValue &GeneticObj::get_value()
+{
+    return (m_value);
+}

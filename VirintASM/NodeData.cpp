@@ -20,9 +20,12 @@ NodeMaker::NodeMaker(std::string &maind, bool asmn)
     m_opt.push_back(std::make_pair("UNSHARED", UNSHARED));
     m_opt.push_back(std::make_pair("ADD", ADD));
     m_opt.push_back(std::make_pair("SUB", SUB));
+    m_opt.push_back(std::make_pair("CP", COPY));
     m_opt.push_back(std::make_pair("SET", SET));
     m_opt.push_back(std::make_pair("MULT", MULT));
     m_opt.push_back(std::make_pair("DIV", DIV));
+    m_opt.push_back(std::make_pair("MOD", MOD));
+    m_opt.push_back(std::make_pair("WHILE", WHILE));
     m_opt.push_back(std::make_pair("CREAT", CREAT));
     m_opt.push_back(std::make_pair("DETACH", DETACH));
     m_opt.push_back(std::make_pair("NEW_HEAD", NEW_HEAD));
@@ -102,7 +105,44 @@ NodeData        *NodeMaker::get_node(std::string &name)
     return (0);
 }
 
-boost::shared_ptr<GeneticObj> NodeMaker::get_value(NodeData *data, std::string &value, std::vector<SMART(GeneticObj)> &av)
+SMART(GeneticalNode)      get_addr(std::string str, SMART(GeneticalNode) cp = SMART(GeneticalNode)())
+{
+  std::size_t             pos = str.find_first_of("^");
+  std::string             word;
+  SMART(GeneticalNode)    node;
+  nodeValue               val;
+
+  if (pos != std::string::npos)
+    word = str.substr(0, pos);
+  else
+    word = str;
+  if (!cp)
+    cp = SMART(GeneticalNode)(new GeneticalNode());
+  if (!word.size())
+    {
+      return (cp);
+      if (pos == std::string::npos)
+        return (cp);
+      node = SMART(GeneticalNode)(new GeneticalNode());
+    }
+  else
+    {
+      node = SMART(GeneticalNode)(new GeneticalNode());
+      if (word.find_first_not_of("0123456789") != std::string::npos) {
+          node->set_type(EMPTY_CHAN);
+          val._ui = Chanel::hash(word);
+      }
+      else
+        val._f = boost::lexical_cast<float>(word);
+      node->set_value(val);
+      cp->add_son(node);
+      if (pos != std::string::npos)
+        get_addr(str.substr(pos + 1), cp);
+    }
+  return (cp);
+}
+
+SMART(GeneticalNode) NodeMaker::get_value(NodeData *data, std::string &value, std::vector<SMART(GeneticalNode)> &av)
 {
     std::string             tmp;
     SMART(GeneticalNode)    node;
@@ -115,7 +155,7 @@ boost::shared_ptr<GeneticObj> NodeMaker::get_value(NodeData *data, std::string &
         {
             node = SMART(GeneticalNode)(new GeneticalNode());
             node->set_type(VALUE);
-            val._ui = 0;
+            val._f = 0;
             node->set_value(val);
             return (node);
         }
@@ -126,26 +166,31 @@ boost::shared_ptr<GeneticObj> NodeMaker::get_value(NodeData *data, std::string &
             v = data->arg[value];
             if (v >= av.size())
                 throw (std::string(value + " was not found, to few argument"));
-            return (av[v]);
+            return (av[v]->copy());
         }
-        else if (value[0] == '@' || value[0] == '&')
+        else if (value[0] == '@' || value[0] == '&' || value[0] == '#' || value[0] == '!')
         {
             node = SMART(GeneticalNode)(new GeneticalNode());
             tmp = value.substr(1);
-            val._ui = get_var(tmp);
+            val._ui = 0;
+            get_addr(tmp, node);
             node->set_value(val);
-            node->set_type(GLOBAL_CHAN);
-        }
-        else if (value[0] == '#' || value[0] == '!')
-        {
-            node = SMART(GeneticalNode)(new GeneticalNode());
-            if (value[0] == '#')
+            if (value[0] == '@')
+              node->set_type(GLOBAL_CHAN);
+            else if (value[0] == '&')
+              node->set_type(INTERACTION);
+            else if (value[0] == '#')
               node->set_type(FAST_CHAN);
             else
               node->set_type(LOCAL_CHAN);
+        }
+        else if (value[0] == '/')
+          {
+            node = SMART(GeneticalNode)(new GeneticalNode());
+            node->set_type(EMPTY_CHAN);
             val._ui = Chanel::hash(value.substr(1));
             node->set_value(val);
-        }
+          }
         else
         {
             node = SMART(GeneticalNode)(new GeneticalNode());
@@ -168,7 +213,7 @@ boost::shared_ptr<GeneticObj> NodeMaker::get_value(NodeData *data, std::string &
     {
         throw (std::string("Syntax Error with : ") + value + std::string("."));
     }
-    return (boost::static_pointer_cast<GeneticObj>(node));
+    return (node);
 }
 
 unsigned int    NodeMaker::get_var(std::string &str)
@@ -202,7 +247,7 @@ void        NodeMaker::dasm(std::ofstream &file, GeneticalNode* node)
     }*/
 }
 
-void        NodeMaker::make_node(std::string &name, std::string &str, std::vector<SMART(GeneticObj)> &av)
+void        NodeMaker::make_node(std::string &name, std::string &str, std::vector<SMART(GeneticalNode)> &av)
 {
     NodeData    *Node;
     std::size_t pos = 0;
@@ -210,8 +255,8 @@ void        NodeMaker::make_node(std::string &name, std::string &str, std::vecto
     Node = get_node(name);
     check_pile(Node);
     str += "begin " + name + "\n";
-    Node->block = SMART(GeneticBlock)(new GeneticBlock());
-    Node->block->set_obj(read_node(Node, pos, str, av));
+    Node->block = read_node(Node, pos, str, av);
+    Node->block->set_type(BLOCK);
     str += "finish " + name + " succesfull\n";
     m_pile.pop_back();
 }
@@ -228,7 +273,7 @@ void            NodeMaker::check_pile(NodeData *data)
 
 void            NodeMaker::save(std::string &out)
 {
-    SMART(GeneticBlock)    res;
+    SMART(GeneticalNode)    res;
     std::ofstream   file(out.c_str(), std::ios_base::binary);
 
     if (!file.is_open())

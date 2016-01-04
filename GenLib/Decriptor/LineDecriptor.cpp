@@ -3,17 +3,13 @@
 
 LineDecript::LineDecript()
 {
+  m_global = SMART(GeneticalNode)(new GeneticalNode());
+  m_shared = SMART(GeneticalNode)(new GeneticalNode());
+  m_prop = SMART(GeneticalNode)(new GeneticalNode());
 }
 
 LineDecript::~LineDecript()
 {
-  USE_LIST::iterator    it;
-  CHANPLIST::iterator  chanit;
-
-  for (it = m_chan.begin(); it != m_chan.end(); it++)
-    delete it->second;
-  for (chanit = m_prop.begin(); chanit != m_prop.end(); chanit++)
-    delete chanit->second;
 }
 
 void                LineDecript::get_ready()
@@ -31,83 +27,65 @@ SIGNALS_LIST        &LineDecript::get_signals()
   return (m_signals);
 }
 
-unsigned int            LineDecript::get_value(unsigned int ref, bool use)
+float            LineDecript::get_value(unsigned int ref, bool use)
 {
-  USE_LIST::iterator it;
-  if ((it = m_chan.find(ref)) == m_chan.end())
-    return (use ? 1 : 0);
-  if (!use)
-    return (it->second->get_value());
-  return (it->second->get_use() ? 1 : 0);
+  SMART(GeneticObj)  res;
+
+  if (!(res = m_global->get_ass(ref, false)))
+    return (0);
+  return (res->get_value()._f);
 }
 
 void                    LineDecript::shared_to_line(LineDecript *line)
 {
   USE_LIST::iterator  it;
-  Chanel              *chan;
 
-  for (it = line->get_begin(); it != line->get_end(); it++)
-    {
-      if (it->second->get_shared())
-        {
-          chan = get_chan(it->first);
-          chan->set_use(it->second->get_use());
-          chan->set_value(it->second->get_value());
-          chan->set_shared(it->second->get_shared());
-        }
-    }
+  for (it = line->m_shared->get_ass().begin(); it != line->m_shared->get_ass().end(); it++)
+      m_global->set_ass(it->first, it->second->copy());
 }
 
-
-Chanel              *LineDecript::get_chan(unsigned int ref)
+SMART(GeneticalNode)    LineDecript::get_chan()
 {
-  USE_LIST::iterator  it;
-  Chanel              *chan;
+  return (m_global);
+}
 
-  if ((it = m_chan.find(ref)) == m_chan.end())
-    {
-      chan = new Chanel();
-      chan->set_ref(ref);
-      m_chan.insert(std::make_pair(ref, chan));
+SMART(GeneticalNode)    LineDecript::get_shared()
+{
+  return (m_shared);
+}
+
+SMART(GeneticalNode)    LineDecript::get_interaction()
+{
+  return (m_prop);
+}
+
+SMART(GeneticalNode)             LineDecript::get_chan(unsigned int key)
+{
+  return (m_global->get_ass(key));
+}
+
+SMART(GeneticalNode)             LineDecript::get_chan(GeneticalNode *node)
+{
+  std::vector<SMART(GeneticalNode)> &vct = node->get_son();
+  SMART(GeneticalNode)                 chan;
+
+  chan = m_global;
+  for (unsigned  int it = 0; it < vct.size(); it++) {
+      if (vct[it]->get_type() == EMPTY_CHAN)
+        chan = chan->get_ass(vct[it]->get_value()._ui);
+      else if (vct[it]->get_type() == VALUE)
+        chan = chan->get_son_ref((unsigned int)vct[it]->get_value()._f);
     }
-  else
-    chan = it->second;
   return (chan);
-}
-
-ChanPropriety           *LineDecript::get_prop(unsigned int ref)
-{
-  CHANPLIST::iterator it;
-  ChanPropriety       *prop;
-
-  if ((it = m_prop.find(ref)) == m_prop.end())
-    {
-      prop = new ChanPropriety();
-      prop->set_ref(ref);
-      m_prop.insert(std::make_pair(ref, prop));
-    }
-  else
-    prop = it->second;
-  return (prop);
 }
 
 USE_LIST::iterator  LineDecript::get_begin()
 {
-  return (m_chan.begin());
+  return (m_global->get_ass().begin());
 }
 
 
 USE_LIST::iterator  LineDecript::get_end()
 {
-  return (m_chan.end());
-}
-
-CHANPLIST::iterator LineDecript::get_begin_prop()
-{
-  return (m_prop.begin());
-}
-
-CHANPLIST::iterator LineDecript::get_end_prop()
-{
-  return (m_prop.end());
+  return (m_global->get_ass().end());
 }

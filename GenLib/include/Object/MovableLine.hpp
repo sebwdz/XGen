@@ -6,14 +6,15 @@
 
 typedef struct  sMovableChan sMovableChan;
 
-#define         CHAN_MOVELIST   boost::unordered_map<unsigned int, sMovableChan*>
+#define         CHAN_MOVELIST   boost::unordered_map<GeneticalNode*, sMovableChan*>
 
 struct                                  sMovableChan
 {
-    boost::unordered_map<Object*, float>                         obj;
-    float                                                        total;
-    float                                                        have;
-    unsigned int                                                 life;
+    boost::unordered_map<Object*, float>                          obj;
+    float                                                         total;
+    float                                                         have;
+    unsigned int                                                  life;
+    GeneticalNode*                                                path;
 };
 
 class           MovableLine
@@ -24,13 +25,14 @@ class           MovableLine
 
     void                make();
     void                make_range();
-    void                change_chan(unsigned int ref, sMovableChan *move);
+    void                change_chan(GeneticalNode *ref, sMovableChan *move);
     void                exec();
-    void                interact_with(class Movable *obj, ChanPropriety *prop);
+    void                interact_with(class Movable *obj, GeneticalNode *prop);
     void                interact(class Movable *obj);
-    void                apply(class Movable *from, ChanPropriety *prop,
-                          std::pair<float, float> &vct, std::pair<float, unsigned int> &chan);
-    bool                check_attach(Object *obj, ChanPropriety *prop);
+    void                apply(class Movable *from, GeneticalNode *prop,
+                          std::pair<float, float> &vct, std::pair<float, GeneticalNode*> &chan);
+    bool                check_attach(Object *obj, GeneticalNode *prop);
+    void                reduce(float &chan, GeneticalNode *prop);
 
     void                set_parent(class Movable* parent);
 

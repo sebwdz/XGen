@@ -15,6 +15,7 @@
 #define         SUB             2 + OPT_RANGE
 #define         DIV             95 + OPT_RANGE
 #define         MULT            96 + OPT_RANGE
+#define         MOD             97 + OPT_RANGE
 
 /* compare opt */
 
@@ -25,12 +26,14 @@
 #define         OR              23 + OPT_RANGE
 #define         XOR             24 + OPT_RANGE
 #define         NO              25 + OPT_RANGE
+#define         WHILE           98 + OPT_RANGE
 
 /* create module and detach decriptor */
 
 #define         CREAT           6 + OPT_RANGE
 #define         DETACH          7 + OPT_RANGE
 #define         NEW_HEAD        17 + OPT_RANGE
+#define         COPY            99 + OPT_RANGE
 
 /* use or unuse parameter */
 
@@ -63,19 +66,28 @@
 
 /* PROPRIETY */
 
-#define         TO              6 + OPT_CHAN_RANGE
-#define         OTH             7 + OPT_CHAN_RANGE
-#define         BI              12 + OPT_CHAN_RANGE
-#define         MV              8 + OPT_CHAN_RANGE
-#define         CHNG            9 + OPT_CHAN_RANGE
-#define         TYPE            10 + OPT_CHAN_RANGE
-#define         ACT             11 + OPT_CHAN_RANGE
-#define         ATR             1 + OPT_CHAN_RANGE
-#define         RPLS            2 + OPT_CHAN_RANGE
+#define         TO              0 + OPT_CHAN_RANGE
+#define         OTH             1 + OPT_CHAN_RANGE
 
-#define         PW              4 + OPT_CHAN_RANGE
-#define         DST             5 + OPT_CHAN_RANGE
-#define         MINDST          31 + OPT_CHAN_RANGE
+#define         MV              0 + OPT_CHAN_RANGE
+#define         CHNG            1 + OPT_CHAN_RANGE
+
+#define         ATR             0 + OPT_CHAN_RANGE
+#define         RPLS            1 + OPT_CHAN_RANGE
+
+#define         AUTO            0
+#define         FIX             1
+#define         PROP            1
+
+#define         TYPE            4 + OPT_CHAN_RANGE
+#define         ACT             3 + OPT_CHAN_RANGE
+#define         DIR             6 + OPT_CHAN_RANGE
+#define         PW              2 + OPT_CHAN_RANGE
+#define         DST             0 + OPT_CHAN_RANGE
+#define         MINDST          1 + OPT_CHAN_RANGE
+#define         TARGET          5 + OPT_CHAN_RANGE
+#define         REDUCE          7
+#define         LIMIT           8
 
 /* OTHER */
 
@@ -83,12 +95,14 @@
 
 /* Node type */
 
-#define         BLOCK           0
-#define         INSTRU          1
-#define         GLOBAL_CHAN     2
-#define         LOCAL_CHAN      3
-#define         FAST_CHAN       4
-#define         VALUE           5
+#define         BLOCK                 0
+#define         INSTRU                1
+#define         GLOBAL_CHAN           2
+#define         LOCAL_CHAN            3
+#define         FAST_CHAN             4
+#define         VALUE                 5
+#define         EMPTY_CHAN            6
+#define         INTERACTION           7
 
 #define         FAST_SIZE   20
 

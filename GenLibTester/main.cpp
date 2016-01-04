@@ -20,10 +20,11 @@ void        exec(Brain *brain)
   cycle = 0;
   Monitor::get_instance()->begin_time(MN_ALL);
   gettimeofday(&_time[0], NULL);
-  while (cycle < 3000)
+  while (cycle < 1000)
   {
       brain->exec();
       cycle++;
+      //continue;
       if (!(cycle % 100))
       {
           gettimeofday(&_time[1], NULL);
@@ -53,6 +54,13 @@ void        exec(Brain *brain)
   std::cout << "average : " << all / (tall * 1000) << " * 10⁶ instrs/s" << std::endl;
 }
 
+nodeValue   toNodeValue(float x)
+{
+  nodeValue val;
+  val._f = x;
+  return (val);
+}
+
 void        exec_view(Brain *brain)
 {
   BrainView *view;
@@ -78,26 +86,26 @@ void        exec_view(Brain *brain)
                     view->close();
                 // stimulie
                 if (event.key.code == sf::Keyboard::A)
-                  act[0]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(60);
+                  act[0]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(toNodeValue(60));
                 if (event.key.code == sf::Keyboard::Z)
-                  act[1]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(60);
+                  act[1]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(toNodeValue(60));
                 if (event.key.code == sf::Keyboard::E)
-                  act[2]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(60);
+                  act[2]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(toNodeValue(60));
                 // reponse positif et negatif
                 if (event.key.code == sf::Keyboard::K) {
-                  sens[0]->get_line()->get_chan(Chanel::hash("Active"))->set_value(60);
-                  sens[1]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(40);
-                  sens[2]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(40);
+                  sens[0]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(toNodeValue(60));
+                  sens[1]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(toNodeValue(40));
+                  sens[2]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(toNodeValue(40));
                   }
                 if (event.key.code == sf::Keyboard::L) {
-                  sens[1]->get_line()->get_chan(Chanel::hash("Active"))->set_value(60);
-                  sens[0]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(40);
-                  sens[2]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(40);
+                  sens[1]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(toNodeValue(60));
+                  sens[0]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(toNodeValue(40));
+                  sens[2]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(toNodeValue(40));
                   }
                 if (event.key.code == sf::Keyboard::M) {
-                  sens[2]->get_line()->get_chan(Chanel::hash("Active"))->set_value(60);
-                  sens[1]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(40);
-                  sens[0]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(40);
+                  sens[2]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(toNodeValue(60));
+                  sens[1]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(toNodeValue(40));
+                  sens[0]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(toNodeValue(40));
                   }
                 crep = 0;
                 response.restart();
@@ -124,12 +132,12 @@ void        exec_view(Brain *brain)
         {
           speedclock[0].restart();
           brain->exec();
-          if (sens[0]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() > 0 ||
-                sens[1]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() > 0 ||
-                sens[2]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() > 0) {
-              std::cout << sens[0]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() << " " <<
-              sens[1]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() << " " <<
-              sens[2]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value() << std::endl;
+          if (sens[0]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value()._f > 0 ||
+                sens[1]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value()._f > 0 ||
+                sens[2]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value()._f > 0) {
+              std::cout << sens[0]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value()._f << " " <<
+              sens[1]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value()._f << " " <<
+              sens[2]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value()._f << std::endl;
               std::cout << response.getElapsedTime().asMilliseconds() << " " << crep << std::endl;
             }
           crep++;
@@ -149,21 +157,26 @@ void        exec_view(Brain *brain)
 
 void                  add_act(Brain *brain, std::pair<float, float> pos, bool sensor = false)
 {
-  SMART(GeneticBlock) dnaact;
+  static SMART(GeneticalNode) dnaact;
   Decriptor           *decriptor;
   ModuleClass         *module;
   std::string         file;
+  nodeValue           value;
 
-  dnaact = SMART(GeneticBlock)(new GeneticBlock);
-  file = "../testlib2/test.gen";
-  dnaact->load_file(file);
+  if (!dnaact)
+    {
+      dnaact = SMART(GeneticalNode)(new GeneticalNode);
+      file = "../testlib3/test.gen";
+      dnaact->load_file(file);
+    }
   decriptor = new Decriptor(NULL);
-  decriptor->set_block(dnaact);
+  decriptor->set_block(dnaact->copy());
   module = new ModuleClass();
   module->attach_decriptor(decriptor);
   module->set_pos(pos);
   if (sensor) {
-      module->get_line()->get_chan(Chanel::hash("ISSENSOR"))->set_value(10);
+      value._f = 10;
+      module->get_line()->get_chan(Chanel::hash("ISSENSOR"))->set_value(value);
       sens.push_back(module);
     }
   else
@@ -174,29 +187,27 @@ void                  add_act(Brain *brain, std::pair<float, float> pos, bool se
 int         main(int ac, char **av)
 {
   Brain         *brain;
-  SMART(GeneticBlock) dna;
+  SMART(GeneticalNode) dna;
   std::string   file;
-/*
+
   if (ac < 2)
     {
       std::cout << "./GenLibTester node_file" << std::endl;
       return (1);
-    }*/
+    }
   brain = new Brain();
-  dna = SMART(GeneticBlock)(new GeneticBlock());
-  file = "../testlib2/out.gen";//av[1];
-
+  dna = SMART(GeneticalNode)(new GeneticalNode());
+  file = av[1];
   dna->load_file(file);
   brain->set_dna(dna);
 
-  add_act(brain, std::make_pair(90.0, -60.0));
-  add_act(brain, std::make_pair(90.0, 0.0));
-  add_act(brain, std::make_pair(90.0, 60.0));
+      add_act(brain, std::make_pair(100.0, -70.0));
+      add_act(brain, std::make_pair(100.0, 0.0));
+      add_act(brain, std::make_pair(100.0, 70.0));
 
-  /* Sensor */
-  add_act(brain, std::make_pair(-90.0, -60.0), true);
-  add_act(brain, std::make_pair(-90.0, 0.0), true);
-  add_act(brain, std::make_pair(-90.0, 60.0), true);
+      add_act(brain, std::make_pair(-100.0, -70.0), true);
+      add_act(brain, std::make_pair(-100.0, 0.0), true);
+      add_act(brain, std::make_pair(-100.0, 70.0), true);
 
   if (ac > 2)
     exec_view(brain);

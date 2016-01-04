@@ -8,10 +8,10 @@ Init_Main<(
 
 	:Make_Atr_Mv ( &AtrCell oth @IM_MAIN @ImNucleusSplit )
 	:Init_Prop_Chan ( &AtrCell 100 500 )
-	:Set_Prop_Chan ( &AtrCell mindst ( 110 ) )
+	:Set_Prop_Chan ( &AtrCell mindst ( 120 ) )
 
 	:Make_Rpls_Mv ( &RplsCell oth @IM_MAIN @ImSplitNucleusAct )
-        :Init_Prop_Chan ( &RplsCell 50 90 )
+        :Init_Prop_Chan ( &RplsCell 100 120 )
 )>
 
 MAIN<(

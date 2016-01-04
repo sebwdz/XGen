@@ -37,23 +37,3 @@ void            ObjClass::set_parent(ObjClass *parent)
 {
     m_parent = parent;
 }
-
-void            ObjClass::add_son(SMART(ObjClass) son)
-{
-    m_son.push_back(son);
-}
-
-void            ObjClass::clear()
-{
-    m_son.clear();
-}
-
-SMART(ObjClass) ObjClass::copy(SMART(ObjClass) cp)
-{
-    return (cp);
-}
-
-std::vector<SMART(ObjClass)>    &ObjClass::get_son()
-{
-    return (m_son);
-}

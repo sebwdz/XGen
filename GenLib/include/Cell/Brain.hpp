@@ -11,7 +11,7 @@ public:
     virtual ~Brain();
 
     virtual void                    exec();
-    void                            set_dna(SMART(GeneticObj) node);
+    void                            set_dna(SMART(GeneticalNode) node);
 };
 
 #endif // BRAIN_HPP

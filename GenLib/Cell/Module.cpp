@@ -54,7 +54,7 @@ void        ModuleClass::attach_decriptor(Decriptor *decriptor)
     {
       cp = new Decriptor(m_split[it]);
       cp->get_line()->shared_to_line(decriptor->get_line());
-      cp->set_block(boost::static_pointer_cast<GeneticObj>(CAST(Decriptor*)(decriptor)->get_block()->copy()));
+      cp->set_block(CAST(Decriptor*)(decriptor)->get_block()->copy());
       m_split[it]->attach_decriptor(cp);
     }
   get_line()->shared_to_line(decriptor->get_line());
@@ -311,7 +311,7 @@ void        ModuleClass::catch_split(unsigned int code, void *sig)
       for (unsigned int it = 0; it < m_decriptor.size(); it++)
         {
           decript = new Decriptor(split);
-          decript->set_block(boost::static_pointer_cast<GeneticObj>(CAST(Decriptor*)(m_decriptor[it])->get_block()->copy()));
+          decript->set_block(CAST(Decriptor*)(m_decriptor[it])->get_block()->copy());
           split->attach_decriptor(decript);
         }
       split->set_pos(m_pos);

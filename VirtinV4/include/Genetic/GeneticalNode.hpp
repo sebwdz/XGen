@@ -1,17 +1,14 @@
 #ifndef GENETICALNODE_HPP_INCLUDED
 #define GENETICALNODE_HPP_INCLUDED
 
+#include    <boost/unordered_map.hpp>
 #include    "Genetic/GeneticObj.hpp"
 
 typedef class Decriptor     Decriptor;
 typedef class Chanel        Chanel;
 typedef class GeneticBlock  GeneticBlock;
 
-typedef union u_nodeValue {
-  float         _f;
-  unsigned char _uc;
-  unsigned int  _ui;
-} nodeValue;
+#define     USE_LIST        boost::unordered_map<unsigned int, SMART(GeneticalNode)>
 
 class   GeneticalNode : public GeneticObj
 {
@@ -19,28 +16,42 @@ class   GeneticalNode : public GeneticObj
         GeneticalNode(GeneticObj *parent = 0);
         virtual ~GeneticalNode();
 
-        void        load(std::ifstream &stream);
-        void        save(std::ofstream &stream);
+        void                    load(std::ifstream &stream);
+        void                    save(std::ofstream &stream);
 
-        void            set_block(GeneticBlock *block);
-        void            set_value(nodeValue &value);
-        void            set_chan(Chanel *chan);
-        void            set_function(int (Decriptor::*fonction)(GeneticalNode*));
-        nodeValue       &get_value();
-        int             (Decriptor::*get_function())(GeneticalNode *);
-        Chanel          *get_chan();
-        GeneticBlock    *get_block();
+        void                    set_block(GeneticalNode *block);
+        void                    set_chan(boost::shared_ptr<GeneticalNode> chan);
+        void                    set_function(int (Decriptor::*fonction)(GeneticalNode*));
 
-        virtual SMART(ObjClass)    copy(SMART(ObjClass) cp = SMART(ObjClass)());
+        int                     (Decriptor::*get_function())(GeneticalNode*);
+        SMART(GeneticalNode)    &get_chan();
+        GeneticalNode           *get_block();
+
+        SMART(GeneticalNode)    get_ass(unsigned int key, bool creat = true);
+        SMART(GeneticalNode)    &get_son_ref(unsigned int ref);
+
+        void                    remove_ass(unsigned int key);
+        void                    set_ass(unsigned int key, SMART(GeneticalNode) node);
+        void                    add_son(boost::shared_ptr<GeneticalNode> son);
+        SMART(GeneticalNode)    get_local();
+
+        void                    set_type(int type);
+
+        USE_LIST                &get_ass();
+        std::vector<SMART(GeneticalNode)> &get_son();
+
+        virtual SMART(GeneticalNode)    copy(SMART(GeneticalNode) cp = SMART(GeneticalNode)());
 
         GeneticalNode *get_obj(int &move, GeneticalNode *from, int parent);
 
     protected:
 
-        nodeValue                               m_value;
-        int                                     (Decriptor::*m_function)(GeneticalNode*);
-        Chanel                                  *m_chan;
-        GeneticBlock                            *m_block;
+        int                                 (Decriptor::*m_function)(GeneticalNode*);
+        SMART(GeneticalNode)                m_chan;
+        GeneticalNode                       *m_block;
+        USE_LIST                            m_ass;
+        SMART(GeneticalNode)                m_local;
+        std::vector<SMART(GeneticalNode)>   m_son;
 };
 
 #endif // GENETICALNODE_HPP_INCLUDED

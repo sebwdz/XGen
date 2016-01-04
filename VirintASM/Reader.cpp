@@ -1,4 +1,5 @@
 
+#include    <boost/algorithm/string/replace.hpp>
 #include    "include/NodeMaker.hpp"
 
 std::string             remove_comment(std::string buff) {
@@ -26,6 +27,39 @@ std::string             remove_comment(std::string buff) {
     return (res);
 }
 
+void        NodeMaker::read_define(std::string &data)
+{
+  std::size_t     pos;
+  std::size_t     end;
+  std::string     word;
+  std::string     value;
+
+  pos = 0;
+  while ((pos = data.find_first_of("?", pos)) != std::string::npos)
+    {
+      end = data.find_first_of(" \t", pos);
+      word = data.substr(pos, end - pos);
+      pos = data.find_first_not_of(" \t", end);
+      end = data.find_first_of(";", pos);
+      value = data.substr(pos, end - pos);
+      m_define[word] = value;
+      pos = end;
+    }
+}
+
+void            NodeMaker::apply_define()
+{
+  unsigned int  it;
+  boost::unordered_map<std::string, std::string>::iterator str;
+
+  for (it = 0; it < m_node.size(); it++)
+    {
+      for (str = m_define.begin(); str != m_define.end(); str++)
+        boost::replace_all(m_node[it]->data, str->first, str->second);
+      std::cout << m_node[it]->data << std::endl;
+    }
+}
+
 void        NodeMaker::read_data(std::ifstream &file)
 {
     std::string line;
@@ -48,19 +82,22 @@ void        NodeMaker::read_data(std::ifstream &file)
         data = buff.substr(pos, found - pos);
         pos = found + 1;
         pos = buff.find_first_not_of("\t\n ", pos);
-        add_data(name, data);
+        if (name.size())
+          add_data(name, data);
+        else
+          read_define(data);
     }
 }
 
 
-SMART(GeneticObj)               NodeMaker::read_node(NodeData *data, std::size_t &pos,
-                                                     std::string &str, std::vector<SMART(GeneticObj)> &av)
+SMART(GeneticalNode)               NodeMaker::read_node(NodeData *data, std::size_t &pos,
+                                                     std::string &str, std::vector<SMART(GeneticalNode)> &av)
 {
-    SMART(GeneticObj)                                    node;
-    SMART(GeneticObj)                                    son;
-    std::size_t                                             found;
-    std::string                                             tmp;
-    std::vector<SMART(GeneticObj)>                          newAv;
+    SMART(GeneticalNode)              node;
+    SMART(GeneticalNode)              son;
+    std::size_t                       found;
+    std::string                       tmp;
+    std::vector<SMART(GeneticalNode)> newAv;
 
     found = data->data.find_first_of("\t ()", pos);
     if (data->data[pos] == ':')

@@ -20,32 +20,38 @@ void            MovableLine::make()
 
 void            MovableLine::make_range()
 {
-  int                                 range[2] = {0};
-  CHANPLIST::iterator                 it;
+  int                               range[2] = {0};
+  unsigned int                      it;
+  float                             dst;
+  std::vector<SMART(GeneticalNode)> &sons = m_parent->get_line()->get_interaction()->get_son();
 
-  for (it = m_parent->get_line()->get_begin_prop();
-       it != m_parent->get_line()->get_end_prop(); it++)
+  for (it = 0; it < sons.size(); it++)
     {
-      if (it->second->get_pow(PW) || it->second->get_type(ATTACH) ||
-          it->second->get_type(LINK) || it->second->get_type(COMIN))
+      if (sons[it]->get_son_ref(LIMIT)->get_value()._f &&
+          !sons[it]->get_son_ref(LIMIT)->get_son_ref(0)->get_value()._f)
+        continue;
+      if (sons[it]->get_son_ref(PW)->get_value()._f || sons[it]->get_son_ref(TYPE)->get_value()._f == ATTACH ||
+          sons[it]->get_son_ref(TYPE)->get_value()._f == LINK || sons[it]->get_son_ref(TYPE)->get_value()._f == COMIN)
         {
-          if (it->second->get_pow(DST) > range[1])
-            range[1] = it->second->get_pow(DST);
-          if (range[0] == 0 || it->second->get_pow(DST) < range[0])
-            range[0] = it->second->get_pow(DST);
+          dst = sons[it]->get_son_ref(DST)->get_value()._f;
+          if (dst > range[1])
+            range[1] = dst;
+          if (range[0] == 0 || dst < range[0])
+            range[0] = dst;
         }
     }
   m_range.first = range[0];
   m_range.second = range[1];
 }
 
-void            MovableLine::change_chan(unsigned int ref, sMovableChan *move)
+void            MovableLine::change_chan(GeneticalNode* ref, sMovableChan *move)
 {
   boost::unordered_map<Object*, float>::iterator  it;
   boost::unordered_map<Object*, float>::iterator  end;
   LineDecript                                     *line;
   float                                           tmp;
   float                                           all;
+  nodeValue                                       value;
 
   it = move->obj.begin();
   end = move->obj.end();
@@ -61,12 +67,16 @@ void            MovableLine::change_chan(unsigned int ref, sMovableChan *move)
           else
             tmp = (it->second / move->total) * move->have;
           all += tmp;
-          line->get_chan(ref)->set_value(tmp + line->get_chan(ref)->get_value());
+          value = line->get_chan(move->path)->get_value();
+          value._f += tmp;
+          line->get_chan(move->path)->set_value(value);
           it->second = 0;
         }
       it++;
     }
-  m_parent->get_line()->get_chan(ref)->set_value(m_parent->get_line()->get_chan(ref)->get_value() - all);
+  value = ref->get_value();
+  value._f -= all;
+  ref->set_value(value);
   move->life = 0;
   move->total = 0;
   move->have = 0;
@@ -101,43 +111,72 @@ void            MovableLine::exec()
     }
 }
 
-void            MovableLine::interact_with(class Movable *obj, ChanPropriety *prop)
+void            MovableLine::reduce(float &chan, GeneticalNode *prop)
 {
-  std::pair<float, float>         vct;
-  std::pair<float, unsigned int>  chan;
-  unsigned int                    tmp[2];
-  float                           lentmp;
+  unsigned int  type;
+  float         val;
+  float         lentmp;
+
+  type = (unsigned int)prop->get_son_ref(REDUCE)->get_son_ref(0)->get_value()._f;
+  val = prop->get_son_ref(REDUCE)->get_son_ref(1)->get_value()._f;
+  if (type == AUTO)
+    {
+      lentmp = ((prop->get_son_ref(DST)->get_value()._f - m_len) / prop->get_son_ref(DST)->get_value()._f);
+      chan *= (lentmp * lentmp) * (3.14 / 4);
+    }
+  else if (type == FIX)
+      chan -= val  * (prop->get_son_ref(DST)->get_value()._f / 100);
+  else
+    {
+
+
+    }
+}
+
+void            MovableLine::interact_with(class Movable *obj, GeneticalNode *prop)
+{
+  std::pair<float, float>                 vct;
+  float                                   chan;
+  float                                   type;
+  std::pair<float, GeneticalNode*>        node;
+  GeneticalNode*                          tmp[2];
 
   vct = m_vct;
-  if (prop->get_type(ATTACH) || prop->get_type(LINK) || prop->get_type(COMIN))
+  type = prop->get_son_ref(TYPE)->get_value()._f;
+  if (type == ATTACH || type == LINK || type == COMIN)
     {
       check_attach(obj, prop);
       return ;
     }
-  if (prop->get_type(OTH))
+  if (prop->get_son_ref(TARGET)->get_value()._f == OTH)
     {
       vct.first *= -1;
       vct.second *= -1;
     }
-  if ((tmp[0] = prop->get_chan()->get_value()) &&
-      (tmp[1] = obj->get_line()->get_value(prop->get_act()[1])))
+  tmp[1] = obj->get_line()->get_chan(prop->get_son_ref(ACT)->get_son_ref(1).get()).get();
+  tmp[0] = m_parent->get_line()->get_chan(prop->get_son_ref(ACT)->get_son_ref(0).get()).get();
+  if (tmp[0]->get_value()._f && tmp[1]->get_value()._f)
     {
-      chan.first = tmp[0] + tmp[1];
-      chan.first *= prop->get_pow(PW) / 100;
-      chan.first *= prop->get_type(RPLS) ? -1 : 1;
-      lentmp = (prop->get_pow(DST) - m_len) / prop->get_pow(DST);
-      chan.first *= (lentmp * lentmp) * (3.14 / 4);
-      chan.second = prop->get_type(OTH) ? prop->get_act()[1] : prop->get_act()[0];
-      if (prop->get_type(OTH) || prop->get_type(BI))
-        obj->get_move_line()->apply(m_parent, prop, vct, chan);
-      if (prop->get_type(TO) || prop->get_type(BI))
-        apply(obj, prop, vct, chan);
+      chan = tmp[0]->get_value()._f + tmp[1]->get_value()._f;
+      chan *= prop->get_son_ref(PW)->get_value()._f;
+      reduce(chan, prop);
+      chan *= prop->get_son_ref(DIR)->get_value()._f == RPLS ? -1 : 1;
+      node.first = chan / 100;
+      if (prop->get_son_ref(TARGET)->get_value()._f == OTH)
+          node.second = prop->get_son_ref(ACT)->get_son_ref(1).get();
+      else
+        node.second = prop->get_son_ref(ACT)->get_son_ref(0).get();
+      if (prop->get_son_ref(TARGET)->get_value()._f == OTH)
+          obj->get_move_line()->apply(m_parent, prop, vct, node);
+      else
+          apply(obj, prop, vct, node);
     }
 }
 
 void            MovableLine::interact(Movable *obj)
 {
-  CHANPLIST::iterator             it;
+  unsigned int                      it;
+  std::vector<SMART(GeneticalNode)> &vct = m_parent->get_line()->get_interaction()->get_son();
 
   m_vct.first = obj->get_pos().first - m_parent->get_pos().first + (((rand() % 100) - 50) / 200.0);
   m_vct.second = obj->get_pos().second - m_parent->get_pos().second + (((rand() % 100) - 50) / 200.0);
@@ -151,39 +190,51 @@ void            MovableLine::interact(Movable *obj)
           m_vct.second /= m_len;
           if (m_parent == obj->get_parent() || obj == m_parent->get_parent() || m_len < 1)
             m_len = 1;
-          for (it = m_parent->get_line()->get_begin_prop(); it != m_parent->get_line()->get_end_prop(); it++)
+          for (it = 0; it < vct.size(); it++)
             {
-              if (it->second->get_chan() &&
-                  it->second->get_pow(DST) >= m_len &&
-                  it->second->get_pow(MINDST) <= m_len)
-                interact_with(obj, it->second);
+              if (vct[it]->get_son_ref(LIMIT)->get_value()._f &&
+                  !vct[it]->get_son_ref(LIMIT)->get_son_ref(0)->get_value()._f)
+                continue;
+              if (vct[it]->get_son_ref(DST)->get_value()._f >= m_len &&
+                  vct[it]->get_son_ref(MINDST)->get_value()._f <= m_len)
+                interact_with(obj, vct[it].get());
             }
         }
     }
 }
 
-void            MovableLine::apply(Movable *from, ChanPropriety *prop, std::pair<float, float> &vct, std::pair<float, unsigned int> &chan)
+void            MovableLine::apply(Movable *from, GeneticalNode *prop, std::pair<float, float> &vct, std::pair<float, GeneticalNode*> &chan)
 {
   sMovableChan            *move;
   float                   tmp;
   CHAN_MOVELIST::iterator it;
+  GeneticalNode           *node;
+  nodeValue               val;
 
-  if (prop->get_type(MV))
+  if (prop->get_son_ref(LIMIT)->get_value()._f)
+    {
+      val = prop->get_son_ref(LIMIT)->get_son_ref(0)->get_value();
+      val._f--;
+      prop->get_son_ref(LIMIT)->get_son_ref(0)->set_value(val);
+    }
+  if (prop->get_son_ref(TYPE)->get_value()._f == MV)
     {
       m_move.first += vct.first * chan.first;
       m_move.second += vct.second * chan.first;
     }
   else
     {
-      if ((it = m_change.find(chan.second)) == m_change.end())
+      node = m_parent->get_line()->get_chan(chan.second).get();
+      if ((it = m_change.find(node)) == m_change.end())
         {
           move = new sMovableChan;
           move->life = 0;
           move->total = 0;
-          m_change.insert(std::make_pair(chan.second, move));
+          m_change.insert(std::make_pair(node, move));
         }
       else
         move = it->second;
+      move->path = chan.second;
       if (move->obj.find(from) == move->obj.end())
         move->obj.insert(std::make_pair(from, 0));
       tmp = 0;
@@ -200,32 +251,48 @@ void            MovableLine::apply(Movable *from, ChanPropriety *prop, std::pair
         tmp = chan.first;
       move->obj[from] += chan.first;
       move->total += tmp;
-      move->have = m_parent->get_line()->get_chan(chan.second)->get_value();
+      move->have = node->get_value()._f;
     }
 }
 
-bool              MovableLine::check_attach(Object *obj, ChanPropriety *prop)
+bool              MovableLine::check_attach(Object *obj, GeneticalNode *prop)
 {
-  if (obj->get_line()->get_value(prop->get_act()[0]) > 0 &&
-      obj->get_line()->get_value(prop->get_act()[1]) < 1)
+  float           tmp[2];
+  unsigned int    type;
+  nodeValue       val;
+  bool            res;
+
+  tmp[1] = obj->get_line()->get_chan(prop->get_son_ref(ACT)->get_son_ref(1).get())->get_value()._f;
+  tmp[0] = obj->get_line()->get_chan(prop->get_son_ref(ACT)->get_son_ref(0).get())->get_value()._f;
+  if(tmp[0] > 0 && tmp[1] < 1)
     {
-      if (prop->get_type(ATTACH) && !(obj->get_type() & TYPE_DECRIPTOR) && m_parent->get_type() & TYPE_DECRIPTOR)
+      type = prop->get_son_ref(TYPE)->get_value()._f;
+      if (type == ATTACH && !(obj->get_type() & TYPE_DECRIPTOR) && m_parent->get_type() & TYPE_DECRIPTOR)
         {
           m_parent->add_signal(ATTACH, static_cast<void*>(obj));
-          return (true);
+          res = true;
         }
-      else if (prop->get_type(LINK) && obj->get_type() & TYPE_MODULE && m_parent->get_type() & TYPE_MODULE)
+      else if (type == LINK && obj->get_type() & TYPE_MODULE && m_parent->get_type() & TYPE_MODULE)
         {
           m_parent->add_signal(LINK, static_cast<void*>(obj));
-          return (true);
+          res = true;
         }
-      else if (prop->get_type(COMIN))
+      else if (type == COMIN)
         {
           m_parent->add_signal(COMIN, static_cast<void*>(obj));
-          return (true);
+          res = true;
         }
     }
-  return (false);
+  if (res)
+    {
+      if (prop->get_son_ref(LIMIT)->get_value()._f)
+        {
+          val = prop->get_son_ref(LIMIT)->get_son_ref(0)->get_value();
+          val._f--;
+          prop->get_son_ref(LIMIT)->get_son_ref(0)->set_value(val);
+        }
+    }
+  return (res);
 }
 
 

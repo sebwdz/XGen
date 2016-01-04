@@ -1,5 +1,5 @@
 InitNucleus<(
-	shared ( @ImSplit )
+	shared ( /ImSplit )
 	inf ( ( @ImSplit 1 ) (
 			set ( @ImSplit 10 )
 			set ( #nucleus 1 )
@@ -11,7 +11,7 @@ Nucleus<(
 	:Init ( :InitNucleus )
 	sup ( ( #nucleus 0 )
 		( :NucleusCode )
-		( :SplitNucleus )	
+		( :SplitNucleus )
 	)
 )>
 
@@ -39,7 +39,7 @@ InitNucleusCode<(
 NucleusCode<(
 	:Init ( :InitNucleusCode )
 	:CycleL ( split 0 1 )
-	:CycleL ( unshared ( @ImSplit ) 2 1 )
+	:CycleL ( unshared ( /ImSplit ) 2 1 )
 	and ( (
 			inf ( ( #haveAxon 1 ) )
 			inf ( ( @NoAxon 1 ) )

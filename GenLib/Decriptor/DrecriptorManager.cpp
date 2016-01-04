@@ -9,6 +9,7 @@ DecriptorManager::DecriptorManager()
   m_opt.insert(std::make_pair(SUB, &Decriptor::set_function));
   m_opt.insert(std::make_pair(MULT, &Decriptor::set_function));
   m_opt.insert(std::make_pair(DIV, &Decriptor::set_function));
+  m_opt.insert(std::make_pair(MOD, &Decriptor::set_function));
   m_opt.insert(std::make_pair(SUP, &Decriptor::comp_funcion));
   m_opt.insert(std::make_pair(INF, &Decriptor::comp_funcion));
   m_opt.insert(std::make_pair(EGAL, &Decriptor::comp_funcion));
@@ -16,6 +17,7 @@ DecriptorManager::DecriptorManager()
   m_opt.insert(std::make_pair(AND, &Decriptor::comp_funcion));
   m_opt.insert(std::make_pair(XOR, &Decriptor::comp_funcion));
   m_opt.insert(std::make_pair(NO, &Decriptor::comp_funcion));
+  m_opt.insert(std::make_pair(WHILE, &Decriptor::loop));
   m_opt.insert(std::make_pair(CREAT, &Decriptor::creat_function));
   m_opt.insert(std::make_pair(DETACH, &Decriptor::creat_function));
   m_opt.insert(std::make_pair(NEW_HEAD, &Decriptor::creat_function));
@@ -26,10 +28,10 @@ DecriptorManager::DecriptorManager()
   m_opt.insert(std::make_pair(FREE, &Decriptor::decript_function));
   m_opt.insert(std::make_pair(DUPLIC, &Decriptor::creat_function));
   m_opt.insert(std::make_pair(KILL, &Decriptor::decript_function));
-  m_opt.insert(std::make_pair(VAR, &Decriptor::set_var_function));
   m_opt.insert(std::make_pair(TAKEOUT, &Decriptor::decript_function));
   m_opt.insert(std::make_pair(SPLIT, &Decriptor::decript_function));
   m_opt.insert(std::make_pair(ECHO, &Decriptor::echo));
+  m_opt.insert(std::make_pair(COPY, &Decriptor::copy));
 }
 
 DecriptorManager::~DecriptorManager()

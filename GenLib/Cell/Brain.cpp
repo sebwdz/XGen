@@ -12,7 +12,7 @@ Brain::~Brain()
 
 }
 
-void        Brain::set_dna(boost::shared_ptr<GeneticObj> block)
+void        Brain::set_dna(boost::shared_ptr<GeneticalNode> block)
 {
   CellClass       *cell;
 
@@ -23,6 +23,7 @@ void        Brain::set_dna(boost::shared_ptr<GeneticObj> block)
 
 void        Brain::exec()
 {
+
   ModuleClass::exec();
   make_move_line();
   move();

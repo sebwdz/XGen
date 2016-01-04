@@ -42,7 +42,7 @@ Link($to $link $base $head)<(
 )>
 
 Init_Head_Link<(
-	shared ( @ImSplit )
+	shared ( /ImSplit )
 	inf ( ( @ImSplit 1 ) (
 			set ( @ImMain 10 )
 			set ( @ImSplit 10 )
@@ -82,7 +82,7 @@ Init_Head_Link_Code<(
 
 Init_Head_Link_Split<(
 	set ( @ImHeadLinkSplit 10 )
-	unshared ( @ImSplit )
+	unshared ( /ImSplit )
 
 	:Make_Spe_Chan ( &Link @ImHeadLink @Block link 50 )
 )>

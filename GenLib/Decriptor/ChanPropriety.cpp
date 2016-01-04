@@ -6,8 +6,6 @@ ChanPropriety::ChanPropriety()
 {
   m_pow = 0;
   m_dist = 0;
-  m_act[0] = 0;
-  m_act[1] = 0;
   m_mindst = 0;
   m_dir = false;
   m_type = false;
@@ -15,7 +13,6 @@ ChanPropriety::ChanPropriety()
   m_link = false;
   m_comin = false;
   m_attach = false;
-  m_chan = NULL;
 }
 
 ChanPropriety::~ChanPropriety()
@@ -60,7 +57,7 @@ void            ChanPropriety::set_pow(unsigned int type, float value)
     m_mindst = value;
 }
 
-void            ChanPropriety::set_chan(Chanel *chan)
+void            ChanPropriety::set_chan(SMART(GeneticObj) chan)
 {
   m_chan = chan;
 }
@@ -70,7 +67,7 @@ void            ChanPropriety::set_res(float res)
   m_res = res;
 }
 
-void            ChanPropriety::set_act(unsigned int type, unsigned int chan)
+void            ChanPropriety::set_act(unsigned int type, SMART(GeneticalNode) chan)
 {
   if (type == TO)
     m_act[0] = chan;
@@ -123,12 +120,12 @@ float           ChanPropriety::get_pow(unsigned int type) const
   return (0);
 }
 
-unsigned int    *ChanPropriety::get_act()
+SMART(GeneticalNode)  *ChanPropriety::get_act()
 {
   return (m_act);
 }
 
-Chanel          *ChanPropriety::get_chan() const
+SMART(GeneticObj)          ChanPropriety::get_chan() const
 {
   return (m_chan);
 }

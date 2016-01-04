@@ -10,7 +10,7 @@ public:
     CellClass(Object *parent);
     ~CellClass();
 
-    void                set_dna(boost::shared_ptr<GeneticObj> dna);
+    void                set_dna(SMART(GeneticalNode) dna);
 
     virtual void        exec();
     virtual void        catch_duplic(unsigned int, void *sig);
@@ -18,7 +18,7 @@ public:
 
 private:
     SMART(Decriptor)        m_decript;
-    SMART(GeneticObj)       m_dna;
+    SMART(GeneticalNode)    m_dna;
 };
 
 #endif // CELL_CLASS_HPP_

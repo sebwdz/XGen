@@ -12,7 +12,7 @@ CellClass::~CellClass()
 {
 }
 
-void        CellClass::set_dna(SMART(GeneticObj) dna)
+void        CellClass::set_dna(SMART(GeneticalNode) dna)
 {
   m_decript = SMART(Decriptor)(new Decriptor(this));
   m_decript->set_block(dna);
@@ -30,22 +30,21 @@ void        CellClass::catch_duplic(unsigned int code, void *sig)
 {
   CellClass           *cell;
   Decriptor           *decript;
-  OBJ_IT              it;
-  OBJ_IT              end;
+  unsigned int        it;
+  std::vector<SMART(GeneticalNode)> &vct = ((GeneticalNode*)sig)->get_son();
 
   (void)code;
   if (m_parent)
     {
       cell = new CellClass(m_parent);
-      cell->set_dna(boost::static_pointer_cast<GeneticObj>(m_dna->copy()));
+      cell->set_dna(m_dna->copy());
       cell->set_pos(m_pos);
       cell->get_line()->shared_to_line(get_line());
       CAST(ModuleClass*)(m_parent)->add_object(cell);
-      end = ((GeneticalNode*)sig)->get_son().end();
-      for (it = ((GeneticalNode*)sig)->get_son().begin(); it != end; it++)
+      for (it = 0; it < vct.size(); it++)
         {
           decript = new Decriptor(NULL);
-          decript->set_block(boost::static_pointer_cast<GeneticObj>((*it)->copy()));
+          decript->set_block(vct[it]->copy());
           decript->get_line()->shared_to_line(get_line());
           decript->set_pos(get_pos());
           cell->attach_decriptor(decript);

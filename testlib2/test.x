@@ -21,9 +21,9 @@ InitTest<(
 Attach<(
         set ( @ImAttach 10 )
 	set ( @ImInstall 10 )
-
+[
 	:Make_Atr_Mv ( &atr to @ImAttach @ImNucleus )
-        :Init_Prop_Chan ( &atr 40 80 )
+        :Init_Prop_Chan ( &atr 40 80 )]
 	:Make_Spe_Chan ( &enter @ImCell @ImAct comin 20 )
 )>
 
@@ -60,7 +60,7 @@ AttachAct<(
 	) ( set ( @ImpulseStk 0 ) ) )
 	:CycleL ( detach ( :AttachCompnent ) 10 1 )
 	:Cycle ( :Give_Cycle ( &GiveAct @ImAttach 10 0 ) 50 )
-	:Cycle ( :Set_Prop_Chan ( &atr type ( oth ) ) 200 )
+	:Init ( :Set_Prop_Chan ( &atr act ( @ImAttach @ImNucleus ) ) ) 
 )>
 
 AttachCompnent<(

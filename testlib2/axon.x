@@ -34,14 +34,14 @@ Init_Axon_Base<(
 
 	:Make_Atr_Mv ( &AtrHead oth @ImAxonBase @ImAxonHead )
 	:Init_Prop_Chan ( &AtrHead 10 160 )
-	:Set_Prop_Chan ( &AtrHead mindst ( 60 ) )
+	:Set_Prop_Chan ( &AtrHead mindst ( 70 ) )
 
 	:Make_Atr_Mv ( &AtrByHead to @ImAxonBase @ImAxonHead )
 	:Init_Prop_Chan ( &AtrByHead 10 160 )
-	:Set_Prop_Chan ( &AtrByHead mindst ( 50 ) )
+	:Set_Prop_Chan ( &AtrByHead mindst ( 70 ) )
 
 	:Make_Rpls_Mv ( &RplsByHead to @ImAxonBase @ImAxonHead )
-	:Init_Prop_Chan ( &RplsByHead 5 50 )
+	:Init_Prop_Chan ( &RplsByHead 5 60 )
 	:Set_Prop_Chan ( &RplsByHead mindst ( 10 ) )
 )>
 
@@ -123,7 +123,7 @@ Init_Grow_Axon<(
         :Init_Prop_Chan ( &AtrDopamine 5 50 )
 
 	:Make_Atr_Mv ( &AtrDendrite oth @ImInGrow @ImDendriteHeadSplit )
-	:Init_Prop_Chan ( &AtrDendrite 5 5 )
+	:Init_Prop_Chan ( &AtrDendrite 10 5 )
 
 	:Make_Rpls_Mv ( &RplsPeptide to @ImInGrow @PeptideAct )
 	:Init_Prop_Chan ( &RplsPeptide 10 40 )

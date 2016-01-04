@@ -10,7 +10,7 @@ int make(std::vector<std::string> &conf)
     std::ifstream                    file;
     int                              it;
     std::string                      str;
-    std::vector<SMART(GeneticObj)>   av;
+    std::vector<SMART(GeneticalNode)>   av;
 
     try
     {
@@ -28,6 +28,7 @@ int make(std::vector<std::string> &conf)
             it++;
             file.close();
         }
+        data->apply_define();
         data->make_node(conf[0], str, av);
         data->save(conf[1]);
     }

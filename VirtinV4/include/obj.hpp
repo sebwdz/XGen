@@ -24,20 +24,15 @@ public:
     void            load_file(std::string &filename);
     virtual void    load(std::ifstream &file) = 0;
 
-    virtual SMART(ObjClass) copy(SMART(ObjClass) cp = SMART(ObjClass)());
-
     void            set_parent(ObjClass *parent);
     void            add_son(SMART(ObjClass) son);
 
     void            clear();
 
-    std::vector<SMART(ObjClass)>    &get_son();
-
 protected:
 
-    ObjClass                          *m_parent;
-    std::vector<SMART(ObjClass)>        m_son;
-    int                               m_type;
+    ObjClass                                          *m_parent;
+    int                                               m_type;
 
 };
 

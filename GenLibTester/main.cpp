@@ -91,22 +91,12 @@ void        exec_view(Brain *brain)
                   act[1]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(toNodeValue(60));
                 if (event.key.code == sf::Keyboard::E)
                   act[2]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(toNodeValue(60));
-                // reponse positif et negatif
-                if (event.key.code == sf::Keyboard::K) {
+                if (event.key.code == sf::Keyboard::K)
                   sens[0]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(toNodeValue(60));
-                  sens[1]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(toNodeValue(40));
-                  sens[2]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(toNodeValue(40));
-                  }
-                if (event.key.code == sf::Keyboard::L) {
+                if (event.key.code == sf::Keyboard::L)
                   sens[1]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(toNodeValue(60));
-                  sens[0]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(toNodeValue(40));
-                  sens[2]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(toNodeValue(40));
-                  }
-                if (event.key.code == sf::Keyboard::M) {
+                if (event.key.code == sf::Keyboard::M)
                   sens[2]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(toNodeValue(60));
-                  sens[1]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(toNodeValue(40));
-                  sens[0]->get_line()->get_chan(Chanel::hash("SubActive"))->set_value(toNodeValue(40));
-                  }
                 crep = 0;
                 response.restart();
             }

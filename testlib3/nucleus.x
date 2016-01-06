@@ -31,8 +31,8 @@ Nucleus<(
 )>
 
 Nucleus_Cycle<(
-	sup ( ( #ActiveNucleus 0 ) ([
-			sup ( ( #ImpulseStk #AxonWeight )
+	sup ( ( #ActiveNucleus 0 ) (
+			[sup ( ( #ImpulseStk #AxonWeight )
 				( add ( @GiveImpulse #AxonWeight ) )
 				( add ( @GiveImpulse #ImpulseStk ) )
 			)
@@ -41,7 +41,7 @@ Nucleus_Cycle<(
 					set ( #ActiveNucleus 0 )
 					set ( @IsNegNucleus 10 )
 				)
-			)
-		])
+			)]
+		)
 	)
 )>

@@ -7,11 +7,13 @@ Init_Test<(
 			?mv ?oth ?atr
 		)
 	)
-
-	:Make_Give_Chan ( &GiveFree @ImFree @ImCell )
-	set ( &GiveFree^?pw 100 )
-	set ( &GiveFree^?dst 20 )
-	set ( &GiveFree^?reduc^0 ?fix )
+	cp ( &GiveFree 0 (
+			20 0 20
+			?act ( @ImFree @ImCell )
+			?chng ?to ?atr
+			?reduce ( ?fix 0 )
+		)
+	)
 )>
 
 TEST<(
@@ -40,13 +42,20 @@ Init_Attach<(
 			20 0 200
 			?act ( @Impulse @IsNegNucleus )
 			?chng ?to ?atr
+			?reduce ( ?fix )
 		)
 	)
-
-	:Make_Spe_Chan ( &CominCell @ImCell @Block ?comin 20 )
+	:Make_Link ( &CominCell @ImCell @Block 20 #comin )
+	set ( &CominCell^?type ?comin )
 )>
 
 Attach<(
 		:Init ( :Init_Attach )
-		:CycleL ( set ( &CominCell^?dst 0 ) 1 1 )
+		sup ( ( #comin 0 ) (
+				:Init ( (
+					echo ( 65 10 )
+					set ( &CominCell^?dst 0 )
+				) )
+			)
+		)
 )>

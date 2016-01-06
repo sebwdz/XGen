@@ -56,7 +56,6 @@ void            NodeMaker::apply_define()
     {
       for (str = m_define.begin(); str != m_define.end(); str++)
         boost::replace_all(m_node[it]->data, str->first, str->second);
-      std::cout << m_node[it]->data << std::endl;
     }
 }
 

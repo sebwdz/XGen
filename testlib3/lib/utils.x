@@ -29,23 +29,16 @@ Cycle_S($count $time $code $wait $limit)<(
 	)
 )>
 
-Set_Takein($cond $affct $value)<(
-	sup ( $cond 0 ( set ( $affct 0 ) )
-                ( set ( $affct $value ) )
-	)
-)>
-
-Limit($chan $biais)<(
-	sup ( ( $chan $biais )
-		( set ( $chan $biais ) )
+Limit($chan $limit)<(
+	sup ( ( $chan $limit )
+		( set ( $chan $limit ) )
 	)
 )>
 
 Reduce($chan $rate $min)<(
 	set ( !sub $chan )
-	set ( !min 1 )
-	div ( !min $min )
-       	div ( !sub $rate )
+	set ( !min $min )
+       	mult ( !sub $rate )
         inf ( ( !sub !min )
               	( sub ( $chan !min ) )
                 ( sub ( $chan !sub ) )

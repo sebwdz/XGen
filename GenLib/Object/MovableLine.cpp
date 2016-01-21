@@ -133,6 +133,20 @@ void            MovableLine::reduce(float &chan, GeneticalNode *prop)
     }
 }
 
+bool             MovableLine::can_interact(GeneticalNode *prop, unsigned int scope)
+{
+    std::vector<SMART(GeneticalNode)>       nodes = prop->get_son_ref(SCOPE)->get_son();
+
+    if (!prop->get_son_ref(SCOPE)->get_value()._f)
+        return (true);
+    for (unsigned int it = 0; it < nodes.size(); it++)
+    {
+        if (nodes[it]->get_value()._f == scope)
+            return (true);
+    }
+    return (false);
+}
+
 void            MovableLine::interact_with(class Movable *obj, GeneticalNode *prop)
 {
   std::pair<float, float>                 vct;
@@ -173,7 +187,7 @@ void            MovableLine::interact_with(class Movable *obj, GeneticalNode *pr
     }
 }
 
-void            MovableLine::interact(Movable *obj)
+void            MovableLine::interact(Movable *obj, unsigned int scope)
 {
   unsigned int                      it;
   std::vector<SMART(GeneticalNode)> &vct = m_parent->get_line()->get_interaction()->get_son();
@@ -192,6 +206,8 @@ void            MovableLine::interact(Movable *obj)
             m_len = 1;
           for (it = 0; it < vct.size(); it++)
             {
+              if (!can_interact(vct[it].get(), scope))
+                  continue;
               if (vct[it]->get_son_ref(LIMIT)->get_value()._f &&
                   !vct[it]->get_son_ref(LIMIT)->get_son_ref(0)->get_value()._f)
                 continue;
@@ -264,6 +280,7 @@ bool              MovableLine::check_attach(Object *obj, GeneticalNode *prop)
 
   tmp[1] = obj->get_line()->get_chan(prop->get_son_ref(ACT)->get_son_ref(1).get())->get_value()._f;
   tmp[0] = obj->get_line()->get_chan(prop->get_son_ref(ACT)->get_son_ref(0).get())->get_value()._f;
+  res = false;
   if(tmp[0] > 0 && tmp[1] < 1)
     {
       type = prop->get_son_ref(TYPE)->get_value()._f;

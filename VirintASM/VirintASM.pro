@@ -13,8 +13,7 @@ CONFIG  += DEBUG
 LIBS    += ../build-VirtinV4-Desktop-Debug/libVirtinV4.a
 
 INCLUDEPATH += ../VirtinV4/include
-INCLUDEPATH += ../Virtin/include
-INCLUDEPATH += ../VirtualMachine/VirtualMachineV2/include
+INCLUDEPATH += ../GenLib/include
 
 SOURCES += main.cpp \
     NodeData.cpp \
@@ -28,6 +27,3 @@ HEADERS += \
     include/NodeMaker.hpp \
     include/Engine.hpp \
     include/Compilator.hpp
-
-OTHER_FILES += \
-    ../VirtualMachine/VirtualMachineV2/Chanel.o

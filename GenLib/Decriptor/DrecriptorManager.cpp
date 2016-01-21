@@ -21,8 +21,6 @@ DecriptorManager::DecriptorManager()
   m_opt.insert(std::make_pair(CREAT, &Decriptor::creat_function));
   m_opt.insert(std::make_pair(DETACH, &Decriptor::creat_function));
   m_opt.insert(std::make_pair(NEW_HEAD, &Decriptor::creat_function));
-  m_opt.insert(std::make_pair(USE, &Decriptor::use_function));
-  m_opt.insert(std::make_pair(UNUSE, &Decriptor::use_function));
   m_opt.insert(std::make_pair(SHARED, &Decriptor::use_function));
   m_opt.insert(std::make_pair(UNSHARED, &Decriptor::use_function));
   m_opt.insert(std::make_pair(FREE, &Decriptor::decript_function));
@@ -32,6 +30,7 @@ DecriptorManager::DecriptorManager()
   m_opt.insert(std::make_pair(SPLIT, &Decriptor::decript_function));
   m_opt.insert(std::make_pair(ECHO, &Decriptor::echo));
   m_opt.insert(std::make_pair(COPY, &Decriptor::copy));
+  m_opt.insert(std::make_pair(CALL, &Decriptor::call));
 }
 
 DecriptorManager::~DecriptorManager()

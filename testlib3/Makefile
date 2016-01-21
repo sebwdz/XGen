@@ -9,6 +9,8 @@ LIB =		lib/utils.x \
 SRC =		cell.x \
 		nucleus.x \
 		axon.x \
+		soma.x \
+		dendrite.x \
 
 BEGIN =		MAIN
 

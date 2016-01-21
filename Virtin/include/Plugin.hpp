@@ -4,7 +4,6 @@
 #include        <QWidget>
 #include        <QPluginLoader>
 #include        <qplugin.h>
-#include        <VirtualMachine/VirtualMachine.hpp>
 
 class       Plugin
 {

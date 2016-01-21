@@ -22,6 +22,7 @@ public:
     OBJECT_LIST::iterator       get_begin();
     OBJECT_LIST::iterator       get_end();
     ClassMap                    *get_map() const;
+    const std::vector<ModuleClass *> &get_links() const;
 
     void                        remove_object(Object *obj);
     void                        move();

@@ -34,6 +34,7 @@
 #define         DETACH          7 + OPT_RANGE
 #define         NEW_HEAD        17 + OPT_RANGE
 #define         COPY            99 + OPT_RANGE
+#define         CALL            94 + OPT_RANGE
 
 /* use or unuse parameter */
 
@@ -88,6 +89,10 @@
 #define         TARGET          5 + OPT_CHAN_RANGE
 #define         REDUCE          7
 #define         LIMIT           8
+#define         SCOPE           9
+
+#define         SON             2
+#define         PARENT          0
 
 /* OTHER */
 

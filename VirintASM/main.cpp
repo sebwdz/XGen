@@ -25,6 +25,7 @@ int make(std::vector<std::string> &conf, QTextEdit *edit)
     std::string     str;
     bool            asmn;
     GeneticalNode   *node;
+    std::vector<SMART(GeneticalNode)> vct;
 
     try
     {
@@ -48,7 +49,7 @@ int make(std::vector<std::string> &conf, QTextEdit *edit)
         }
         if (asmn)
         {
-            data->make_node(conf[0], str);
+            data->make_node(conf[0], str, vct);
             data->save(conf[2]);
         }
         else

@@ -3,7 +3,8 @@ MAIN<(
 	set ( #val 5 )
 	set ( #length 1000 )
 	
-	inf ( ( #it 1000 ) ( :Bcl ) )
+	call ( :TT 0 ( #length ) )
+	[inf ( ( #it 1000 ) ( :Bcl ) )]
 	add ( !it 1 )
 )>
 
@@ -12,14 +13,16 @@ Bcl<(
 
 	while ( inf ( ( !it #length ) ) (
 			echo ( #it 32 !it 10 )
-			[set ( # ( /tab #it !it ) #val )]
+			set ( # ( /tab #it !it ) #val )
 			add ( #val !it )
 			add ( !it 1 )
 		)
 	)
 )>
 
-
+TT<(
+	echo ( !av^0 10 )
+)>
 
 
 [bytecode-state-1]

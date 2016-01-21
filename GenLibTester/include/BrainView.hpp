@@ -13,6 +13,7 @@ public:
     void            show_tester(Brain *brain);
     void            show_module(ModuleClass *module);
     void            show_object(Object *obj);
+    void            show_link(ModuleClass *module);
 
 private:
 

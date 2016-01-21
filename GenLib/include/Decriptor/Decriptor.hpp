@@ -35,6 +35,7 @@ public:
     int             jmp_function(GeneticalNode *node);
     int             echo(GeneticalNode *node);
     int             copy(GeneticalNode *node);
+    int             call(GeneticalNode* node);
 
     /* chan */
 

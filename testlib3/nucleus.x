@@ -2,7 +2,8 @@ Init_Nucleus<(
 	set ( @IsNegNucleus 10 )
 
 	set ( #Biais 50 )
-	set ( #AxonWeight 20 )
+	set ( #ImpulseWeight 30 )
+	set ( #Speed 40 )
 
 )>
 
@@ -20,28 +21,21 @@ Create_Axon<(
 Nucleus<(
 	:Init ( :Init_Nucleus )
 
-	:Create_Axon
-	[:ChangeTo ( @Impulse #ImpulseStk )
-	sup ( ( #ImpulseStk #Biais ) (
-			set ( #ActiveNucleus 1 )
-			set ( @IsNegNucleus 0 )
-		)
-	)]
-	:Nucleus_Cycle
+	:Create_Axon ( )
+	:Nucleus_Cycle ( )
+	:Soma ( )
 )>
 
 Nucleus_Cycle<(
-	sup ( ( #ActiveNucleus 0 ) (
-			[sup ( ( #ImpulseStk #AxonWeight )
-				( add ( @GiveImpulse #AxonWeight ) )
-				( add ( @GiveImpulse #ImpulseStk ) )
-			)
-			sub ( #ImpulseStk #AxonWeight )
-			inf ( ( #ImpulseStk 1 ) (
-					set ( #ActiveNucleus 0 )
-					set ( @IsNegNucleus 10 )
+	inf ( ( #ActiveNucleus 1 ) (
+			add ( @ImpulseStk @Impulse )
+			set ( @Impulse 0 )
+			sup ( ( @ImpulseStk #Biais ) (
+					set ( #ActiveNucleus 1 )
+					add ( @ImpulseStk #ImpulseWeight )
+					set ( @IsNegNucleus 0 )
 				)
-			)]
+			)
 		)
 	)
 )>

@@ -25,6 +25,21 @@ void        BrainView::show_tester(Brain *brain)
     display();
 }
 
+void        BrainView::show_link(ModuleClass *module)
+{
+    std::vector<ModuleClass*> const &links = module->get_links();
+
+    for (unsigned int it = 0; it < links.size(); it++)
+    {
+        sf::Vertex line[] =
+        {
+            sf::Vertex(sf::Vector2f(module->get_pos().first, module->get_pos().second)),
+            sf::Vertex(sf::Vector2f(links[it]->get_pos().first, links[it]->get_pos().second))
+        };
+        draw(line, 2, sf::Lines);
+    }
+}
+
 void        BrainView::show_module(ModuleClass *module)
 {
     sf::ConvexShape           shape;
@@ -38,7 +53,7 @@ void        BrainView::show_module(ModuleClass *module)
     res = Chanel::hash(str);
     res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value()._f * 200.0;
     res = res > 254 ? 254 : res;
-    sf::Color cl(0, 0, res);
+    sf::Color cl(10, 0, res);
 
     str = "ImNucleusSplit";
     res = Chanel::hash(str);
@@ -54,7 +69,7 @@ void        BrainView::show_module(ModuleClass *module)
     res = res > 254 ? 254 : res;
     if (res > 0)
       cl.g = res;
-    str = "Peptide";
+    str = "ImActive";
     res = Chanel::hash(str);
     res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value()._f * 50.0;
     res = res > 254 ? 254 : res;
@@ -68,7 +83,7 @@ void        BrainView::show_module(ModuleClass *module)
     }
     shape.setFillColor(cl);
     shape.setOutlineThickness(0.8);
-    shape.setOutlineColor(sf::Color(50, 50, 100));
+    shape.setOutlineColor(sf::Color(100, 100, 200));
     draw(shape);
     for (it = module->get_begin(); it != module->get_end(); it++)
     {
@@ -77,6 +92,7 @@ void        BrainView::show_module(ModuleClass *module)
         else
             show_object(*it);
     }
+    show_link(module);
 }
 
 void        BrainView::show_object(Object *obj)

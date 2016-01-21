@@ -1,24 +1,26 @@
 Init_Axon<(
 	set ( @ImAxonHead 10 )
+	set ( @IsNegAxon 10 )
 
-	:Make_Rpls_Mv ( &RplsCell to @ImAxonHead @ImCell )
+	:Make_Rpls_Mv ( &RplsCell ?to @ImAxonHead @ImSoma )
 	set ( &RplsCell^?pw 10 )
-	set ( &RplsCell^?scope 0 ( ?link ) )
+	cp ( &RplsCell^?scope ?scope ( ?link ) )
 )>
 
 Install_Axon<(
 	inf ( ( #install 1 ) (
 			:Make_Link (
-				&LinkCell @ImAxonHead @ImCell
+				&LinkCell @ImSoma @Block
 				20 #install
 			)
-		) ( :Init ( set ( &RplsCell^?dst 20 ) ) )
+			cp ( &LinkCell^?scope ?scope ( ?oth ) )
+		) ( :Init ( set ( &RplsCell^?dst 25 ) ) )
 	)
 )>
 
 Exec_Axon<(
 	sup ( ( #install 0 ) (
-			
+			sup ( ( @Impulse 0 ) ( sub ( @Impulse 1 ) ) )
 		)
 	)
 )>

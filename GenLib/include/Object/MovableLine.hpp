@@ -28,11 +28,12 @@ class           MovableLine
     void                change_chan(GeneticalNode *ref, sMovableChan *move);
     void                exec();
     void                interact_with(class Movable *obj, GeneticalNode *prop);
-    void                interact(class Movable *obj);
+    void                interact(class Movable *obj, unsigned int scope);
     void                apply(class Movable *from, GeneticalNode *prop,
                           std::pair<float, float> &vct, std::pair<float, GeneticalNode*> &chan);
     bool                check_attach(Object *obj, GeneticalNode *prop);
     void                reduce(float &chan, GeneticalNode *prop);
+    bool                can_interact(GeneticalNode *prop, unsigned int scope);
 
     void                set_parent(class Movable* parent);
 

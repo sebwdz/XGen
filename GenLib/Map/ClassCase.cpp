@@ -66,7 +66,7 @@ void                        ClassCase::interact_with(MovableLine *move)
   for (it = m_obj.begin(); it != end; it++)
     {
       if ((*it)->get_type() & TYPE_MOVABLE && *it != move->get_parent())
-        move->interact(CAST(Movable*)(*it));
+        move->interact(CAST(Movable*)(*it), OTH);
     }
 }
 

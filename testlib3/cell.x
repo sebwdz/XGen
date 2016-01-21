@@ -9,10 +9,7 @@ Init_Main<(
 
 MAIN<(
 	:Init ( :Init_Main )
-	sup ( ( #ImMain 0 )
-		( :Im_Main )
-		( :Cell )
-	)
+	sup ( ( #ImMain 0 ) ( :Im_Main ) [ else ] ( :Cell ) )
 )>	
 
 Im_Main<(
@@ -21,7 +18,7 @@ Im_Main<(
 					add ( #duplic 1 )
 					duplic
 			) 20 )
-		)
+		) ( kill )
 	)
 )>
 
@@ -31,9 +28,15 @@ Init_Cell<(
 	:Make_Rpls_Mv ( &RplsOth ?to @ImCell @ImCell )
 	set ( &RplsOth^?pw 15 )
 	set ( &RplsOth^?dst 60 )
+	cp ( &RplsOth^?scope ?scope ( ?oth ) )
+)>
+
+Create_Dendrite<(
+	:Cycle_S ( !dendrite !time creat ( :Dendrite ) 100 2 )
 )>
 
 Cell<(
 	:Init ( :Init_Cell )
 	:Nucleus ( )
+	:Create_Dendrite ( )
 )>

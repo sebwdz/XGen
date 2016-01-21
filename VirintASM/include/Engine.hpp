@@ -2,7 +2,6 @@
 #define ENGINE_HPP
 
 #include    <QWidget>
-#include    "../Virtin/include/Plugin.hpp"
 
 class Engine : public QObject, public Plugin
 {

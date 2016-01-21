@@ -40,6 +40,7 @@ NodeMaker::NodeMaker(std::string &maind, bool asmn)
     m_opt.push_back(std::make_pair("DESTROY", DESTROY));
     m_opt.push_back(std::make_pair("VAR", VAR));
     m_opt.push_back(std::make_pair("ECHO", ECHO));
+    m_opt.push_back(std::make_pair("CALL", CALL));
 
     m_opt.push_back(std::make_pair("ATR", ATR));
     m_opt.push_back(std::make_pair("RPLS", RPLS));

@@ -58,8 +58,12 @@ int        Decriptor::copy(GeneticalNode *node)
   if (vct.size() > 1)
     {
       cp = get_chan(vct[0].get());
-      if (vct[1]->get_type() != VALUE)
+      if (vct[1]->get_type() == GLOBAL_CHAN ||
+              vct[1]->get_type() == FAST_CHAN ||
+              vct[1]->get_type() == LOCAL_CHAN)
+      {
         get_chan(vct[1].get())->copy(cp);
+      }
       else
         vct[1]->copy(cp);
     }
@@ -245,7 +249,7 @@ int             Decriptor::echo(GeneticalNode *node)
 
   for (it = 0; it < vct.size(); it++)
     {
-      son = CAST(GeneticalNode*)(vct[it].get());
+      son = vct[it].get();
       if (son->get_type() == GLOBAL_CHAN || son->get_type() == LOCAL_CHAN ||
           son->get_type() == FAST_CHAN || son->get_type() == INTERACTION)
         {
@@ -255,4 +259,30 @@ int             Decriptor::echo(GeneticalNode *node)
         std::cout << (char)son->get_value()._f;
     }
   return (0);
+}
+/*
+GeneticalNode   *Decriptor::take_arguments(GeneticalNode *node)
+{
+    GeneticalNode   *d;
+}
+*/
+int             Decriptor::call(GeneticalNode* node)
+{
+    GeneticalNode       *son;
+    std::vector<SMART(GeneticalNode)> &vct = node->get_son();
+    GeneticalNode       *ret;
+
+    if (vct.size() > 0)
+    {
+        // send arguments
+        son = vct[0].get();
+        /*if (vct.size() > 1)
+            ret = take_arguments(vct[1].get());*/
+        if (son->get_type() == GLOBAL_CHAN ||
+                son->get_type() == LOCAL_CHAN || son->get_type() == FAST_CHAN)
+            turn(get_chan(son).get());
+        else
+            turn(son);
+    }
+    return (0);
 }

@@ -1,4 +1,5 @@
 Init_Main<(
+	shared ( /CellId )
 	inf ( ( @S_IMSON 1 ) (
 			set ( #ImMain 1 )
 			shared ( /S_IMSON )
@@ -9,12 +10,13 @@ Init_Main<(
 
 MAIN<(
 	:Init ( :Init_Main )
-	sup ( ( #ImMain 0 ) ( :Im_Main ) [ else ] ( :Cell ) )
+	sup ( ( #ImMain 0 ) ( :Im_Main ) ( :Cell ) )
 )>	
 
 Im_Main<(
 	inf ( ( #duplic 6 ) (
 			:Cycle ( (
+					add ( @CellId 1 )
 					add ( #duplic 1 )
 					duplic
 			) 20 )
@@ -22,17 +24,25 @@ Im_Main<(
 	)
 )>
 
-Init_Cell<(
-	set ( @ImCell 10 )
 
-	:Make_Rpls_Mv ( &RplsOth ?to @ImCell @ImCell )
-	set ( &RplsOth^?pw 15 )
-	set ( &RplsOth^?dst 60 )
+Init_Cell<(
+	shared ( /CellId )
+	shared ( /IM_SENSOR )
+	shared ( /IM_ACTOR )
+	
+	set ( @ImCell 15 )
+
+	:Make_Rpls_Mv ( &RplsOth ?to
+			0 ( ?need ( @ImCell ) )
+			( ?need ( @ImCell ) )
+	)
+	set ( &RplsOth^?pw 50 )
+	set ( &RplsOth^?dst 70 )
 	cp ( &RplsOth^?scope ?scope ( ?oth ) )
 )>
 
 Create_Dendrite<(
-	:Cycle_S ( !dendrite !time creat ( :Dendrite ) 100 2 )
+	:Cycle_S ( !dendrite !time new_head ( :Dendrite ) 200 2 )
 )>
 
 Cell<(

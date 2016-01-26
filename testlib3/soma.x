@@ -8,16 +8,15 @@ Init_Soma<(
 	set ( @ImSoma 10 )
 
 	cp ( &GiveImpulse 0 (
-			400 0 40
-			?act ( @Impulse @IsNegAxon )
+			400 0 400
+			?act ( ( ?need ( @Impulse ) ) ( ?need ( @IsNegAxon ) ) )
 			?chng ?to ?atr
 			?reduce ( ?fix ) 0 ?scope ( ?link )
 		)
 	)
-	
 	cp ( &GiveActive 0 (
-			100 0 50
-			?act ( @ImActive @ImDendriteHead )
+			100 0 100
+			?act ( ( ?need ( @Active ) ) ( ?need ( @ImDendriteHead ) ) )
 			?chng ?to ?atr
 			?reduce ( ?fix ) 0 ?scope ( ?link )	
 		)
@@ -29,20 +28,21 @@ Active_Cycle<(
                         inf ( ( @Impulse 1 ) )
                         inf ( ( @ImpulseStk 1 ) )
                 ) (
-                        sup ( ( !wait 5 ) (
+                        sup ( ( !wait 20 ) (
                                         set ( #ActiveNucleus 0 )
                                         set ( @IsNegNucleus 10 )
                                 )
                         )
-			set ( @ImActive 0 )
+			set ( @Active 0 )
                         add ( !wait 1 )
                 ) (
-			set ( @ImActive 20 )
+			set ( @Active 20 )
                         set ( !wait 0 )
                         set ( !sd #Speed )
                         sup ( ( !sd @ImpulseStk ) ( set ( !sd @ImpulseStk ) ) )
                         sub ( @ImpulseStk !sd )
                         add ( @Impulse !sd )
+			sup ( ( @IM_SENSOR 0 ) ( set ( @Impulse 0 ) ) )
                 )
         )
 )>

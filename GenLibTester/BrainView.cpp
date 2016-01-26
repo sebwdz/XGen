@@ -47,13 +47,12 @@ void        BrainView::show_module(ModuleClass *module)
     POINT_LIST::iterator    pt;
     std::string             str("Impulse");
     unsigned int            res;
-    unsigned int            res2;
     int                     index = 0;
 
     res = Chanel::hash(str);
     res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value()._f * 200.0;
     res = res > 254 ? 254 : res;
-    sf::Color cl(10, 0, res);
+    sf::Color cl(1, 0, res);
 
     str = "ImNucleusSplit";
     res = Chanel::hash(str);

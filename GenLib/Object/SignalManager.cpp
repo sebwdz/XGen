@@ -44,7 +44,6 @@ void            SignalManager::catch_simple(unsigned int code, void *sig)
         {
           CAST(ModuleClass*)(m_parent)->get_map()->remove_object(this);
           CAST(ModuleClass*)(sig)->add_object(this);
-          m_parent = CAST(Object*)(sig);
         }
     }
 }
@@ -74,11 +73,16 @@ void            SignalManager::catch_create(unsigned int code, void *sig)
     {
       decript = new Decriptor(parent);
       decript->set_block(vct[it]->copy());
-      decript->get_line()->shared_to_line(get_line());
       decript->set_pos(get_pos());
       if (code != DETACH)
+      {
         parent->attach_decriptor(decript);
+        parent->get_line()->shared_to_line(get_line());
+      }
       else
+      {
+        decript->get_line()->shared_to_line(get_line());
         parent->add_object(decript);
+      }
     }
 }

@@ -134,7 +134,7 @@ void        exec_view(Brain *brain)
           cycle++;
         }
       if (cycle - prev[1] > 25)
-        {//0.00567
+        {//0.00907
           time = speedclock[1].getElapsedTime();
           sleep = (sleep + 0.00907 - ((time.asMicroseconds() / 1000000.0) / 25.0)) / 2;
           speedclock[1].restart();
@@ -164,13 +164,16 @@ void                  add_act(Brain *brain, std::pair<float, float> pos, bool se
   module = new ModuleClass();
   module->attach_decriptor(decriptor);
   module->set_pos(pos);
+  value._f = 10;
   if (sensor) {
-      value._f = 10;
-      module->get_line()->get_chan(Chanel::hash("ISSENSOR"))->set_value(value);
+      module->get_line()->get_chan(Chanel::hash("IM_SENSOR"))->set_value(value);
       sens.push_back(module);
     }
   else
+  {
+    module->get_line()->get_chan(Chanel::hash("IM_ACTOR"))->set_value(value);
     act.push_back(module);
+  }
   brain->add_object(module);
 }
 

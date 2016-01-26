@@ -10,7 +10,7 @@ Init_Nucleus<(
 Create_Axon<(
 	inf ( ( #HaveAxon 1 ) (
 			:Cycle ( (
-				creat ( :Axon )
+				new_head ( :Axon )
 				set ( #HaveAxon 1 )
 			) 200 )
 		)

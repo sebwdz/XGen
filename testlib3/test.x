@@ -2,15 +2,15 @@ Init_Test<(
 	set ( @ImFree 10 )
 
 	cp ( &AtrCell 0 (
-			160 10 230
-			?act ( @ImFree @ImCell )
+			160 10 600
+			?act ( ( ?need ( @ImFree ) ) ( ?need ( @ImCell ) ) )
 			?mv ?oth ?atr
 			?reduce 0 ?scope ( ?oth )
 		)
 	)
 	cp ( &GiveFree 0 (
-			20 0 20
-			?act ( @ImFree @ImCell )
+			20 0 50
+			?act ( ( ?need ( @ImFree ) ) ( ?need ( @ImCell ) ) )
 			?chng ?to ?atr
 			?reduce ( ?fix 0 ) 0 ?scope ( ?oth )
 		)
@@ -32,17 +32,17 @@ MainTest<(
 Init_Attach<(
 	set ( @ImFree 0 )
 	set ( @ImAttach 10 )
-	
+
 	cp ( &AtrCell 0 (
-			20 5 10
-			?act ( @ImAttach @ImCell )
+			100 0 200
+			?act ( ( ?need ( @ImAttach ) ) ( ?need ( @ImCell ) ) )
 			?mv ?oth ?atr
 			?reduce 0 ?scope ( ?parent )
 		)
 	)
 	cp ( &GiveImpulse 0 (
-			20 0 200
-			?act ( @Impulse @IsNegNucleus )
+			20 0 400
+			?act ( ( ?need ( @Impulse ) ) ( ?need ( @IsNegNucleus ) ) )
 			?chng ?to ?atr
 			?reduce ( ?fix ) 0 ?scope ( ?parent )
 		)
@@ -53,12 +53,23 @@ Init_Attach<(
 )>
 
 Attach<(
-		:Init ( :Init_Attach )
-		sup ( ( #comin 0 ) (
-				:Init ( (
-					echo ( 65 10 )
-					set ( &CominCell^?dst 0 )
-				) )
-			)
+	:Init ( :Init_Attach )
+	inf ( ( &CominCell^?limit^0  1 ) (
+			:Init ( (
+				set ( &CominCell^?dst 0 )
+				cp ( &GiveType 0 (
+						20 0 50
+						?act ( ( ?need ( @ ) ) ( ?need ( @ImCell ) ) )
+						?chng ?to ?atr
+						?reduce ( ?fix ) 0 ?scope ( ?parent )
+					)
+				)
+				sup ( ( @IM_SENSOR 0 ) (
+						cp ( &GiveType^?act^0^?need^0^0 /IM_SENSOR )
+					) ( cp ( &GiveType^?act^0^?need^0^0 /IM_ACTOR ) )
+				)
+			) )
 		)
+	)
+		
 )>

@@ -33,6 +33,10 @@
 	?oth		1;
 	?son		2;
 	?link		12;
+
+	[interaction]
+	?need		0;
+	?forbiden	1;
 >
 
 Make_Atr_Mv($name $to $act1 $act2)<(

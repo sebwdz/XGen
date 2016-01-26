@@ -27,10 +27,13 @@ class           MovableLine
     void                make_range();
     void                change_chan(GeneticalNode *ref, sMovableChan *move);
     void                exec();
+    float               get_pow(LineDecript *line, GeneticalNode *node);
     void                interact_with(class Movable *obj, GeneticalNode *prop);
     void                interact(class Movable *obj, unsigned int scope);
     void                apply(class Movable *from, GeneticalNode *prop,
                           std::pair<float, float> &vct, std::pair<float, GeneticalNode*> &chan);
+    void                apply_change(Movable *from,
+                                     std::pair<float, GeneticalNode*> &chan);
     bool                check_attach(Object *obj, GeneticalNode *prop);
     void                reduce(float &chan, GeneticalNode *prop);
     bool                can_interact(GeneticalNode *prop, unsigned int scope);

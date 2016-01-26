@@ -12,7 +12,7 @@ SMART(GeneticalNode)    GeneticalNode::copy(SMART(GeneticalNode) cp)
     if (!cp)
         node = SMART(GeneticalNode)(new GeneticalNode(NULL));
     else
-        node = boost::static_pointer_cast<GeneticalNode>(cp);
+        node = cp;
     node->m_value = m_value;
     node->m_function = m_function;
     node->m_son.clear();

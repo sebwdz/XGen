@@ -344,3 +344,16 @@ void                    ModuleClass::cal_pos()
         m_pos = pos;
     }
 }
+
+void                    ModuleClass::change_pos(std::pair<float, float> &pos)
+{
+    std::pair<float, float> tmp;
+
+    for (unsigned int it = 0; it < m_obj.size(); it++)
+    {
+        tmp = m_obj[it]->get_pos();
+        tmp.first += pos.first;
+        tmp.second += pos.second;
+        m_obj[it]->set_pos(tmp);
+    }
+}

@@ -121,15 +121,21 @@ void        exec_view(Brain *brain)
       if (time.asMicroseconds() / 1000000.0 >= sleep)
         {
           speedclock[0].restart();
-          brain->exec();
-          if (sens[0]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value()._f > 0 ||
-                sens[1]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value()._f > 0 ||
-                sens[2]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value()._f > 0) {
-              std::cout << sens[0]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value()._f << " " <<
-              sens[1]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value()._f << " " <<
-              sens[2]->get_line()->get_chan(Chanel::hash("ImpulseStk"))->get_value()._f << std::endl;
+          brain->exec();/*
+          if (sens[0]->get_line()->get_chan(Chanel::hash("ActImpulse"))->get_value()._f > 0 ||
+                sens[1]->get_line()->get_chan(Chanel::hash("ActImpulse"))->get_value()._f > 0 ||
+                sens[2]->get_line()->get_chan(Chanel::hash("ActImpulse"))->get_value()._f > 0) {
+              std::cout << sens[0]->get_line()->get_chan(Chanel::hash("ActImpulse"))->get_value()._f << " " <<
+              sens[1]->get_line()->get_chan(Chanel::hash("ActImpulse"))->get_value()._f << " " <<
+              sens[2]->get_line()->get_chan(Chanel::hash("ActImpulse"))->get_value()._f << std::endl;
               std::cout << response.getElapsedTime().asMilliseconds() << " " << crep << std::endl;
-            }
+            }*/
+          if (sens[0]->get_line()->get_chan(Chanel::hash("ActImpulse"))->get_value()._f > 0)
+              std::cout << "K" << "\t" << sens[0]->get_line()->get_chan(Chanel::hash("ActImpulse"))->get_value()._f << std::endl;
+          if (sens[1]->get_line()->get_chan(Chanel::hash("ActImpulse"))->get_value()._f > 0)
+              std::cout << "L" << std::endl;
+          if (sens[2]->get_line()->get_chan(Chanel::hash("ActImpulse"))->get_value()._f > 0)
+              std::cout << "M" << std::endl;
           crep++;
           cycle++;
         }
@@ -164,7 +170,7 @@ void                  add_act(Brain *brain, std::pair<float, float> pos, bool se
   module = new ModuleClass();
   module->attach_decriptor(decriptor);
   module->set_pos(pos);
-  value._f = 10;
+  value._f = 200;
   if (sensor) {
       module->get_line()->get_chan(Chanel::hash("IM_SENSOR"))->set_value(value);
       sens.push_back(module);
@@ -194,13 +200,13 @@ int         main(int ac, char **av)
   dna->load_file(file);
   brain->set_dna(dna);
 
-      add_act(brain, std::make_pair(100.0, -70.0));
-      add_act(brain, std::make_pair(100.0, 0.0));
-      add_act(brain, std::make_pair(100.0, 70.0));
+      add_act(brain, std::make_pair(50.0, -50.0));
+      add_act(brain, std::make_pair(50.0, 0.0));
+      add_act(brain, std::make_pair(50.0, 50.0));
 
-      add_act(brain, std::make_pair(-100.0, -70.0), true);
-      add_act(brain, std::make_pair(-100.0, 0.0), true);
-      add_act(brain, std::make_pair(-100.0, 70.0), true);
+      add_act(brain, std::make_pair(-50.0, -50.0), true);
+      add_act(brain, std::make_pair(-50.0, 0.0), true);
+      add_act(brain, std::make_pair(-50.0, 50.0), true);
 
   if (ac > 2)
     exec_view(brain);

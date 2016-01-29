@@ -8,14 +8,14 @@ Init_Soma<(
 	set ( @ImSoma 10 )
 
 	cp ( &GiveImpulse 0 (
-			400 0 400
+			1000 0 2000
 			?act ( ( ?need ( @Impulse ) ) ( ?need ( @IsNegAxon ) ) )
 			?chng ?to ?atr
 			?reduce ( ?fix ) 0 ?scope ( ?link )
 		)
 	)
 	cp ( &GiveActive 0 (
-			100 0 100
+			100 0 200
 			?act ( ( ?need ( @Active ) ) ( ?need ( @ImDendriteHead ) ) )
 			?chng ?to ?atr
 			?reduce ( ?fix ) 0 ?scope ( ?link )	

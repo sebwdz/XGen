@@ -1,5 +1,5 @@
 
-#include        "Decriptor/Decriptor.hpp"
+#include        "Cell/Module.hpp"
 
 MovableLine::MovableLine()
 {
@@ -94,6 +94,8 @@ void            MovableLine::exec()
     pos = m_parent->get_pos();
     pos.first += m_move.first;
     pos.second += m_move.second;
+    if (m_parent->get_type() & TYPE_MODULE)
+        CAST(ModuleClass*)(m_parent)->change_pos(m_move);
     m_parent->set_pos(pos);
     it = m_change.begin();
     while (it != m_change.end())

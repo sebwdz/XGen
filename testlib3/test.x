@@ -1,16 +1,16 @@
 Init_Test<(
-	set ( @ImFree 10 )
+	set ( @ImFree 20 )
 
 	cp ( &AtrCell 0 (
-			160 10 600
-			?act ( ( ?need ( @ImFree ) ) ( ?need ( @ImCell ) ) )
+			90 0 60
+			?act ( ( ?need ( @ImFree ) ) ( ?need ( @ImCell ) ?forbiden ( @ImFree ) ) )
 			?mv ?oth ?atr
-			?reduce 0 ?scope ( ?oth )
+			?reduce ( ?auto ) 0 ?scope ( ?oth )
 		)
 	)
 	cp ( &GiveFree 0 (
-			20 0 50
-			?act ( ( ?need ( @ImFree ) ) ( ?need ( @ImCell ) ) )
+			10 0 50
+			?act ( ( ?need ( @ImFree ) ) ( ?need ( @ImCell )) )
 			?chng ?to ?atr
 			?reduce ( ?fix 0 ) 0 ?scope ( ?oth )
 		)
@@ -33,26 +33,36 @@ Init_Attach<(
 	set ( @ImFree 0 )
 	set ( @ImAttach 10 )
 
-	cp ( &AtrCell 0 (
+[	cp ( &AtrCell 0 (
 			100 0 200
 			?act ( ( ?need ( @ImAttach ) ) ( ?need ( @ImCell ) ) )
 			?mv ?oth ?atr
 			?reduce 0 ?scope ( ?parent )
 		)
 	)
+]
 	cp ( &GiveImpulse 0 (
-			20 0 400
-			?act ( ( ?need ( @Impulse ) ) ( ?need ( @IsNegNucleus ) ) )
+			20 0 1000
+			?act ( ( ?need ( @Impulse @Primary ) ) ( ?need ( @IsNegNucleus ) ) )
 			?chng ?to ?atr
+			?reduce ( ?fix ) 0 ?scope ( ?parent )
+		)
+	)
+	cp ( &AtrImpulse 0 (
+			20 0 1000
+			?act ( ( ?need ( @ImAttach ) ) ( ?need ( @ActImpulse ) ) )
+			?chng ?oth ?atr
 			?reduce ( ?fix ) 0 ?scope ( ?parent )
 		)
 	)
 	:Make_Link ( &CominCell @ImCell @Block 20 #comin )
 	set ( &CominCell^?type ?comin )
 	cp ( &CominCell^?scope 0 ( ?oth ) )
+	sup ( ( @IM_SENSOR 0 ) ( set ( #IM_SENSOR 10 ) ) )
 )>
 
 Attach<(
+	sup ( ( @ActImpulse 0 ) ( set ( @ActImpulse 0 ) ) )
 	:Init ( :Init_Attach )
 	inf ( ( &CominCell^?limit^0  1 ) (
 			:Init ( (
@@ -71,5 +81,9 @@ Attach<(
 			) )
 		)
 	)
-		
+	sup ( ( #IM_SENSOR 0 ) (
+			add ( @Primary @Impulse )
+			set ( @Impulse 0 )
+		)
+	)
 )>

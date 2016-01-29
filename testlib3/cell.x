@@ -14,12 +14,12 @@ MAIN<(
 )>	
 
 Im_Main<(
-	inf ( ( #duplic 6 ) (
+	inf ( ( #duplic 19 ) (
 			:Cycle ( (
 					add ( @CellId 1 )
 					add ( #duplic 1 )
 					duplic
-			) 20 )
+			) 80 )
 		) ( kill )
 	)
 )>
@@ -36,17 +36,30 @@ Init_Cell<(
 			0 ( ?need ( @ImCell ) )
 			( ?need ( @ImCell ) )
 	)
-	set ( &RplsOth^?pw 50 )
-	set ( &RplsOth^?dst 70 )
+	set ( &RplsOth^?pw 180 )
+	set ( &RplsOth^?dst 40 )
 	cp ( &RplsOth^?scope ?scope ( ?oth ) )
+
+	cp ( &GivePrimary 0 (
+			200 0 500
+			?act ( ( ?need ( @Primary ) ) ( ?need ( @ImDendriteHead ) ) )
+			?chng ?to ?atr
+			?reduce ( ?fix ) 0 ?scope ( ?link )
+		)
+	)
 )>
 
 Create_Dendrite<(
-	:Cycle_S ( !dendrite !time new_head ( :Dendrite ) 200 2 )
+	inf ( ( @IM_ACTOR 1 ) (
+			:Cycle_S ( !dendrite !time new_head ( :Dendrite ) 800 2 )
+		)
+	)
 )>
 
 Cell<(
+	:Debug ( @Primary 67 )
 	:Init ( :Init_Cell )
 	:Nucleus ( )
 	:Create_Dendrite ( )
+	inf ( ( &RplsOth^?dst 50 ) ( add ( &RplsOth^?dst 0.01 ) ) )	
 )>

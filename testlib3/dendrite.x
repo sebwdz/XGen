@@ -1,40 +1,57 @@
 Init_Dendrite<(
 	set ( @ImDendriteHead 10 )
-	set ( @ ( /From @CellId ) 10 )
-
-	mult ( @ ( /From @CellId ) 100 )
-	mult ( @IM_SENSOR 100 )
-	mult ( @IM_ACTOR 100 )
+	set ( #PreSynaptic 10 )
+	set ( @ImPostSynaptic 10 )
+	set ( @ ( /From @CellId ) 10000 )
 
 	[ PHYSICAL INTERACTION ]
-	:Make_Rpls_Mv ( &RplsCell ?to 0 ( ?need ( @ImDendriteHead ) ) ( ?need ( @ImCell ) ) )
-	set ( &RplsCell^?pw 10 )
-	cp ( &RplsCell^?scope ?scope ( ?link ) )
+	:Make_Rpls_Mv ( &RplsBase ?to 0 ( ?need ( @ImDendriteHead ) ) ( ?need ( @ImDendriteBase ) ) )
+	set ( &RplsBase^?pw 10 )
+	cp ( &RplsBase^?scope ?scope ( ?link ) )
+
 	cp ( &RplsOth 0 (
-			30 0 50
+			35 0 40
 			?act (
 				( ?need ( @ImDendriteHead ) )
-				( ?need ( @ImDendriteHead ) ?forbiden ( @From ) )
+				( ?need ( @ImPostSynaptic @ImDendriteHead @ImCell ) )
 			) ?mv ?to ?rpls
-			0 0 ?scope ( ?oth )
+			?reduce ( ?auto ) 0 ?scope ( ?oth )
 		)
 	)
-	cp ( &AtrCell 0 (
-			130 20 20
+	cp ( &AtrByBase 0 (
+			130 30 7
 			?act (
 				( ?need ( @ImDendriteHead ) )
-				( ?need ( @ImCell ) )
+				( ?need ( @ImDendriteBase ) )
 			) ?mv ?to ?atr
 			?reduce ( ?fix ) 0 ?scope ( ?link )
 		)
 	)
-	cp ( &AtrByAxon 0 (
-			30 0 10
+	cp ( &AtrBase 0 (
+			130 35 10
 			?act (
 				( ?need ( @ImDendriteHead ) )
-				( ?need ( @ImAxonHead ) ?forbiden ( @From ) )
+				( ?need ( @ImDendriteBase ) )
+			) ?mv ?oth ?atr
+			?reduce ( ?fix ) 0 ?scope ( ?link )
+		)
+	)
+	cp ( &AtrByTarget 0 (
+			40 0 15
+			?act (
+				( ?need ( @ImDendriteHead @AtrPrimary ) )
+				( ?need ( @ImPreSynaptic @ActiveImpulse ) ?forbiden ( @From ) )
 			) ?mv ?to ?atr
 			?reduce ( ?auto ) 0 ?scope ( ?oth )
+		)
+	)
+	cp ( &AtrByTargetLong 0 (
+			150 0 2
+			?act (
+				( ?need ( @AtrPrimary ) )
+				( ?need ( @ActiveImpulse @ImPreSynaptic ) ?forbiden ( @From ) )
+			) ?mv ?to ?atr
+			?reduce ( ?fix ) 0 ?scope ( ?oth )
 		)
 	)
 	[ TRANSMIT ]
@@ -42,51 +59,82 @@ Init_Dendrite<(
 			100 0 2000
 			?act (
 				( ?need ( @Impulse ) )
-				( ?need ( @IsNegNucleus ) )
+				( ?need ( @ImDendriteBase ) )
 			) ?chng ?to ?atr
 			?reduce ( ?fix ) 0 ?scope ( ?link )
 		)
 	)
 	cp ( &GivePrimary 0 (
-			50 0 4000
+			50 0 500
 			?act (
 				( ?need ( @SalPrimary ) )
-				( ?need ( @ImAxonHead ) ?forbiden ( @From ) )
+				( ?need ( @ImPreSynaptic ) ?forbiden ( @From ) )
 			) ?chng ?to ?atr
 			?reduce ( ?auto ) 0 ?scope ( ?oth )
 		)
 	)
-	cp ( &AtrByAxon^?act^1^?forbiden^0^1 @CellId )
+	cp ( &AtrByTarget^?act^1^?forbiden^0^1 @CellId )
+	cp ( &AtrByTargetLong^?act^1^?forbiden^0^1 @CellId )
 	cp ( &GivePrimary^?act^1^?forbiden^0^1 @CellId )
-	cp ( &RplsOth^?act^1^?forbiden^0^1 @CellId )
+)>
+
+Create_Branching_Dendrite<(
+	:Init ( ( shared ( /IMSON ) add ( @IMSON 1 ) ) )
+	inf ( ( @IMSON 2 ) (
+			:CycleL ( (
+				:Create_Branching_Link (
+					@ImDendriteBase
+					0 (
+						cp ( &AtrByTarget^?act^1^?need^0^0 /ImDendriteHead )
+						cp ( &AtrByTarget^?act^1^?need^1 0 )
+						cp ( &AtrByTarget^?act^1^?forbiden 0 )
+						cp ( &GivePrimary^?act^1^?need^0^0 /ImDendriteHead )
+						cp ( &GivePrimary^?act^1^?forbiden 0 )
+						cp ( &GivePrimary^?act^0^?need^0^0 /Primary )
+						cp ( &GivePrimary^?scope ?scope ( ?link ) )
+						cp ( &RplsOth^?act^1^?need^0^0 /ImDendriteBase 0 )
+						set ( #PreSynaptic 0 )
+						set ( @ImPostSynaptic 0 )
+					)
+				)
+			) 200 2 )
+		)
+	)
 )>
 
 Install_Dendrite<(
-	inf ( ( #install 1 ) (
-                        :Make_Link ( &LinkCell @ImCell @Block 20 #install )
-                        cp ( &LinkCell^?scope ?scope ( ?parent ) )
-                ) ( :Init ( ( take_out set ( &RplsCell^?dst 15 ) ) ) )
-        )
+	:Init ( (
+		set ( &RplsBase^?dst 10 )
+		cp ( &AtrActor 0 (
+                		200 0 0.01
+                                ?act ( ( ?need ( @ImDendriteHead ) ) ( ?need ( @IM_ACTOR ) ) )
+                                ?mv ?to ?atr
+                                ?reduce ( ?fix ) 0 ?scope ( ?oth )
+                        )
+                )
+	) )
+	:CycleL ( set ( &AtrActor^?pw 0 ) 100 1 )
+)>
+
+Pre_Synaptic_Dendrite<(
+	div ( @Primary 2 )
+	add ( @SalPrimary @Primary )
+)>
+
+ActOut_Dendrite<(
+	set ( !tmp @Primary )
+	sub ( @SalPrimary 1 )
+	sub ( @Primary 1 )
+	sub ( @AtrPrimary 0.2 )
+	sup ( ( #PreSynaptic 0 ) ( add ( @AtrPrimary !tmp ) ) )
+	sup ( ( @AtrPrimary 10 ) ( set ( @AtrPrimary 10 ) ) )
 )>
 
 Dendrite<(
+	:Debug ( @Primary 68 )
 	:Init ( :Init_Dendrite )
-	:Install_Dendrite
-	sub ( @Active 1 )
-	sub ( @SalPrimary 1 )
-	sup ( ( @Active 20 ) ( set ( @Active 20 ) ) )
-	sup ( ( @Primary 20 ) ( set ( @Primary 20 ) ) )
-	inf ( ( @IM_ACTOR 1 ) (
-			add ( @ImActive @Active )
-			div ( @ImActive 10 )
-			sup ( ( @ImActive 50 ) ( set ( @ImActive 50 ) ) )
-		)
-	)
-	set ( #tmp @Primary )
-	sub ( @Primary 1 )
-	sub ( @AtrPrimary 0.5 )
-	[sup ( ( #tmp 20 ) ( set ( #tmp 20 ) ) )]
-	add ( @AtrPrimary #tmp )
-	add ( @SalPrimary @Primary )
-	div ( @Primary 5 )
+	:Link ( @ImDendriteBase :Install_Dendrite )
+	:Create_Branching_Dendrite ( )
+	sup ( ( #PreSynaptic 0 ) ( :Pre_Synaptic_Dendrite ) )
+	:ActOut_Dendrite
 )>

@@ -30,8 +30,7 @@ void            MovableLine::make_range()
         if (sons[it]->get_son_ref(LIMIT)->get_value()._f &&
                 !sons[it]->get_son_ref(LIMIT)->get_son_ref(0)->get_value()._f)
             continue;
-        if (sons[it]->get_son_ref(PW)->get_value()._f || sons[it]->get_son_ref(TYPE)->get_value()._f == ATTACH ||
-                sons[it]->get_son_ref(TYPE)->get_value()._f == LINK || sons[it]->get_son_ref(TYPE)->get_value()._f == COMIN)
+        if (sons[it]->get_son_ref(PW)->get_value()._f && can_interact(sons[it].get(), OTH))
         {
             dst = sons[it]->get_son_ref(DST)->get_value()._f;
             if (dst > range[1])

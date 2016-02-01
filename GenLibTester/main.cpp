@@ -20,7 +20,7 @@ void        exec(Brain *brain)
   cycle = 0;
   Monitor::get_instance()->begin_time(MN_ALL);
   gettimeofday(&_time[0], NULL);
-  while (cycle < 1000)
+  while (cycle < 3000)
   {
       brain->exec();
       cycle++;
@@ -92,18 +92,18 @@ void        exec_view(Brain *brain)
                 if (event.key.code == sf::Keyboard::E)
                   act[2]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(toNodeValue(60));
                 if (event.key.code == sf::Keyboard::K)
-                  sens[0]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(toNodeValue(60));
+                  sens[0]->get_line()->get_chan(Chanel::hash("Primary"))->set_value(toNodeValue(60));
                 if (event.key.code == sf::Keyboard::L)
-                  sens[1]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(toNodeValue(60));
+                  sens[1]->get_line()->get_chan(Chanel::hash("Primary"))->set_value(toNodeValue(60));
                 if (event.key.code == sf::Keyboard::M)
-                  sens[2]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(toNodeValue(60));
+                  sens[2]->get_line()->get_chan(Chanel::hash("Primary"))->set_value(toNodeValue(60));
                 crep = 0;
                 response.restart();
             }
         }
 
       time = show[0].getElapsedTime();
-      if (time.asMilliseconds() / 1000.0 >= 24 / 1000.0)
+      if (time.asMilliseconds() / 1000.0 >= 50 / 1000.0)
         {
           show[0].restart();
           brain->make_skeleton();
@@ -130,17 +130,17 @@ void        exec_view(Brain *brain)
               sens[2]->get_line()->get_chan(Chanel::hash("ActImpulse"))->get_value()._f << std::endl;
               std::cout << response.getElapsedTime().asMilliseconds() << " " << crep << std::endl;
             }*/
-          if (sens[0]->get_line()->get_chan(Chanel::hash("ActImpulse"))->get_value()._f > 0)
-              std::cout << "K" << "\t" << sens[0]->get_line()->get_chan(Chanel::hash("ActImpulse"))->get_value()._f << std::endl;
-          if (sens[1]->get_line()->get_chan(Chanel::hash("ActImpulse"))->get_value()._f > 0)
+          if (sens[0]->get_line()->get_chan(Chanel::hash("Impulse"))->get_value()._f > 0)
+              std::cout << "K" << "\t" << sens[0]->get_line()->get_chan(Chanel::hash("Impulse"))->get_value()._f << std::endl;
+          if (sens[1]->get_line()->get_chan(Chanel::hash("Impulse"))->get_value()._f > 0)
               std::cout << "L" << std::endl;
-          if (sens[2]->get_line()->get_chan(Chanel::hash("ActImpulse"))->get_value()._f > 0)
+          if (sens[2]->get_line()->get_chan(Chanel::hash("Impulse"))->get_value()._f > 0)
               std::cout << "M" << std::endl;
           crep++;
           cycle++;
         }
       if (cycle - prev[1] > 25)
-        {//0.00907
+        {
           time = speedclock[1].getElapsedTime();
           sleep = (sleep + 0.00907 - ((time.asMicroseconds() / 1000000.0) / 25.0)) / 2;
           speedclock[1].restart();

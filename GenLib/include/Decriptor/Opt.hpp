@@ -55,6 +55,7 @@
 
 #define         DUPLIC          16 + OPT_RANGE
 #define         SPLIT           26 + OPT_RANGE
+#define         SPLITIN         80 + OPT_RANGE
 
 /* SHARE */
 

@@ -31,6 +31,7 @@ NodeMaker::NodeMaker(std::string &maind, bool asmn)
     m_opt.push_back(std::make_pair("NEW_HEAD", NEW_HEAD));
     m_opt.push_back(std::make_pair("DUPLIC", DUPLIC));
     m_opt.push_back(std::make_pair("SPLIT", SPLIT));
+    m_opt.push_back(std::make_pair("SPLITIN", SPLITIN));
     m_opt.push_back(std::make_pair("ATTACH", ATTACH));
     m_opt.push_back(std::make_pair("LINK", LINK));
     m_opt.push_back(std::make_pair("COMIN", COMIN));

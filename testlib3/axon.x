@@ -1,137 +1,153 @@
 Init_Axon<(
+	shared ( /SON /CellId )
+	add ( @SON 1 )
+	set ( @ImPreSynaptic 10 )
 	set ( @ImAxonHead 10 )
 	set ( @IsNegAxon 10 )
-	set ( @ ( /From @CellId ) 10 )
+	set ( @ ( /From @CellId ) 10000 )
 
-	mult ( @ ( /From @CellId ) 100 )
 	[ PHISICAL INTERACTION ]
-	:Make_Rpls_Mv ( &RplsCell ?to 10 ( ?need ( @ImAxonHead ) ) ( ?need ( @ImSoma ) ) )
-	cp ( &RplsCell^?pw 1 )
+	:Make_Rpls_Mv ( &RplsCell ?to 10 ( ?need ( @ImAxonHead ) ) ( ?need ( @ImAxonBase ) ) )
+	cp ( &RplsCell^?pw 10 )
 	cp ( &RplsCell^?scope ?scope ( ?link ) )
-	cp ( &AtrActive 0 (
-			20 0 2
+	cp ( &AtrByDendrite 0 (
+			30 0 5
 			?act (
 				( ?need ( @ImAxonHead ) )
-				( ?need ( @ImDendriteHead ) ?forbiden ( @ @From ) )
+				( ?need ( @ImPostSynaptic ) ?forbiden ( @From ) )
 			) ?mv ?to ?atr
-			?reduce ( ?fix ) 0 ?scope ( ?oth )
+			?reduce ( ?auto ) 0 ?scope ( ?oth )
 		)
 	)
 	cp ( &AtrPrimary 0 (
-			100 0 15
+			60 0 15
 			?act (
 				( ?need ( @ActiveImpulse ) )
-				( ?need ( @AtrPrimary ) ?forbiden ( @ @From ) )
+				( ?need ( @AtrPrimary ) ?forbiden ( @From ) )
 			) ?mv ?to ?atr
 			?reduce ( ?fix ) 0 ?scope ( ?oth )
 		)
 	)
-	cp ( &RlsOth 0 (
-			50 0 50
+	cp ( &RplsOth 0 (
+			50 0 20
 			?act (
 				( ?need ( @ActiveImpulse ) )
-				( ?need ( @ImAxonHead ) )
+				( ?need ( @ImAxonHead @ImCell ) )
 			) ?mv ?oth ?rpls
 			?reduce ( ?auto ) 0 ?scope ( ?oth )
 		)
 	)
 	cp ( &AtrByPrimary 0 (
-			80 0 10
+			160 0 5
 			?act (
 				( ?need ( @ImAxonHead ) )
-				( ?need ( @AtrPrimary ) ?forbiden ( @ @From ) )
+				( ?need ( @AtrPrimary ) ?forbiden ( @From ) )
 			) ?mv ?to ?atr
-			?reduce ( ?auto ) 0 ?scope ( ?oth )
+			?reduce ( ?fix ) 0 ?scope ( ?oth )
 		)
 	)
 	cp ( &RplsByOth 0 (
-			20 0 40
+			30 0 40
 			?act (
 				( ?need ( @ImAxonHead ) )
-				( ?need ( @ImAxonHead ) )
+				( ?need ( @ImAxonHead @ImCell ) )
 			) ?mv ?to ?rpls
 			?reduce ( ?auto ) 0 ?scope ( ?oth )
 		)
 	)
-	cp ( &AtrByCell 0 (
-			500 70 1
+	cp ( &AtrByBase 0 (
+			500 70 5
 			?act (
 				( ?need ( @ImAxonHead ) )
-				( ?need ( @ImCell ) )
+				( ?need ( @ImAxonBase ) )
 			) ?mv ?to ?atr
+			?reduce ( ?fix ) 0 ?scope ( ?link )
+		)
+	)
+	cp ( &AtrBase 0 (
+			500 75 14
+			?act (
+				( ?need ( @ImAxonHead ) )
+				( ?need ( @ImAxonBase ) )
+			) ?mv ?oth ?atr
 			?reduce ( ?fix ) 0 ?scope ( ?link )
 		)
 	)
 	[ TRANSMITION ]
 	cp ( &GiveImpulse 0 (
-			10 0 1500
+			10 0 2000
 			?act (
 				( ?need ( @Impulse ) )
-				( ?need ( @ImDendriteHead ) ?forbiden ( @ @From ) )
+				( ?need ( @ImPostSynaptic ) ?forbiden ( @From ) )
 			) ?chng ?to ?atr
 			?reduce ( ?fix ) 0 ?scope ( ?oth )
 		)
 	)
 	cp ( &GivePrimary 0 (
-			500 0 100
+			2000 0 2000
 			?act (
 				( ?need ( @Primary ) )
-				( ?need ( @ImCell ) )
+				( ?need ( @ImAxonBase ) )
 			) ?chng ?to ?atr
 			?reduce ( ?fix ) 0 ?scope ( ?link )
 		)
 	)
 	[ SPECIALIZATION ]
-	sup ( ( @IM_SENSOR 0 )
-		( cp ( #type /IM_SENSOR ) )
-		( sup ( ( @IM_ACTOR ) (
-				cp ( #type /IM_ACTOR )
-			) ( cp ( #type /IM_NOTHING ) )
-		) )
-	)
-	cp ( &AtrActive^?act^1^?forbiden^0^0 #type )
-	cp ( &AtrActive^?act^1^?forbiden^1^1 @CellId )
-	cp ( &AtrPrimary^?act^1^?forbiden^0^0 #type )
-	cp ( &AtrPrimary^?act^1^?forbiden^1^1 @CellId )
-	cp ( &GiveImpulse^?act^1^?forbiden^0^0 #type )
-	cp ( &GiveImpulse^?act^1^?forbiden^1^1 @CellId )
-	cp ( &AtrByPrimary^?act^1?forbiden^0^0 #type )
-	cp ( &AtrByPrimary^?act^1^?forbiden^1^1 @CellId )
+	sup ( ( @SON 1 ) ( set ( &AtrByBase^?mindst 40 ) ) )
+	cp ( &AtrByDendrite^?act^1^?forbiden^0^1 @CellId )
+	cp ( &AtrPrimary^?act^1^?forbiden^0^1 @CellId )
+	cp ( &GiveImpulse^?act^1^?forbiden^0^1 @CellId )
+	cp ( &AtrByPrimary^?act^1^?forbiden^0^1 @CellId )
 )>
 
 Install_Axon<(
-	inf ( ( #install 1 ) (
-			:Make_Link (
-				&LinkCell @ImSoma @Block
-				20 #install
+	:Init ( (
+			set ( &RplsCell^?dst 50 )
+			cp ( &AtrSensor 0 (
+					300 0 0.1
+					?act ( ( ?need ( @ImAxonHead ) ) ( ?need ( @IM_SENSOR ) ) )
+					?mv ?to ?atr
+					?reduce ( ?auto ) 0 ?scope ( ?oth )
+				)
 			)
-			:Init ( cp ( &LinkCell^?scope ?scope ( ?parent ) ) )
-		) ( 
-			:Init ( (
-					take_out
-					set ( &RplsCell^?dst 40 )
-			) )
-		)
-	)
+	) )
+	:CycleL ( set ( &AtrSensor^?pw 0 ) 100 1 )
 )>
 
 Exec_Axon<(
 	sup ( ( #install 0 ) (
-			inf ( ( @InSynapse 1 ) (
-					add ( @ActiveImpulse @Impulse )
-					sup ( ( @ActiveImpulse 50 ) ( set ( @ActiveImpulse 50 ) ) )
-					sup ( ( @Impulse 0 ) ( sub ( @Impulse 2 ) ) )
-					sup ( ( @ActiveImpulse 0 ) ( sub ( @ActiveImpulse 5 ) ) )
-				)
-			)
+			add ( @ActiveImpulse @Impulse )
+			sup ( ( @ActiveImpulse 50 ) ( set ( @ActiveImpulse 50 ) ) )
+			sup ( ( @Impulse 0 ) ( sub ( @Impulse 1 ) ) )
+			sup ( ( @ActiveImpulse 0 ) ( sub ( @ActiveImpulse 1 ) ) )
 		)
 	)
 )>
 
+Split_Axon<(
+[:CycleL ( (
+		:Init ( (
+			echo ( 65 10 )
+			cp ( &GiveImpulseSon 0 (
+					1000 0 200
+					?act ( ( ?need ( @Impulse ) ) ( ?need ( @ImAxonHead ) ) )
+					?chng ?to ?atr
+					?reduce ( ?fix ) 0 ?scope ( ?link )
+				)
+			)
+			set ( &AtrByPrimary^?pw 0 )
+			set ( &AtrPrimary^?pw 0 )
+			set ( &RplsOth^?pw 10 )
+			set ( &GiveImpulse^?pw 0 )
+		) )
+		splitin
+		set ( @ImAxonBase 10 )
+	) 100 1 )]
+)>
+
 Axon<(
-	:Debug ( @SalPrimary 65 )
 	:Init ( :Init_Axon )
-	:Install_Axon
+	:Link ( @ImAxonBase :Install_Axon )
 	:Exec_Axon
 	sub ( @Primary 1 )
 	add ( @Primary @SalPrimary )

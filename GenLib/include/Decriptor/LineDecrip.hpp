@@ -24,7 +24,7 @@ public:
     SMART(GeneticalNode)    get_chan();
     SMART(GeneticalNode)    get_interaction();
     SMART(GeneticalNode)    get_shared();
-    float                   get_value(unsigned int ref, bool use = false);
+    float                   get_value(unsigned int ref);
     void                    add_signal(unsigned int value, void *ptr);
     SIGNALS_LIST            &get_signals();
     void                    shared_to_line(LineDecript *line);

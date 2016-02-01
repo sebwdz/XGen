@@ -28,6 +28,7 @@ DecriptorManager::DecriptorManager()
   m_opt.insert(std::make_pair(KILL, &Decriptor::decript_function));
   m_opt.insert(std::make_pair(TAKEOUT, &Decriptor::decript_function));
   m_opt.insert(std::make_pair(SPLIT, &Decriptor::decript_function));
+  m_opt.insert(std::make_pair(SPLITIN, &Decriptor::decript_function));
   m_opt.insert(std::make_pair(ECHO, &Decriptor::echo));
   m_opt.insert(std::make_pair(COPY, &Decriptor::copy));
   m_opt.insert(std::make_pair(CALL, &Decriptor::call));

@@ -11,6 +11,7 @@ ModuleClass::ModuleClass(Object *parent) : Movable(parent)
     m_sig.insert(std::make_pair(TAKEOUT, (SIG_CATCH)(&ModuleClass::catch_takeout)));
     m_sig.insert(std::make_pair(LINK, (SIG_CATCH)(&ModuleClass::catch_link)));
     m_sig.insert(std::make_pair(SPLIT, (SIG_CATCH)(&ModuleClass::catch_split)));
+    m_sig.insert(std::make_pair(SPLITIN, (SIG_CATCH)(&ModuleClass::catch_split)));
     m_type ^= TYPE_MODULE;
     m_spliter = NULL;
 }
@@ -301,23 +302,23 @@ void        ModuleClass::catch_split(unsigned int code, void *sig)
     ModuleClass     *split;
     Decriptor       *decript;
 
-    if (!m_spliter)
+    (void)(code);
+    (void)(sig);
+    split = new ModuleClass(m_parent);
+    split->set_spliter(this);
+    set_split(split, true);
+    for (unsigned int it = 0; it < m_decriptor.size(); it++)
     {
-        (void)(code);
-        (void)(sig);
-        split = new ModuleClass(m_parent);
-        split->set_spliter(this);
-        set_split(split, true);
-        for (unsigned int it = 0; it < m_decriptor.size(); it++)
-        {
-            decript = new Decriptor(split);
-            decript->set_block(CAST(Decriptor*)(m_decriptor[it])->get_block()->copy());
-            split->attach_decriptor(decript);
-        }
-        split->set_pos(m_pos);
-        split->get_line()->shared_to_line(get_line());
-        CAST(ModuleClass*)(m_parent)->add_object(split);
+        decript = new Decriptor(split);
+        decript->set_block(CAST(Decriptor*)(m_decriptor[it])->get_block()->copy());
+        split->attach_decriptor(decript);
     }
+    split->set_pos(m_pos);
+    split->get_line()->shared_to_line(get_line());
+    if (code == SPLIT)
+        CAST(ModuleClass*)(m_parent)->add_object(split);
+    else
+        add_object(split);
 }
 
 void                    ModuleClass::cal_pos()

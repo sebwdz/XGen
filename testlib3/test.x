@@ -1,89 +1,69 @@
-Init_Test<(
-	set ( @ImFree 20 )
-
-	cp ( &AtrCell 0 (
-			90 0 60
-			?act ( ( ?need ( @ImFree ) ) ( ?need ( @ImCell ) ?forbiden ( @ImFree ) ) )
-			?mv ?oth ?atr
-			?reduce ( ?auto ) 0 ?scope ( ?oth )
-		)
-	)
-	cp ( &GiveFree 0 (
-			10 0 50
-			?act ( ( ?need ( @ImFree ) ) ( ?need ( @ImCell )) )
-			?chng ?to ?atr
-			?reduce ( ?fix 0 ) 0 ?scope ( ?oth )
-		)
-	)
-)>
-
 TEST<(
-	:Init ( :Init_Test )
-	:MainTest
-)>
-
-MainTest<(
-	inf ( ( !attach 1 ) (
-			inf ( ( @ImFree 5 ) ( set ( !attach 10 ) ) )
-		) ( :Attach )
-	)
+	:Attach
 )>
 
 Init_Attach<(
 	set ( @ImFree 0 )
 	set ( @ImAttach 10 )
 
-[	cp ( &AtrCell 0 (
-			100 0 200
-			?act ( ( ?need ( @ImAttach ) ) ( ?need ( @ImCell ) ) )
-			?mv ?oth ?atr
-			?reduce 0 ?scope ( ?parent )
-		)
-	)
-]
 	cp ( &GiveImpulse 0 (
-			20 0 1000
-			?act ( ( ?need ( @Impulse @Primary ) ) ( ?need ( @IsNegNucleus ) ) )
+			10 0 1000
+			?act ( ( ?need ( @Impulse ) ) ( ?need ( @ImPostSynaptic ) ) )
 			?chng ?to ?atr
-			?reduce ( ?fix ) 0 ?scope ( ?parent )
+			?reduce ( ?fix ) 0 ?scope ( ?oth )
 		)
 	)
-	cp ( &AtrImpulse 0 (
-			20 0 1000
-			?act ( ( ?need ( @ImAttach ) ) ( ?need ( @ActImpulse ) ) )
-			?chng ?oth ?atr
-			?reduce ( ?fix ) 0 ?scope ( ?parent )
+	cp ( &GivePrimary 0 (
+			30 0 1000
+			?act ( ( ?need ( @Primary ) ) ( ?need ( @ImPreSynaptic ) ) )
+			?chng ?to ?atr
+			?reduce ( ?fix ) 0 ?scope ( ?oth )
 		)
 	)
-	:Make_Link ( &CominCell @ImCell @Block 20 #comin )
-	set ( &CominCell^?type ?comin )
-	cp ( &CominCell^?scope 0 ( ?oth ) )
-	sup ( ( @IM_SENSOR 0 ) ( set ( #IM_SENSOR 10 ) ) )
+	cp ( &RplsCell 0 (
+			70 0 10
+			?act ( ( ?need ( @ImAttach ) ) ( ?need ( @ImCell ) ) )
+			?mv ?to ?rpls
+			?reduce ( ?auto ) 0 ?scope ( ?oth )
+		)
+	)
+	cp ( &RplsOth 0 (
+			90 0 10
+			?act ( ( ?need ( @ImAttach ) ) ( ?need ( @ImAttach ) ) )
+			?mv ?to ?rpls
+			?reduce ( ?auto ) 0 ?scope ( ?oth )
+		)
+	)
+	cp ( &RplsDiff 0 (
+			140 0 5
+			?act ( ( ?need ( @ImAttach ) ) ( ?need ( @ ) ) )
+			?mv ?to ?rpls
+			?reduce ( ?auto ) 0 ?scope ( ?oth )
+		)
+	)
+	mult ( @IM_SENSOR 100 )
+	mult ( @IM_ACTOR 100 )
+	sup ( ( @IM_SENSOR 0 ) (
+			cp ( &RplsDiff^?act^1^?need^0^0 /IM_ACTOR )
+		) ( cp ( &RplsDiff^?act^1^?need^0^0 /IM_SENSOR ) )
+	)
+	sup ( ( @IM_SENSOR 0 ) (
+			set ( @ImPostSynaptic 50 )
+			set ( #PreSynaptic 10 )
+		) ( set ( @ImPreSynaptic 50 ) ) )
+	)
 )>
 
 Attach<(
-	sup ( ( @ActImpulse 0 ) ( set ( @ActImpulse 0 ) ) )
-	:Init ( :Init_Attach )
-	inf ( ( &CominCell^?limit^0  1 ) (
-			:Init ( (
-				set ( &CominCell^?dst 0 )
-				cp ( &GiveType 0 (
-						20 0 50
-						?act ( ( ?need ( @ ) ) ( ?need ( @ImCell ) ) )
-						?chng ?to ?atr
-						?reduce ( ?fix ) 0 ?scope ( ?parent )
-					)
-				)
-				sup ( ( @IM_SENSOR 0 ) (
-						cp ( &GiveType^?act^0^?need^0^0 /IM_SENSOR )
-					) ( cp ( &GiveType^?act^0^?need^0^0 /IM_ACTOR ) )
-				)
-			) )
-		)
-	)
-	sup ( ( #IM_SENSOR 0 ) (
-			add ( @Primary @Impulse )
+	sup ( ( @IM_SENSOR 0 ) (
+			:Pre_Synaptic_Dendrite
+			:ActOut_Dendrite
 			set ( @Impulse 0 )
+		) (
+			:Exec_Axon
+			set ( @Primary 0 ) 
 		)
 	)
+	:CycleL ( set ( &RplsCell^?dst 0 ) 900 1 )
+	:Init ( :Init_Attach )
 )>

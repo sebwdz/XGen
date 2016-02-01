@@ -8,6 +8,7 @@ LIB =		lib/utils.x \
 
 SRC =		cell.x \
 		nucleus.x \
+		link.x \
 		axon.x \
 		soma.x \
 		dendrite.x \
@@ -18,7 +19,9 @@ all:
 	$(CC) $(BEGIN) $(TARGET) $(SRC) $(LIB)
 
 test:
-	$(CC) TEST test.gen test.x $(LIB)
+	$(CC) TEST test.gen test.x $(LIB) dendrite.x axon.x
+
+
 
 
 

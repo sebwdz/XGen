@@ -5,6 +5,7 @@ Soma<(
 )>
 
 Init_Soma<(
+	set ( @ImAxonBase 10 )
 	set ( @ImSoma 10 )
 
 	cp ( &GiveImpulse 0 (
@@ -42,7 +43,6 @@ Active_Cycle<(
                         sup ( ( !sd @ImpulseStk ) ( set ( !sd @ImpulseStk ) ) )
                         sub ( @ImpulseStk !sd )
                         add ( @Impulse !sd )
-			sup ( ( @IM_SENSOR 0 ) ( set ( @Impulse 0 ) ) )
                 )
         )
 )>

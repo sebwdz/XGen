@@ -27,7 +27,7 @@ SIGNALS_LIST        &LineDecript::get_signals()
   return (m_signals);
 }
 
-float            LineDecript::get_value(unsigned int ref, bool use)
+float            LineDecript::get_value(unsigned int ref)
 {
   SMART(GeneticObj)  res;
 

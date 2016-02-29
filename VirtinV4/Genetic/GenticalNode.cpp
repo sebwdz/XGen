@@ -37,7 +37,7 @@ void            GeneticalNode::set_type(int type)
     }
 }
 
-void            GeneticalNode::set_function(int (Decriptor::*function)(GeneticalNode*))
+void            GeneticalNode::set_function(SMART(GeneticalNode) (Decriptor::*function)(GeneticalNode*))
 {
     m_function = function;
 }
@@ -47,7 +47,7 @@ void            GeneticalNode::set_chan(SMART(GeneticalNode) chan)
     m_chan = chan;
 }
 
-int             (Decriptor::*GeneticalNode::get_function())(GeneticalNode*)
+SMART(GeneticalNode)             (Decriptor::*GeneticalNode::get_function())(GeneticalNode*)
 {
     return (m_function);
 }

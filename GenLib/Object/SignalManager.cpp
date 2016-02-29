@@ -54,7 +54,7 @@ void            SignalManager::catch_create(unsigned int code, void *sig)
   ModuleClass             *create;
   Decriptor               *decript;
   int                     it;
-  std::vector<SMART(GeneticalNode)>    &vct = ((GeneticalNode*)sig)->get_son();
+  std::vector<SMART(GeneticalNode)>    &vct = ((SMART(GeneticalNode)*)sig)->get()->get_son();
 
   if (m_parent && code != NEW_HEAD)
     parent = CAST(ModuleClass*)(m_parent);
@@ -85,4 +85,5 @@ void            SignalManager::catch_create(unsigned int code, void *sig)
         parent->add_object(decript);
       }
     }
+  delete (SMART(GeneticalNode)*)sig;
 }

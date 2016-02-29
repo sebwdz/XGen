@@ -26,6 +26,7 @@ protected:
     std::list<Object*>            m_obj;
     int                           m_size;
     LnkCase                       *m_parent;
+    std::vector<LnkCase*>         m_cross;
 };
 
 

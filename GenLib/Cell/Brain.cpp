@@ -15,9 +15,13 @@ Brain::~Brain()
 void        Brain::set_dna(boost::shared_ptr<GeneticalNode> block)
 {
   CellClass       *cell;
+  std::pair<float, float>   p;
 
   cell = new CellClass(this);
   cell->set_dna(block);
+  p.first = 10;
+  p.second = 20;
+  cell->set_pos(p);
   add_object(cell);
 }
 

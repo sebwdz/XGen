@@ -65,6 +65,14 @@
 /* CHAN OPT */
 
 #define         VAR             19 + OPT_RANGE
+#define         REF             73 + OPT_RANGE
+#define         DEREF           74 + OPT_RANGE
+#define         SIZE            72 + OPT_RANGE
+#define         RETURN          70 + OPT_RANGE
+#define         POW             69 + OPT_RANGE
+#define         RAND            68 + OPT_RANGE
+#define         ERASE           67 + OPT_RANGE
+#define         MOVE            65 + OPT_RANGE
 
 /* PROPRIETY */
 
@@ -81,16 +89,23 @@
 #define         FIX             1
 #define         PROP            1
 
-#define         TYPE            4 + OPT_CHAN_RANGE
+#define         TYPE            3 + OPT_CHAN_RANGE
+
 #define         ACT             3 + OPT_CHAN_RANGE
 #define         DIR             6 + OPT_CHAN_RANGE
 #define         PW              2 + OPT_CHAN_RANGE
+
 #define         DST             0 + OPT_CHAN_RANGE
 #define         MINDST          1 + OPT_CHAN_RANGE
+
 #define         TARGET          5 + OPT_CHAN_RANGE
 #define         REDUCE          7
-#define         LIMIT           8
-#define         SCOPE           9
+
+#define         LIMIT           4
+#define         SCOPE           2
+
+#define         MANUAL          0
+
 
 #define         SON             2
 #define         PARENT          0

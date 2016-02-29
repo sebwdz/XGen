@@ -104,7 +104,7 @@ void        LnkCase::remove(bool forced)
         else
           m_dir[it] = NULL;
         if (m_dir[oth] && m_dir[oth]->check_remove(forced))
-            m_dir[oth]->remove(forced);
+            m_dir[oth]->remove(forced );
         else
           m_dir[oth] = NULL;*/
       it += 2;

@@ -32,6 +32,14 @@ DecriptorManager::DecriptorManager()
   m_opt.insert(std::make_pair(ECHO, &Decriptor::echo));
   m_opt.insert(std::make_pair(COPY, &Decriptor::copy));
   m_opt.insert(std::make_pair(CALL, &Decriptor::call));
+  m_opt.insert(std::make_pair(DEREF, &Decriptor::ref_function));
+  m_opt.insert(std::make_pair(REF, &Decriptor::ref_function));
+  m_opt.insert(std::make_pair(SIZE, &Decriptor::node_size));
+  m_opt.insert(std::make_pair(RETURN, &Decriptor::ret));
+  m_opt.insert(std::make_pair(POW, &Decriptor::pow));
+  m_opt.insert(std::make_pair(RAND, &Decriptor::rand));
+  m_opt.insert(std::make_pair(ERASE, &Decriptor::erase));
+  m_opt.insert(std::make_pair(MOVE, &Decriptor::move_pos));
 }
 
 DecriptorManager::~DecriptorManager()
@@ -46,7 +54,7 @@ DecriptorManager    *DecriptorManager::get_instance()
   return (&inst);
 }
 
-int     (Decriptor::*DecriptorManager::get_function(GeneticalNode* node))(GeneticalNode*)
+SMART(GeneticalNode)    (Decriptor::*DecriptorManager::get_function(GeneticalNode* node))(GeneticalNode*)
 {
   if (node->get_type() == INSTRU)
     {

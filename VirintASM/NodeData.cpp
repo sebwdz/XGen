@@ -42,18 +42,15 @@ NodeMaker::NodeMaker(std::string &maind, bool asmn)
     m_opt.push_back(std::make_pair("VAR", VAR));
     m_opt.push_back(std::make_pair("ECHO", ECHO));
     m_opt.push_back(std::make_pair("CALL", CALL));
+    m_opt.push_back(std::make_pair("%", REF));
+    m_opt.push_back(std::make_pair("*", DEREF));
 
-    m_opt.push_back(std::make_pair("ATR", ATR));
-    m_opt.push_back(std::make_pair("RPLS", RPLS));
-    m_opt.push_back(std::make_pair("DST", DST));
-    m_opt.push_back(std::make_pair("MINDST", MINDST));
-    m_opt.push_back(std::make_pair("PW", PW));
-    m_opt.push_back(std::make_pair("OTH", OTH));
-    m_opt.push_back(std::make_pair("TO", TO));
-    m_opt.push_back(std::make_pair("MV", MV));
-    m_opt.push_back(std::make_pair("CHNG", CHNG));
-    m_opt.push_back(std::make_pair("TYPE", TYPE));
-    m_opt.push_back(std::make_pair("ACT", ACT));
+    m_opt.push_back(std::make_pair("LEN", SIZE));
+    m_opt.push_back(std::make_pair("RET", RETURN));
+    m_opt.push_back(std::make_pair("POW", POW));
+    m_opt.push_back(std::make_pair("RAND", RAND));
+    m_opt.push_back(std::make_pair("ERASE", ERASE));
+    m_opt.push_back(std::make_pair("MOVE", MOVE));
     m_asm = asmn;
     m_size = 0;
 }

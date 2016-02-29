@@ -1,4 +1,5 @@
 
+#include    <boost/lexical_cast.hpp>
 #include    <boost/algorithm/string/replace.hpp>
 #include    "include/NodeMaker.hpp"
 
@@ -59,6 +60,58 @@ void            NodeMaker::apply_define()
     }
 }
 
+std::string NodeMaker::convert_string(std::string buff)
+{
+    std::string res;
+    std::string tmp;
+
+    std::size_t found;
+    std::size_t pos;
+    std::size_t it;
+
+    res = "";
+    pos = 0;
+    while (pos != std::string::npos) {
+        found = buff.find_first_of("\"", pos);
+        if (found != std::string::npos) {
+            res += buff.substr(pos, found - pos);
+            pos = found + 1;
+            it = pos;
+            while (1)
+            {
+                found = buff.find_first_of("\"", it);
+                if (buff[found - 1] != '\\')
+                    break;
+                it = found + 1;
+            }
+            tmp = buff.substr(pos, found - pos);
+            it = 0;
+            while (it < tmp.size())
+            {
+                if (it && tmp[it - 1] == '\\')
+                {
+                    if (tmp[it] == '"')
+                        res += boost::lexical_cast<std::string>((int)'"') + " ";
+                    else if (tmp[it] == 'n')
+                        res += "10 ";
+                    else if (tmp[it] == 't')
+                        res += "9 ";
+                }
+                else if (tmp[it] != '\\' || (it && tmp[it - 1] == '\\'))
+                    res += boost::lexical_cast<std::string>((int)tmp[it]) + " ";
+                it++;
+            }
+        }
+        else
+            res += buff.substr(pos);
+        if (found != std::string::npos)
+            pos = found + 1;
+        else
+            pos = found;
+    }
+    return (res);
+}
+
 void        NodeMaker::read_data(std::ifstream &file)
 {
     std::string line;
@@ -71,6 +124,7 @@ void        NodeMaker::read_data(std::ifstream &file)
     while (getline(file, line))
         buff += line + " ";
     buff = remove_comment(buff);
+    buff = convert_string(buff);
     pos = 0;
     pos = buff.find_first_not_of("\t\n ");
     while ((found = buff.find_first_of("<", pos)) != std::string::npos)

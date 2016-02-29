@@ -11,7 +11,7 @@ public:
 
                 ClassCase                       *get_cases();
                 std::pair<float, float>         &get_pos();
-                void                            set_pos(std::pair<float, float> &pos);
+                virtual void                    set_pos(std::pair<float, float> &pos);
                 void                            set_case(ClassCase* mycase);
 protected:
                 std::pair<float, float> m_pos;

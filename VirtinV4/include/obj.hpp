@@ -18,10 +18,10 @@ public:
 
     int             get_type();
 
-    void            save_file(std::string &filename);
+    void            save_file(std::string const &filename);
     virtual void    save(std::ofstream &file) = 0;
 
-    void            load_file(std::string &filename);
+    void            load_file(std::string const &filename);
     virtual void    load(std::ifstream &file) = 0;
 
     void            set_parent(ObjClass *parent);

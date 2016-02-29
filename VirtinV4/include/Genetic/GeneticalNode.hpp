@@ -21,9 +21,9 @@ class   GeneticalNode : public GeneticObj
 
         void                    set_block(GeneticalNode *block);
         void                    set_chan(boost::shared_ptr<GeneticalNode> chan);
-        void                    set_function(int (Decriptor::*fonction)(GeneticalNode*));
+        void                    set_function(SMART(GeneticalNode) (Decriptor::*fonction)(GeneticalNode*));
 
-        int                     (Decriptor::*get_function())(GeneticalNode*);
+        SMART(GeneticalNode)    (Decriptor::*get_function())(GeneticalNode*);
         SMART(GeneticalNode)    &get_chan();
         GeneticalNode           *get_block();
 
@@ -46,7 +46,7 @@ class   GeneticalNode : public GeneticObj
 
     protected:
 
-        int                                 (Decriptor::*m_function)(GeneticalNode*);
+        SMART(GeneticalNode)                (Decriptor::*m_function)(GeneticalNode*);
         SMART(GeneticalNode)                m_chan;
         GeneticalNode                       *m_block;
         USE_LIST                            m_ass;

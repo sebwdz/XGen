@@ -15,7 +15,7 @@ int         ObjClass::get_type()
   return (m_type);
 }
 
-void        ObjClass::save_file(std::string &filename)
+void        ObjClass::save_file(std::string const &filename)
 {
     std::ofstream   file(filename.c_str());
 
@@ -23,7 +23,7 @@ void        ObjClass::save_file(std::string &filename)
         save(file);
 }
 
-void        ObjClass::load_file(std::string &filename)
+void        ObjClass::load_file(std::string const &filename)
 {
     std::ifstream   file(filename.c_str());
 

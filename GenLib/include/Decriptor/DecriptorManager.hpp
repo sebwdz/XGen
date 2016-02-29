@@ -16,12 +16,12 @@ public:
     ~DecriptorManager();
 
     static DecriptorManager                    *get_instance();
-    int     (Decriptor::*get_function(GeneticalNode*))(GeneticalNode*);
+    SMART(GeneticalNode)                       (Decriptor::*get_function(GeneticalNode*))(GeneticalNode*);
 
 private:
 
     DecriptorManager();
-    boost::unordered_map<int, int (Decriptor::*)(GeneticalNode*)>     m_opt;
+    boost::unordered_map<int, SMART(GeneticalNode) (Decriptor::*)(GeneticalNode*)>     m_opt;
 };
 
 #endif // DECRIPTORMANAGER_HPP

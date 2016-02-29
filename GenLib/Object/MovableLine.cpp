@@ -1,9 +1,10 @@
 
+#include        "Decriptor/Decriptor.hpp"
 #include        "Cell/Module.hpp"
 
 MovableLine::MovableLine()
 {
-
+    m_decriptor = NULL;
 }
 
 MovableLine::~MovableLine()
@@ -24,15 +25,17 @@ void            MovableLine::make_range()
     unsigned int                      it;
     float                             dst;
     std::vector<SMART(GeneticalNode)> &sons = m_parent->get_line()->get_interaction()->get_son();
+    SMART(GeneticalNode)                param;
 
     for (it = 0; it < sons.size(); it++)
     {
-        if (sons[it]->get_son_ref(LIMIT)->get_value()._f &&
-                !sons[it]->get_son_ref(LIMIT)->get_son_ref(0)->get_value()._f)
+        param = sons[it]->get_ass(Chanel::hash("_param"));
+        if (param->get_son_ref(LIMIT)->get_value()._f &&
+                param->get_son_ref(LIMIT)->get_son_ref(0)->get_value()._f <= 0)
             continue;
-        if (sons[it]->get_son_ref(PW)->get_value()._f && can_interact(sons[it].get(), OTH))
+        if (can_interact(sons[it].get(), OTH))
         {
-            dst = sons[it]->get_son_ref(DST)->get_value()._f;
+            dst = param->get_son_ref(DST)->get_value()._f;
             if (dst > range[1])
                 range[1] = dst;
             if (range[0] == 0 || dst < range[0])
@@ -89,13 +92,25 @@ void            MovableLine::exec()
     std::pair<float, float>     pos;
     CHAN_MOVELIST::iterator     it;
     CHAN_MOVELIST::iterator     rm;
+    std::vector<SMART(GeneticalNode)>   &inter = m_parent->get_line()->get_interaction()->get_son();
 
-    pos = m_parent->get_pos();
+    /*pos = m_parent->get_pos();
     pos.first += m_move.first;
     pos.second += m_move.second;
     if (m_parent->get_type() & TYPE_MODULE)
         CAST(ModuleClass*)(m_parent)->change_pos(m_move);
     m_parent->set_pos(pos);
+    */
+    // Clean
+    for (unsigned int it = 0; it < inter.size(); it++)
+    {
+        if (m_decriptor)
+        {
+            m_decriptor->get_fast()->get_ass(Chanel::hash("this"))->set_ref(inter[it]);
+            m_decriptor->turn(inter[it]->get_ass(Chanel::hash("_clean")).get());
+        }
+    }
+    /*
     it = m_change.begin();
     while (it != m_change.end())
     {
@@ -111,7 +126,7 @@ void            MovableLine::exec()
         }
         else
             it++;
-    }
+    }*/
 }
 
 void            MovableLine::reduce(float &chan, GeneticalNode *prop)
@@ -160,21 +175,35 @@ float           MovableLine::get_pow(LineDecript *line, GeneticalNode *node)
     return (pow);
 }
 
-void            MovableLine::interact_with(class Movable *obj, GeneticalNode *prop)
+void            MovableLine::interact_with(class Movable *obj, SMART(GeneticalNode) prop)
 {
     std::pair<float, float>                 vct;
     float                                   chan;
     float                                   type;
     std::pair<float, GeneticalNode*>        node;
     float                                   tmp[2];
+    SMART(GeneticalNode)                    fast;
 
     vct = m_vct;
-    type = prop->get_son_ref(TYPE)->get_value()._f;
-    if (type == ATTACH || type == LINK || type == COMIN)
+    type = prop->get_ass(Chanel::hash("_param"))->get_son_ref(TYPE)->get_value()._f;
+    if (type != MANUAL)
+        check_attach(obj, prop.get());
+    else
     {
-        check_attach(obj, prop);
-        return ;
+        if (!m_decriptor)
+        {
+            m_decriptor = new Decriptor(m_parent);
+            m_decriptor->set_attach(true);
+        }
+        fast = m_decriptor->get_fast();
+        fast->get_ass(Chanel::hash("__oth__"))->set_ref(obj->get_line()->get_chan());
+        fast->get_ass(Chanel::hash("this"))->set_ref(prop);
+        fast->get_ass(Chanel::hash("__vct__"))->get_son_ref(0)->get_value()._f = m_vct.first;
+        fast->get_ass(Chanel::hash("__vct__"))->get_son_ref(1)->get_value()._f = m_vct.second;
+        fast->get_ass(Chanel::hash("__vct__"))->get_son_ref(2)->get_value()._f = m_len;
+        m_decriptor->turn(prop->get_ass(Chanel::hash("_exec")).get());
     }
+            /*
     if (prop->get_son_ref(TARGET)->get_value()._f == OTH)
     {
         vct.first *= -1;
@@ -199,13 +228,14 @@ void            MovableLine::interact_with(class Movable *obj, GeneticalNode *pr
             obj->get_move_line()->apply(m_parent, prop, vct, node);
         else
             apply(obj, prop, vct, node);
-    }
+    }*/
 }
 
 void            MovableLine::interact(Movable *obj, unsigned int scope)
 {
     unsigned int                      it;
     std::vector<SMART(GeneticalNode)> &vct = m_parent->get_line()->get_interaction()->get_son();
+    SMART(GeneticalNode)                param;
 
     m_vct.first = obj->get_pos().first - m_parent->get_pos().first + (((rand() % 100) - 50) / 200.0);
     m_vct.second = obj->get_pos().second - m_parent->get_pos().second + (((rand() % 100) - 50) / 200.0);
@@ -221,14 +251,15 @@ void            MovableLine::interact(Movable *obj, unsigned int scope)
                 m_len = 1;
             for (it = 0; it < vct.size(); it++)
             {
-                if (!can_interact(vct[it].get(), scope))
+                param = vct[it]->get_ass(Chanel::hash("_param"));
+                if (!can_interact(param.get(), scope))
                     continue;
-                if (vct[it]->get_son_ref(LIMIT)->get_value()._f &&
-                        !vct[it]->get_son_ref(LIMIT)->get_son_ref(0)->get_value()._f)
+                if (param->get_son_ref(LIMIT)->get_value()._f &&
+                        param->get_son_ref(LIMIT)->get_son_ref(0)->get_value()._f <= 0)
                     continue;
-                if (vct[it]->get_son_ref(DST)->get_value()._f >= m_len &&
-                        vct[it]->get_son_ref(MINDST)->get_value()._f <= m_len)
-                    interact_with(obj, vct[it].get());
+                if (param->get_son_ref(DST)->get_value()._f >= m_len &&
+                        param->get_son_ref(MINDST)->get_value()._f <= m_len)
+                    interact_with(obj, vct[it]);
             }
         }
     }
@@ -342,6 +373,8 @@ bool              MovableLine::check_attach(Object *obj, GeneticalNode *prop)
 void            MovableLine::set_parent(Movable *parent)
 {
     m_parent = parent;
+    if (m_decriptor)
+        m_decriptor->set_parent(parent);
 }
 
 Movable*        MovableLine::get_parent()

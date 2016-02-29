@@ -1,0 +1,27 @@
+
+CC = 		../ASM
+
+TARGET = 	out.gen
+
+LIB	=	lib/std.x \
+		lib/object.x \
+		lib/array.x \
+		lib/math.x \
+		lib/interaction.x \
+		lib/process.x
+
+
+SRC =		#test.x \ main.x
+		t2.x
+
+
+BEGIN =		MAIN
+
+all:
+	$(CC) $(BEGIN) $(TARGET) $(SRC) $(LIB)
+
+
+
+
+
+

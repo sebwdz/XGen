@@ -21,6 +21,7 @@ public:
 
     virtual void            set_parent(Object *parent);
     Object                  *get_parent();
+    void                    set_pos(std::pair<float, float> &pos);
 
     virtual LineDecript     *get_line();
     unsigned int            get_type();

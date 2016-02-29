@@ -72,31 +72,30 @@ void                        ClassCase::interact_with(MovableLine *move)
 
 void                                ClassCase::cross_map(MovableLine *move, LnkCase *lnk)
 {
-  static std::vector<LnkCase*>    cases;
   unsigned int                    it;
   unsigned int                    nb;
   int                             dir;
   LnkCase*                        tmp;
 
-  if (cases.size())
-    cases[0] = lnk;
+  if (m_cross.size())
+    m_cross[0] = lnk;
   else
-    cases.push_back(lnk);
+    m_cross.push_back(lnk);
   nb = 1;
   for (it = 0; it < nb; it++)
     {
-      if ((cases[it]->get_case()))
-        cases[it]->get_case()->interact_with(move);
+      if ((m_cross[it]->get_case()))
+        m_cross[it]->get_case()->interact_with(move);
       dir = 0;
       while (dir < 4) {
-          tmp = cases[it]->get_dir((LnkDir)dir);
+          tmp = m_cross[it]->get_dir((LnkDir)dir);
           if (tmp && get_dist(tmp, move) &&
-              std::find(cases.begin(), cases.begin() + nb, tmp) == cases.begin() + nb)
+              std::find(m_cross.begin(), m_cross.begin() + nb, tmp) == m_cross.begin() + nb)
             {
-              if (nb < cases.size())
-                cases[nb] = tmp;
+              if (nb < m_cross.size())
+                m_cross[nb] = tmp;
               else
-                cases.push_back(tmp);
+                m_cross.push_back(tmp);
               nb++;
             }
           dir++;

@@ -171,16 +171,21 @@ void        ModuleClass::move()
     Movable::move();
 }
 
+void        ModuleClass::move_object(Object* obj)
+{
+    m_map->move_object(obj);
+    cal_pos();
+}
+
 void        ModuleClass::exec_move()
 {
     unsigned int    it;
-
     for (it = 0; it != m_obj.size(); it++)
     {
         if (m_obj[it]->get_type() & TYPE_MOVABLE)
         {
             CAST(Movable*)(m_obj[it])->exec_move();
-            m_map->move_object(m_obj[it]);
+            //m_map->move_object(m_obj[it]);
         }
     }
     Movable::exec_move();

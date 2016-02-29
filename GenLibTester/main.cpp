@@ -85,7 +85,7 @@ void        exec_view(Brain *brain)
                 if (event.key.code == sf::Keyboard::Escape)
                     view->close();
                 // stimulie
-                if (event.key.code == sf::Keyboard::A)
+		/*                if (event.key.code == sf::Keyboard::A)
                   act[0]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(toNodeValue(60));
                 if (event.key.code == sf::Keyboard::Z)
                   act[1]->get_line()->get_chan(Chanel::hash("Impulse"))->set_value(toNodeValue(60));
@@ -98,7 +98,7 @@ void        exec_view(Brain *brain)
                 if (event.key.code == sf::Keyboard::M)
                   sens[2]->get_line()->get_chan(Chanel::hash("Primary"))->set_value(toNodeValue(60));
                 crep = 0;
-                response.restart();
+                response.restart();*/
             }
         }
 
@@ -130,13 +130,13 @@ void        exec_view(Brain *brain)
               sens[2]->get_line()->get_chan(Chanel::hash("ActImpulse"))->get_value()._f << std::endl;
               std::cout << response.getElapsedTime().asMilliseconds() << " " << crep << std::endl;
             }*/
-          if (sens[0]->get_line()->get_chan(Chanel::hash("Impulse"))->get_value()._f > 0)
+	  /*          if (sens[0]->get_line()->get_chan(Chanel::hash("Impulse"))->get_value()._f > 0)
               std::cout << "K" << "\t" << sens[0]->get_line()->get_chan(Chanel::hash("Impulse"))->get_value()._f << std::endl;
           if (sens[1]->get_line()->get_chan(Chanel::hash("Impulse"))->get_value()._f > 0)
               std::cout << "L" << std::endl;
           if (sens[2]->get_line()->get_chan(Chanel::hash("Impulse"))->get_value()._f > 0)
               std::cout << "M" << std::endl;
-          crep++;
+	  */crep++;
           cycle++;
         }
       if (cycle - prev[1] > 25)
@@ -192,14 +192,18 @@ int         main(int ac, char **av)
   if (ac < 2)
     {
       std::cout << "./GenLibTester node_file" << std::endl;
-      return (1);
+      file = "../test5/out.gen";
+      //return (1);
     }
+  else
+      file = av[1];
+  srandom(time(NULL));
+
   brain = new Brain();
   dna = SMART(GeneticalNode)(new GeneticalNode());
-  file = av[1];
   dna->load_file(file);
   brain->set_dna(dna);
-
+/*
       add_act(brain, std::make_pair(50.0, -50.0));
       add_act(brain, std::make_pair(50.0, 0.0));
       add_act(brain, std::make_pair(50.0, 50.0));
@@ -207,7 +211,7 @@ int         main(int ac, char **av)
       add_act(brain, std::make_pair(-50.0, -50.0), true);
       add_act(brain, std::make_pair(-50.0, 0.0), true);
       add_act(brain, std::make_pair(-50.0, 50.0), true);
-
+*/
   if (ac > 2)
     exec_view(brain);
   else

@@ -17,6 +17,7 @@ SMART(GeneticalNode)    GeneticalNode::copy(SMART(GeneticalNode) cp)
     node->m_function = m_function;
     node->m_son.clear();
     node->m_ass.clear();
+    node->m_ref = m_ref;
     node->set_block(NULL);
     for (it = 0; it < m_son.size(); it++)
     {

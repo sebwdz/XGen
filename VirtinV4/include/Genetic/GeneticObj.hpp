@@ -19,17 +19,20 @@ public:
     GeneticObj(GeneticObj *parent = 0);
     virtual ~GeneticObj();
 
-    int                 get_type();
-    void                set_type(int type);
+    int                     get_type();
+    void                    set_type(int type);
+    void                    set_ref(SMART(GeneticObj) ref);
 
-    void                set_value(nodeValue value);
-    nodeValue           &get_value();
+    void                    set_value(nodeValue value);
+    nodeValue               &get_value();
+    SMART(GeneticObj)       get_ref();
 
-    virtual void        save(std::ofstream &file) = 0;
-    virtual void        load(std::ifstream &file) = 0;
+    virtual void            save(std::ofstream &file) = 0;
+    virtual void            load(std::ifstream &file) = 0;
 protected:
 
     nodeValue           m_value;
+    SMART(GeneticObj)   m_ref;
 
 };
 

@@ -13,29 +13,38 @@ public:
     void            set_block(SMART(GeneticalNode) block);
     SMART(GeneticalNode) get_block() const;
     LineDecript     *get_line();
+    SMART(GeneticalNode)    get_fast() const;
 
     virtual void    exec();
     virtual void    catch_signals();
-    void            turn(GeneticalNode *node);
+    boost::shared_ptr<GeneticalNode> turn(GeneticalNode *node);
     GeneticalNode     *get_next_node(GeneticalNode *obj);
 
     /* value */
 
     float           get_value(GeneticalNode *node);
     SMART(GeneticalNode) get_chan(GeneticalNode *node);
+    SMART(GeneticalNode) getSubChan(SMART(GeneticalNode), std::vector<SMART(GeneticalNode)> &vct, unsigned int i);
 
-    int             nothing(GeneticalNode *node);
-    int             set_function(GeneticalNode *node);
-    int             comparator(GeneticalNode *node, GeneticalNode *content);
-    int             comp_funcion(GeneticalNode *node);
-    int             loop(GeneticalNode *node);
-    int             creat_function(GeneticalNode *node);
-    int             use_function(GeneticalNode *node);
-    int             decript_function(GeneticalNode *node);
-    int             jmp_function(GeneticalNode *node);
-    int             echo(GeneticalNode *node);
-    int             copy(GeneticalNode *node);
-    int             call(GeneticalNode* node);
+    SMART(GeneticalNode) nothing(GeneticalNode *node);
+    SMART(GeneticalNode) set_function(GeneticalNode *node);
+    int comparator(GeneticalNode *node, GeneticalNode *content);
+    SMART(GeneticalNode) comp_funcion(GeneticalNode *node);
+    SMART(GeneticalNode) loop(GeneticalNode *node);
+    SMART(GeneticalNode) creat_function(GeneticalNode *node);
+    SMART(GeneticalNode) use_function(GeneticalNode *node);
+    SMART(GeneticalNode) decript_function(GeneticalNode *node);
+    SMART(GeneticalNode) echo(GeneticalNode *node);
+    SMART(GeneticalNode) copy(GeneticalNode *node);
+    SMART(GeneticalNode) copy_value(GeneticalNode *node);
+    SMART(GeneticalNode) call(GeneticalNode* node);
+    SMART(GeneticalNode) ref_function(GeneticalNode *node);
+    SMART(GeneticalNode) node_size(GeneticalNode *node);
+    SMART(GeneticalNode) ret(GeneticalNode *node);
+    SMART(GeneticalNode) pow(GeneticalNode *node);
+    SMART(GeneticalNode) rand(GeneticalNode *node);
+    SMART(GeneticalNode) erase(GeneticalNode *node);
+    SMART(GeneticalNode) move_pos(GeneticalNode *node);
 
     /* chan */
 
@@ -51,6 +60,7 @@ public:
 
 private:
 
+    SMART(GeneticalNode)    m_return;
     SMART(GeneticalNode)    m_block;
     unsigned int            m_jmp;
     SMART(GeneticalNode)    m_fast;

@@ -22,6 +22,11 @@ LineDecript     *Decriptor::get_line()
   return (&m_line);
 }
 
+SMART(GeneticalNode)    Decriptor::get_fast() const
+{
+    return (m_fast);
+}
+
 void        Decriptor::set_block(SMART(GeneticalNode) block)
 {
   m_block = block;
@@ -30,7 +35,8 @@ void        Decriptor::set_block(SMART(GeneticalNode) block)
 void        Decriptor::set_attach(bool attach)
 {
   m_attach = attach;
-  reset(m_block);
+  if (m_block)
+    reset(m_block);
 }
 
 void        Decriptor::reset(SMART(GeneticalNode) obj)
@@ -56,42 +62,54 @@ float    Decriptor::get_value(GeneticalNode *node)
 
 SMART(GeneticalNode)    Decriptor::get_chan(GeneticalNode *node)
 {
-  unsigned int                        it;
-  unsigned int                        var;
   SMART(GeneticalNode)                chan;
-  GeneticalNode                       *tmp;
   std::vector<SMART(GeneticalNode)>   &vct = node->get_son();
 
-  if (node->get_chan())
-    return (node->get_chan());
+  /*if (node->get_chan())
+    return (node->get_chan());*/
   if (node->get_type() == FAST_CHAN)
     chan = m_fast;
   else if (node->get_type() == LOCAL_CHAN && node->get_block())
     chan = node->get_block()->get_local();
   else if (node->get_type() == INTERACTION)
     chan = get_line()->get_interaction();
+  else if (node->get_type() == INSTRU)
+  {
+      chan = turn(node);
+      if (!chan)
+          chan = SMART(GeneticalNode)(new GeneticalNode);
+      return (chan);
+  }
   else
     chan = get_line()->get_chan();
-  var = 0;
-  for (it = 0; it < vct.size(); it++) {
-      if (vct[it]->get_type() == EMPTY_CHAN)
-        chan = chan->get_ass(vct[it]->get_value()._ui);
-      else if (vct[it]->get_type() == VALUE)
-        chan = chan->get_son_ref((unsigned int)vct[it]->get_value()._f);
-      else
+  return (getSubChan(chan, vct, 0));
+}
+
+SMART(GeneticalNode)        Decriptor::getSubChan(SMART(GeneticalNode) chan, std::vector<SMART(GeneticalNode)> &vct, unsigned int i)
+{
+    GeneticalNode                       *tmp;
+
+    for (unsigned it = i; it < vct.size(); it++) {
+        if (vct[it]->get_type() == EMPTY_CHAN)
+          chan = chan->get_ass(vct[it]->get_value()._ui);
+        else if (vct[it]->get_type() == VALUE)
+          chan = chan->get_son_ref((unsigned int)vct[it]->get_value()._f);
+        else if (vct[it]->get_type() == INSTRU)
         {
-          var = 1;
-          tmp = get_chan(vct[it].get()).get();
-          if (tmp->get_type() == VALUE)
-            chan = chan->get_son_ref((unsigned int)tmp->get_value()._f);
-          else
-            chan = chan->get_ass(tmp->get_value()._ui);
+            chan = turn(vct[it].get());
+            if (!chan)
+                chan = SMART(GeneticalNode)(new GeneticalNode);
         }
-    }
-  if (var)
-      return (chan);
-  node->set_chan(chan);
-  return (node->get_chan());
+        else
+          {
+            tmp = get_chan(vct[it].get()).get();
+            if (tmp->get_type() == VALUE)
+              chan = chan->get_son_ref((unsigned int)tmp->get_value()._f);
+            else
+              chan = chan->get_ass(tmp->get_value()._ui);
+          }
+      }
+    return (chan);
 }
 
 void        Decriptor::catch_signals()

@@ -21,13 +21,23 @@ void            GeneticObj::set_type(int type)
     m_type = type;
 }
 
+void            GeneticObj::set_ref(SMART(GeneticObj) ref)
+{
+    m_ref = ref;
+}
+
 
 void            GeneticObj::set_value(nodeValue value)
 {
     m_value = value;
 }
 
-nodeValue &GeneticObj::get_value()
+nodeValue       &GeneticObj::get_value()
 {
     return (m_value);
+}
+
+SMART(GeneticObj)   GeneticObj::get_ref()
+{
+    return (m_ref);
 }

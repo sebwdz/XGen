@@ -24,6 +24,7 @@ public:
     NodeData        *get_node(std::string &name);
     void            read_data(std::ifstream &file);
     void            dasm(std::ofstream &file, GeneticalNode *node);
+    std::string     convert_string(std::string buff);
     void            make_node(std::string &name, std::string &str, std::vector<SMART(GeneticalNode)> &av);
     SMART(GeneticalNode)    get_value(NodeData *data, std::string &value, std::vector<SMART(GeneticalNode)> &av);
     SMART(GeneticalNode) read_node(NodeData *data, std::size_t &pos, std::string &str, std::vector<SMART(GeneticalNode)> &av);

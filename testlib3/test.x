@@ -41,8 +41,8 @@ Init_Attach<(
 			?reduce ( ?auto ) 0 ?scope ( ?oth )
 		)
 	)
-	mult ( @IM_SENSOR 100 )
-	mult ( @IM_ACTOR 100 )
+	mult ( @IM_SENSOR 1 )
+	mult ( @IM_ACTOR 1 )
 	sup ( ( @IM_SENSOR 0 ) (
 			cp ( &RplsDiff^?act^1^?need^0^0 /IM_ACTOR )
 		) ( cp ( &RplsDiff^?act^1^?need^0^0 /IM_SENSOR ) )

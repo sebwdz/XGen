@@ -26,6 +26,7 @@ public:
 
     void                        remove_object(Object *obj);
     void                        move();
+    void                        move_object(Object* obj);
     void                        exec_move();
     void                        link(ModuleClass *obj, bool link);
     void                        set_split(ModuleClass *obj, bool split);

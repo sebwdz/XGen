@@ -40,6 +40,8 @@ DecriptorManager::DecriptorManager()
   m_opt.insert(std::make_pair(RAND, &Decriptor::rand));
   m_opt.insert(std::make_pair(ERASE, &Decriptor::erase));
   m_opt.insert(std::make_pair(MOVE, &Decriptor::move_pos));
+  m_opt.insert(std::make_pair(ROUND, &Decriptor::round));
+  m_opt.insert(std::make_pair(SQRT, &Decriptor::sqrt));
 }
 
 DecriptorManager::~DecriptorManager()

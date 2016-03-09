@@ -14,8 +14,6 @@ NodeMaker::NodeMaker(std::string &maind, bool asmn)
     m_opt.push_back(std::make_pair("OR", OR));
     m_opt.push_back(std::make_pair("AND", AND));
     m_opt.push_back(std::make_pair("NO", NO));
-    m_opt.push_back(std::make_pair("USE", USE));
-    m_opt.push_back(std::make_pair("UNUSE", UNUSE));
     m_opt.push_back(std::make_pair("SHARED", SHARED));
     m_opt.push_back(std::make_pair("UNSHARED", UNSHARED));
     m_opt.push_back(std::make_pair("ADD", ADD));
@@ -51,6 +49,8 @@ NodeMaker::NodeMaker(std::string &maind, bool asmn)
     m_opt.push_back(std::make_pair("RAND", RAND));
     m_opt.push_back(std::make_pair("ERASE", ERASE));
     m_opt.push_back(std::make_pair("MOVE", MOVE));
+    m_opt.push_back(std::make_pair("ROUND", ROUND));
+    m_opt.push_back(std::make_pair("SQRT", SQRT));
     m_asm = asmn;
     m_size = 0;
 }

@@ -103,7 +103,7 @@ void        exec_view(Brain *brain)
         }
 
       time = show[0].getElapsedTime();
-      if (time.asMilliseconds() / 1000.0 >= 50 / 1000.0)
+      if (time.asMilliseconds() / 1000.0 >= 24 / 1000.0)
         {
           show[0].restart();
           brain->make_skeleton();

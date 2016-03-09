@@ -11,6 +11,7 @@ typedef union u_nodeValue {
   float         _f;
   unsigned char _uc;
   unsigned int  _ui;
+  void          *_ptr;
 } nodeValue;
 
 class                   GeneticObj : public ObjClass

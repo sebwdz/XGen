@@ -18,20 +18,12 @@
 Interaction|Construct<(
 	[ ATTRIBUTS ]
 	(
-		cp ( * ( #this /_exec ) 0 )
-		cp ( * ( #this /_clean ) 0 )
-		cp ( * ( #this /_param ) 0 (
+		cp (* (#this /_exec) 0)
+		cp (* (#this /_clean) 0)
+		cp (* (#this /_param) 0 (
 				[ dst ] [ mindst ]
 				[ scope ] [ type ]
 				[ limit ]
-		) )
+		))
 	)
-	[ MEMBERS ]
-	(
-		cp ( * ( #this /Exec ) :Interaction|Exec )
-	)
-)>
-
-Interaction|Exec<(
-	cp ( * ( #this /_param ?limit 0 ) #__av__^0 )
 )>

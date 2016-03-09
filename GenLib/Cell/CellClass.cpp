@@ -31,7 +31,7 @@ void        CellClass::catch_duplic(unsigned int code, void *sig)
   CellClass           *cell;
   Decriptor           *decript;
   unsigned int        it;
-  std::vector<SMART(GeneticalNode)> &vct = ((GeneticalNode*)sig)->get_son();
+  std::vector<SMART(GeneticalNode)>    &vct = ((SMART(GeneticalNode)*)sig)->get()->get_son();
 
   (void)code;
   if (m_parent)

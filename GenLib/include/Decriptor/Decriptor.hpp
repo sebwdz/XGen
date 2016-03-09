@@ -14,6 +14,7 @@ public:
     SMART(GeneticalNode) get_block() const;
     LineDecript     *get_line();
     SMART(GeneticalNode)    get_fast() const;
+    void                    set_return(SMART(GeneticalNode) node);
 
     virtual void    exec();
     virtual void    catch_signals();
@@ -45,6 +46,8 @@ public:
     SMART(GeneticalNode) rand(GeneticalNode *node);
     SMART(GeneticalNode) erase(GeneticalNode *node);
     SMART(GeneticalNode) move_pos(GeneticalNode *node);
+    SMART(GeneticalNode) round(GeneticalNode *node);
+    SMART(GeneticalNode) sqrt(GeneticalNode *node);
 
     /* chan */
 
@@ -52,6 +55,7 @@ public:
     void            set_attach(bool attach);
     void            reset(SMART(GeneticalNode) obj);
     void            set_propriety(GeneticalNode *node, ChanPropriety *prop);
+    SMART(GeneticalNode)    get_return();
 
     /* signals */
 

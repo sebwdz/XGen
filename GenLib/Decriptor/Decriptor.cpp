@@ -27,6 +27,11 @@ SMART(GeneticalNode)    Decriptor::get_fast() const
     return (m_fast);
 }
 
+void                    Decriptor::set_return(SMART(GeneticalNode) node)
+{
+    m_return = node;
+}
+
 void        Decriptor::set_block(SMART(GeneticalNode) block)
 {
   m_block = block;
@@ -88,6 +93,7 @@ SMART(GeneticalNode)    Decriptor::get_chan(GeneticalNode *node)
 SMART(GeneticalNode)        Decriptor::getSubChan(SMART(GeneticalNode) chan, std::vector<SMART(GeneticalNode)> &vct, unsigned int i)
 {
     GeneticalNode                       *tmp;
+    SMART(GeneticalNode)                x;
 
     for (unsigned it = i; it < vct.size(); it++) {
         if (vct[it]->get_type() == EMPTY_CHAN)
@@ -96,9 +102,10 @@ SMART(GeneticalNode)        Decriptor::getSubChan(SMART(GeneticalNode) chan, std
           chan = chan->get_son_ref((unsigned int)vct[it]->get_value()._f);
         else if (vct[it]->get_type() == INSTRU)
         {
-            chan = turn(vct[it].get());
-            if (!chan)
-                chan = SMART(GeneticalNode)(new GeneticalNode);
+            x = turn(vct[it].get());
+            if (!x)
+                x = SMART(GeneticalNode)(new GeneticalNode);
+            chan = chan->get_son_ref((unsigned int)x->get_value()._f);
         }
         else
           {
@@ -133,4 +140,9 @@ void        Decriptor::catch_duplic(unsigned int code, void *sig)
 {
   (void)code;
   (void)sig;
+}
+
+SMART(GeneticalNode)    Decriptor::get_return()
+{
+    return (m_return);
 }

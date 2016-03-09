@@ -1,4 +1,5 @@
 
+#include        <boost/lexical_cast.hpp>
 #include        "Cell/Brain.hpp"
 #include        "Decriptor/Opt.hpp"
 #include        "Decriptor/DecriptorManager.hpp"
@@ -65,15 +66,7 @@ SMART(GeneticalNode)         Decriptor::copy(GeneticalNode *node)
   if (vct.size() > 1)
     {
       cp = get_chan(vct[0].get());
-      if (vct[1]->get_type() == GLOBAL_CHAN ||
-              vct[1]->get_type() == FAST_CHAN ||
-              vct[1]->get_type() == LOCAL_CHAN ||
-              vct[1]->get_type() == INSTRU)
-      {
-        get_chan(vct[1].get())->copy(cp);
-      }
-      else
-        vct[1]->copy(cp);
+      copy_value(vct[1].get())->copy(cp);
     }
   return (cp);
 }
@@ -228,6 +221,8 @@ SMART(GeneticalNode)          Decriptor::creat_function(GeneticalNode *node)
 
   if (vct.size())
     get_line()->add_signal(node->get_value()._uc, new SMART(GeneticalNode)(copy_value(vct[0].get())));
+  else if(node->get_value()._uc == DUPLIC)
+      get_line()->add_signal(node->get_value()._uc, new SMART(GeneticalNode)(new GeneticalNode()));
   return (SMART(GeneticalNode)());
 }
 
@@ -268,17 +263,49 @@ SMART(GeneticalNode)              Decriptor::echo(GeneticalNode *node)
   unsigned int                      it;
   std::vector<SMART(GeneticalNode)> &vct = node->get_son();
   GeneticalNode                     *son;
+  SMART(GeneticalNode)              ch;
 
   for (it = 0; it < vct.size(); it++)
     {
       son = vct[it].get();
-      if (son->get_type() == GLOBAL_CHAN || son->get_type() == LOCAL_CHAN ||
-          son->get_type() == FAST_CHAN || son->get_type() == INTERACTION || son->get_type() == INSTRU)
-        {
-          std::cout << get_value(son);
-        }
+      if (son->get_type() == VALUE && son->get_son().size())
+      {
+          if (son->get_value()._f == 0)
+              echo(son);
+          else
+          {
+            for (unsigned int i = 0; i < son->get_son().size(); i++)
+            {
+                if (son->get_value()._f == 1)
+                    std::cout << get_value(son->get_son()[i].get());
+                else
+                    std::cout << (char)son->get_son()[i]->get_value()._f;
+            }
+          }
+
+      }
       else
-        std::cout << (char)son->get_value()._f;
+      {
+        if (son->get_type() == GLOBAL_CHAN || son->get_type() == LOCAL_CHAN ||
+              son->get_type() == FAST_CHAN || son->get_type() == INTERACTION || son->get_type() == INSTRU)
+            {
+                ch = get_chan(son);
+                if (ch->get_son().size())
+                {
+                    for (unsigned int i = 0; i < ch->get_son().size(); i++)
+                    {
+                        if (ch->get_value()._f == 1)
+                            std::cout << get_value(ch->get_son()[i].get());
+                        else
+                            std::cout << (char)ch->get_son()[i]->get_value()._f;
+                    }
+                }
+                else
+                    std::cout << get_value(son);
+            }
+        else
+            std::cout << (char)son->get_value()._f;
+      }
     }
   return (SMART(GeneticalNode)());
 }
@@ -292,6 +319,7 @@ SMART(GeneticalNode)              Decriptor::copy_value(GeneticalNode *node)
     av = SMART(GeneticalNode)(new GeneticalNode());
     if (node->get_type() == VALUE)
     {
+        av->set_value(node->get_value());
         for (unsigned int it = 0; it < vct.size(); it++)
         {
             son = vct[it].get();
@@ -304,8 +332,10 @@ SMART(GeneticalNode)              Decriptor::copy_value(GeneticalNode *node)
                 av->add_son(son->copy());
         }
     }
-    else
+    else if (node->get_type() != BLOCK)
         get_chan(node)->copy(av);
+    else
+        av = node->copy(av);
     return (av);
 }
 
@@ -336,6 +366,7 @@ SMART(GeneticalNode)            Decriptor::ref_function(GeneticalNode *node)
 {
     std::vector<SMART(GeneticalNode)>   &vct = node->get_son();
     SMART(GeneticalNode)                res;
+    void                                *ptr;
 
     if (vct.size())
     {
@@ -348,7 +379,12 @@ SMART(GeneticalNode)            Decriptor::ref_function(GeneticalNode *node)
         else
         {
             res = SMART(GeneticalNode)(new GeneticalNode());
-            res->set_ref(get_chan(vct[0].get()));
+            if (vct[0]->get_type() != VALUE && vct[0]->get_type() != BLOCK)
+                res->set_ref(get_chan(vct[0].get()));
+            else
+                res->set_ref(copy_value(vct[0].get()));
+            ptr = res->get_ref().get();
+            res->get_value()._ptr = ptr;
             return (res);
         }
     }
@@ -430,4 +466,32 @@ SMART(GeneticalNode)            Decriptor::move_pos(GeneticalNode *node)
         CAST(ModuleClass*)(m_parent->get_parent())->move_object(m_parent);
     }
     return (SMART(GeneticalNode)());
+}
+
+SMART(GeneticalNode)            Decriptor::round(GeneticalNode *node)
+{
+    SMART(GeneticalNode)        res(new GeneticalNode);
+    double                      p;
+    double                      tmp;
+
+    if (node->get_son().size() > 1)
+    {
+        p = std::pow(10, get_value(node->get_son()[1].get()));
+        tmp = p * get_value(node->get_son()[0].get());
+        tmp = (int)(tmp + 0.0001);
+        tmp /= p;
+        res->get_value()._f = tmp;
+    }
+    return (res);
+}
+
+SMART(GeneticalNode)            Decriptor::sqrt(GeneticalNode *node)
+{
+    SMART(GeneticalNode)        res;
+    if (node->get_son().size())
+    {
+        res = SMART(GeneticalNode)(new GeneticalNode);
+        res->get_value()._f = std::sqrt(get_value(node->get_son()[0].get()));
+    }
+    return (res);
 }

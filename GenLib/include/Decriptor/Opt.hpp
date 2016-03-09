@@ -43,11 +43,11 @@
 
 /* signals */
 
-#define         ATTACH          10 + OPT_RANGE
+#define         ATTACH          2 + OPT_RANGE
 #define         FREE            11 + OPT_RANGE
 
-#define         LINK            12 + OPT_RANGE
-#define         COMIN           13 + OPT_RANGE
+#define         LINK            1 + OPT_RANGE
+#define         COMIN           3 + OPT_RANGE
 #define         TAKEOUT         14 + OPT_RANGE
 
 #define         KILL            15 + OPT_RANGE
@@ -73,6 +73,8 @@
 #define         RAND            68 + OPT_RANGE
 #define         ERASE           67 + OPT_RANGE
 #define         MOVE            65 + OPT_RANGE
+#define         ROUND           64 + OPT_RANGE
+#define         SQRT            63 + OPT_RANGE
 
 /* PROPRIETY */
 

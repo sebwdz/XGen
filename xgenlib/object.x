@@ -6,11 +6,11 @@
 		Obj Call define
 ]
 <
-	?__ 		) );
 	?c_			call ( #__construct__ 0 ( % (;
 	?_			call ( #__obj__ 0 ( % (;
 	?.			);
 	?:			0;
+	?__ 		) );
 >
 [
 		# Call Member Function ( local )
@@ -19,11 +19,13 @@
 
 _($this $fun $av)<(
 	cp ( !av $av )
-	call ( #__push__ 0 ( #this ) ) 
-	cp ( #this $this )
+	cp ( !this $this )
 	cp ( !fun $fun )
-	call ( * ( #this !fun ) !av )
+	call ( #__push__ 0 ( #this ) )
+	cp ( #this !this )
+	cp ( !res call ( * ( #this !fun ) !av ) )
 	cp ( #this call ( #__pop__ ) )
+	ret ( !res )
 )>
 
 [
@@ -42,7 +44,7 @@ __obj_call__<(
 
 __construct__<(
 	cp ( !av #__av__ )
-	call ( #__push__ #this )
+	call ( #__push__ 0 ( #this ) )
 	cp ( #this !av^0 )
 	call ( * ( !av^1 ) !av^2 )
 	cp ( #this call ( #__pop__ ) )

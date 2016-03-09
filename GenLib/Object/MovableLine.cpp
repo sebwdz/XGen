@@ -106,6 +106,7 @@ void            MovableLine::exec()
     {
         if (m_decriptor)
         {
+            m_decriptor->set_return(SMART(GeneticalNode)());
             m_decriptor->get_fast()->get_ass(Chanel::hash("this"))->set_ref(inter[it]);
             m_decriptor->turn(inter[it]->get_ass(Chanel::hash("_clean")).get());
         }
@@ -186,49 +187,24 @@ void            MovableLine::interact_with(class Movable *obj, SMART(GeneticalNo
 
     vct = m_vct;
     type = prop->get_ass(Chanel::hash("_param"))->get_son_ref(TYPE)->get_value()._f;
+    if (!m_decriptor)
+    {
+        m_decriptor = new Decriptor(m_parent);
+        m_decriptor->set_attach(true);
+    }
+    fast = m_decriptor->get_fast();
+    m_decriptor->set_return(SMART(GeneticalNode)());
+    fast->get_ass(Chanel::hash("__oth__"))->set_ref(obj->get_line()->get_chan());
+    fast->get_ass(Chanel::hash("this"))->set_ref(prop);
+    fast->get_ass(Chanel::hash("__vct__"))->get_son_ref(0)->get_value()._f = m_vct.first;
+    fast->get_ass(Chanel::hash("__vct__"))->get_son_ref(1)->get_value()._f = m_vct.second;
+    fast->get_ass(Chanel::hash("__vct__"))->get_son_ref(2)->get_value()._f = m_len;
+    m_decriptor->turn(prop->get_ass(Chanel::hash("_exec")).get());
     if (type != MANUAL)
-        check_attach(obj, prop.get());
-    else
     {
-        if (!m_decriptor)
-        {
-            m_decriptor = new Decriptor(m_parent);
-            m_decriptor->set_attach(true);
-        }
-        fast = m_decriptor->get_fast();
-        fast->get_ass(Chanel::hash("__oth__"))->set_ref(obj->get_line()->get_chan());
-        fast->get_ass(Chanel::hash("this"))->set_ref(prop);
-        fast->get_ass(Chanel::hash("__vct__"))->get_son_ref(0)->get_value()._f = m_vct.first;
-        fast->get_ass(Chanel::hash("__vct__"))->get_son_ref(1)->get_value()._f = m_vct.second;
-        fast->get_ass(Chanel::hash("__vct__"))->get_son_ref(2)->get_value()._f = m_len;
-        m_decriptor->turn(prop->get_ass(Chanel::hash("_exec")).get());
+        if (m_decriptor->get_return() && m_decriptor->get_return()->get_value()._f != 0)
+            check_attach(obj, prop.get());
     }
-            /*
-    if (prop->get_son_ref(TARGET)->get_value()._f == OTH)
-    {
-        vct.first *= -1;
-        vct.second *= -1;
-    }
-    tmp[0] = get_pow(m_parent->get_line(), prop->get_son_ref(ACT)->get_son_ref(0)->get_son_ref(0).get());
-    tmp[0] -= get_pow(m_parent->get_line(), prop->get_son_ref(ACT)->get_son_ref(0)->get_son_ref(1).get());
-    tmp[1] = get_pow(obj->get_line(), prop->get_son_ref(ACT)->get_son_ref(1)->get_son_ref(0).get());
-    tmp[1] -= get_pow(obj->get_line(), prop->get_son_ref(ACT)->get_son_ref(1)->get_son_ref(1).get());
-    if (tmp[0] > 0 && tmp[1] > 0)
-    {
-        chan = tmp[0] + tmp[1];
-        chan *= prop->get_son_ref(PW)->get_value()._f;
-        reduce(chan, prop);
-        chan *= prop->get_son_ref(DIR)->get_value()._f == RPLS ? -1 : 1;
-        node.first = chan / 1000;
-        if (prop->get_son_ref(TARGET)->get_value()._f == OTH)
-            node.second = prop->get_son_ref(ACT)->get_son_ref(1)->get_son_ref(0).get();
-        else
-            node.second = prop->get_son_ref(ACT)->get_son_ref(0)->get_son_ref(0).get();
-        if (prop->get_son_ref(TARGET)->get_value()._f == OTH)
-            obj->get_move_line()->apply(m_parent, prop, vct, node);
-        else
-            apply(obj, prop, vct, node);
-    }*/
 }
 
 void            MovableLine::interact(Movable *obj, unsigned int scope)
@@ -330,41 +306,24 @@ void            MovableLine::apply(Movable *from, GeneticalNode *prop, std::pair
 
 bool              MovableLine::check_attach(Object *obj, GeneticalNode *prop)
 {
-    float           tmp[2];
     unsigned int    type;
-    nodeValue       val;
     bool            res;
 
-    tmp[1] = obj->get_line()->get_chan(prop->get_son_ref(ACT)->get_son_ref(1).get())->get_value()._f;
-    tmp[0] = obj->get_line()->get_chan(prop->get_son_ref(ACT)->get_son_ref(0).get())->get_value()._f;
-    res = false;
-    if(tmp[0] > 0 && tmp[1] < 1)
+    type = prop->get_ass(Chanel::hash("_param"))->get_son_ref(TYPE)->get_value()._f;
+    if (type == ATTACH && !(obj->get_type() & TYPE_DECRIPTOR) && m_parent->get_type() & TYPE_DECRIPTOR)
     {
-        type = prop->get_son_ref(TYPE)->get_value()._f;
-        if (type == ATTACH && !(obj->get_type() & TYPE_DECRIPTOR) && m_parent->get_type() & TYPE_DECRIPTOR)
-        {
-            m_parent->add_signal(ATTACH, static_cast<void*>(obj));
-            res = true;
-        }
-        else if (type == LINK && obj->get_type() & TYPE_MODULE && m_parent->get_type() & TYPE_MODULE)
-        {
-            m_parent->add_signal(LINK, static_cast<void*>(obj));
-            res = true;
-        }
-        else if (type == COMIN)
-        {
-            m_parent->add_signal(COMIN, static_cast<void*>(obj));
-            res = true;
-        }
+        m_parent->add_signal(ATTACH, static_cast<void*>(obj));
+        res = true;
     }
-    if (res)
+    else if (type == LINK && obj->get_type() & TYPE_MODULE && m_parent->get_type() & TYPE_MODULE)
     {
-        if (prop->get_son_ref(LIMIT)->get_value()._f)
-        {
-            val = prop->get_son_ref(LIMIT)->get_son_ref(0)->get_value();
-            val._f--;
-            prop->get_son_ref(LIMIT)->get_son_ref(0)->set_value(val);
-        }
+        m_parent->add_signal(LINK, static_cast<void*>(obj));
+        res = true;
+    }
+    else if (type == COMIN)
+    {
+        m_parent->add_signal(COMIN, static_cast<void*>(obj));
+        res = true;
     }
     return (res);
 }

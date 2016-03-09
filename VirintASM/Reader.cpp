@@ -156,7 +156,7 @@ SMART(GeneticalNode)               NodeMaker::read_node(NodeData *data, std::siz
     if (data->data[pos] == ':')
     {
         tmp = data->data.substr(pos + 1, found - (pos + 1));
-        pos = data->data.find_first_not_of("\t\n ", found + 1);
+        pos = data->data.find_first_not_of("\t\n ", found);
         if (data->data[pos] == '(')
         {
             pos++;

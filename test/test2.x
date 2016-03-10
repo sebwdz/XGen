@@ -182,7 +182,7 @@ Snake|tail<(
 main<(
 	inf ((set (!it add (!it 1)) 2)(set (!eat 1000)))
 	set (!t add (!t 1))
-	sup ((!t 30)(set (!t 0) creat ((:cell))))
+	sup ((!t 50)(set (!t 0) creat ((:cell))))
 	sup ((set (!eat add (!eat 1)) 550)(
 			creat ((:Snake :Snake|Move))
 			set (!eat 0)

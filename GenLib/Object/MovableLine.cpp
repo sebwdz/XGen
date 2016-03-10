@@ -219,7 +219,7 @@ void            MovableLine::interact(Movable *obj, unsigned int scope)
     if (m_len > 0)
     {
         m_len = sqrt(m_len);
-        if (m_len < m_range.second || m_parent == obj->get_parent() || obj == m_parent->get_parent())
+        if (scope == LINK || m_len < m_range.second || m_parent == obj->get_parent() || obj == m_parent->get_parent())
         {
             m_vct.first /= m_len;
             m_vct.second /= m_len;
@@ -233,8 +233,8 @@ void            MovableLine::interact(Movable *obj, unsigned int scope)
                 if (param->get_son_ref(LIMIT)->get_value()._f &&
                         param->get_son_ref(LIMIT)->get_son_ref(0)->get_value()._f <= 0)
                     continue;
-                if (param->get_son_ref(DST)->get_value()._f >= m_len &&
-                        param->get_son_ref(MINDST)->get_value()._f <= m_len)
+                if (scope == LINK || (param->get_son_ref(DST)->get_value()._f >= m_len &&
+                        param->get_son_ref(MINDST)->get_value()._f <= m_len))
                     interact_with(obj, vct[it]);
             }
         }

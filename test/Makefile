@@ -19,7 +19,7 @@ LIB	=		../xgenlib/array.x \
 			../xgenlib/chain.x
 
 
-SRC =		test2.x
+SRC =		network.x
 
 
 BEGIN =		main

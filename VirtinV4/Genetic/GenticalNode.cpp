@@ -156,3 +156,61 @@ void        GeneticalNode::save(std::ofstream &stream)
         m_son[it]->save(stream);
     }
 }
+
+Serialize   GeneticalNode::serialize()
+{
+    Serialize       s;
+    Serialize       tmp;
+    unsigned int    size;
+    boost::unordered_map<unsigned int, SMART(GeneticalNode)>::iterator  i;
+
+    size = m_son.size();
+    s.append((char*)&m_value, sizeof(nodeValue));
+    s.append((char*)&m_type, sizeof(int));
+    s.append((char*)&size, sizeof(unsigned int));
+    for (unsigned int it = 0; it < m_son.size(); it++)
+    {
+        tmp = m_son[it]->serialize();
+        s.append(reinterpret_cast<char*>(tmp.data.data()), tmp.data.size());
+    }
+    size = m_ass.size();
+    s.append((char*)&size, sizeof(unsigned int));
+    for (i = m_ass.begin(); i != m_ass.end(); i++)
+    {
+        for (unsigned int it = 0; it < m_son.size(); it++)
+        {
+            if (i->second == m_son[it])
+            {
+                s.append((char*)&i->first, sizeof(unsigned int));
+                s.append((char*)&it, sizeof(unsigned int));
+            }
+        }
+    }
+    return (s);
+}
+
+char        *GeneticalNode::deserialize(char *str)
+{
+    unsigned int    size;
+    unsigned int    key[2];
+
+    m_value = *((nodeValue*)str);
+    str += sizeof(nodeValue);
+    m_type = *((int*)str);
+    str += sizeof(int);
+    size = *((unsigned int*)str);
+    str += sizeof(unsigned int);
+    for (unsigned int it = 0; it < size; it++)
+        str = get_son_ref(it)->deserialize(str);
+    size = *((unsigned int*)str);
+    str += sizeof(unsigned int);
+    for (unsigned int it = 0; it < size; it++)
+    {
+        key[0] = *((unsigned int*)str);
+        str += sizeof(unsigned int);
+        key[1] = *((unsigned int*)str);
+        str += sizeof(unsigned int);
+        m_ass[key[0]] = m_son[key[1]];
+    }
+    return (str);
+}

@@ -1,5 +1,5 @@
 <
-	?scope		1;
+	?scope		2;
 	?limit		4;
 
 	[ TYPE ]
@@ -9,10 +9,11 @@
 	?comin		3;
 	
 	[ SCOPE ]
-	?link			0;
-	?oth			1;
+	?link			1;
+	?oth			0;
 	?son			2;
 	?parent		3;
+	?network	4;
 >
 
 Interaction|Construct<(

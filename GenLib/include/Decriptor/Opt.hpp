@@ -78,8 +78,8 @@
 
 /* PROPRIETY */
 
-#define         TO              0 + OPT_CHAN_RANGE
-#define         OTH             1 + OPT_CHAN_RANGE
+#define         TO              1 + OPT_CHAN_RANGE
+#define         OTH             0 + OPT_CHAN_RANGE
 
 #define         MV              0 + OPT_CHAN_RANGE
 #define         CHNG            1 + OPT_CHAN_RANGE

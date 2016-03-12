@@ -19,16 +19,14 @@ LIB	=		../xgenlib/array.x \
 			../xgenlib/chain.x
 
 
-SRC =		test2.x \
-			ecosystem.x
+SRC =		network.x
 
 
 BEGIN =		main
 
 all:
-	$(CC) "ecosystem" $(TARGET) $(SRC) $(LIB)
-	$(CC) "sendfood" "food.gen" $(SRC) $(LIB)
-	$(CC) "sendsnake" "snake.gen" $(SRC) $(LIB)
+	$(CC) "main_server" "server.gen" $(SRC) $(LIB)
+	$(CC) "main_client" "client.gen" $(SRC) $(LIB)
 
 
 

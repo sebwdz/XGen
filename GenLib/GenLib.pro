@@ -43,6 +43,8 @@ SOURCES += \
     Map/LnkCase.cpp \
     Map/MapController.cpp \
     Object/MovableLine.cpp \
+    Network/Sender.cpp \
+    Network/Receiver.cpp
 
 HEADERS += \
     include/Cell/Module.hpp \
@@ -65,3 +67,6 @@ HEADERS += \
     include/Map/MapController.hpp \
     include/Object/MovableLine.hpp \
     include/Monitor.hpp \
+    include/Network/Sender.hpp \
+    include/Network/Receiver.hpp \
+    include/Network/Package.hpp

@@ -29,6 +29,8 @@ public:
     void                    get_ready();
     virtual void            exec() = 0;
 
+    void                    get_used(GeneticalNode*, SMART(GeneticalNode));
+
 protected:
 
     LineDecript             m_line;

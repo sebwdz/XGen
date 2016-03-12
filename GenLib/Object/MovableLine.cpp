@@ -176,7 +176,7 @@ float           MovableLine::get_pow(LineDecript *line, GeneticalNode *node)
     return (pow);
 }
 
-void            MovableLine::interact_with(class Movable *obj, SMART(GeneticalNode) prop)
+void            MovableLine::interact_with(class Movable *obj, SMART(GeneticalNode) prop, GeneticalNode *global)
 {
     std::pair<float, float>                 vct;
     float                                   chan;
@@ -194,6 +194,8 @@ void            MovableLine::interact_with(class Movable *obj, SMART(GeneticalNo
     }
     fast = m_decriptor->get_fast();
     m_decriptor->set_return(SMART(GeneticalNode)());
+    if (global)
+        global->copy(m_decriptor->get_line()->get_chan());
     fast->get_ass(Chanel::hash("__oth__"))->set_ref(obj->get_line()->get_chan());
     fast->get_ass(Chanel::hash("this"))->set_ref(prop);
     fast->get_ass(Chanel::hash("__vct__"))->get_son_ref(0)->get_value()._f = m_vct.first;
@@ -204,6 +206,11 @@ void            MovableLine::interact_with(class Movable *obj, SMART(GeneticalNo
     {
         if (m_decriptor->get_return() && m_decriptor->get_return()->get_value()._f != 0)
             check_attach(obj, prop.get());
+    }
+    if (global)
+    {
+        m_decriptor->get_line()->get_chan()->get_son().clear();
+        m_decriptor->get_line()->get_chan()->get_ass().clear();
     }
 }
 

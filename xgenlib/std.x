@@ -48,6 +48,10 @@ __new__<(
 	( % ( ) ) -> (int)
 ]
 
+get_pid<(
+	cp (@__pid__ rand ())
+)>
+
 count<(
 	set (!it 0)
 	set (!len len (* ( #__av__^0 )))

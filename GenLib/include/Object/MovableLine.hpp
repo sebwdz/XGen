@@ -28,7 +28,7 @@ class           MovableLine
     void                change_chan(GeneticalNode *ref, sMovableChan *move);
     void                exec();
     float               get_pow(LineDecript *line, GeneticalNode *node);
-    void                interact_with(class Movable *obj, boost::shared_ptr<GeneticalNode> prop);
+    void                interact_with(class Movable *obj, boost::shared_ptr<GeneticalNode> prop, GeneticalNode *global = NULL);
     void                interact(class Movable *obj, unsigned int scope);
     void                apply(class Movable *from, GeneticalNode *prop,
                           std::pair<float, float> &vct, std::pair<float, GeneticalNode*> &chan);

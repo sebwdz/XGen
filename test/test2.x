@@ -12,7 +12,8 @@ rplsoth|exec<(
 ]
 
 rplsoth|clean<(
-	sup ((* (#this /_param ?limit 0) 0)(move
+	sup ((* (#this /_param ?limit 0) 0)(
+			move
 			set (* (#this /_param ?limit 0) 0)
 	))
 )>
@@ -73,8 +74,8 @@ gettarget|clean<(
 
 rplsSnake|exec<(
 	sup ((* (#__oth__ /Snake) 0)(
-		set (@__pos__^0 sub (@__pos__^0 mult (#__vct__^0 1.4)))
-		set (@__pos__^1 sub (@__pos__^1 mult (#__vct__^1 1.4)))
+		set (@__pos__^0 sub (@__pos__^0 mult (#__vct__^0 1)))
+		set (@__pos__^1 sub (@__pos__^1 mult (#__vct__^1 1)))
 	))
 )>
 
@@ -90,10 +91,8 @@ Snake|Move<(
 	sup ((set (!move add (!move 1)) 10)(
 			set (!move 0)
 			sup ((@target 0)(
-					set (!vct^0 sub (* (@target /__pos__ 0) @__pos__^0))
-					set (!vct^1 sub (* (@target /__pos__ 1) @__pos__^1))
-					set (!len sqrt(add (mult (!vct^0 !vct^0) mult (!vct^1 !vct^1))))
-					cp (!vct 0 (div (mult (!vct^0 10) !len) div (mult (!vct^1 10) !len)))
+					cp (!vct call (:get_full_vct 0 (% (* (@target /__pos__)) % (@__pos__))))
+					cp (!vct 0 (div (mult (!vct^0 10) !vct^2) div (mult (!vct^1 10) !vct^2)))
 					cp (@__pos__ 0 (add (@__pos__^0 !vct^0) add (@__pos__^1 !vct^1)))
 					inf ((!len 10)(
 							set (* (@target /Food) sub (* (@target /Food 1)))))
@@ -115,6 +114,7 @@ Snake|Move<(
 ]
 
 Snake<(
+	:Snake|Move
 	:Init ((
 			cp (@Head % (@))
 			set (@Len 15)
@@ -124,9 +124,9 @@ Snake<(
 			cp (&gettarget^_exec :gettarget|exec)
 			cp (&gettarget^_clean :gettarget|clean)
 			cp (&gettarget^_param 0 (200 0 ?scope (?oth) ?manual ?limit (0)))
-			cp (&rplsSnake^_exec :rplsSnake|exec)
+			[cp (&rplsSnake^_exec :rplsSnake|exec)
 			cp (&rplsSnake^_clean :rplsSnake|clean)
-			cp (&rplsSnake^_param 0 (100 0 ?scope (?oth) ?manual ?limit (0)))
+			cp (&rplsSnake^_param 0 (100 0 ?scope (?oth) ?manual ?limit (0)))]
 	))
 	sup ((set (!t add (!t 1)) 100)(
 			cp (&gettarget^_param^?limit^0 1)
@@ -155,11 +155,9 @@ Snake|tail<(
 	inf ((* (#Head /Snake) 1)(:Snake|kill))
 	sup ((set (!t add (!t 1)) 5)(
 			set (!t 0)
-			set (!vct^0 sub (* (#Head /__pos__ 0) @__pos__^0))
-			set (!vct^1 sub (* (#Head /__pos__ 1) @__pos__^1))
-			set (!len sqrt (add (mult (!vct^0 !vct^0) mult (!vct^1 !vct^1))))
-			cp (!vct 0 (div (mult (!vct^0 10) !len) div (mult (!vct^1 10) !len)))
-			sup ((!len 15)(
+			cp (!vct call (:get_full_vct 0 (% (* (#Head /__pos__)) % (@__pos__))))
+			cp (!vct 0 (div (mult (!vct^0 10) !vct^2) div (mult (!vct^1 10) !vct^2) !vct^2))
+			sup ((!vct^2 15)(
 					set (@__pos__^0 add (@__pos__^0 !vct^0))
 					set (@__pos__^1 add (@__pos__^1 !vct^1))
 			))

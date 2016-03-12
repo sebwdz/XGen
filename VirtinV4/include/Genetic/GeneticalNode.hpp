@@ -35,7 +35,7 @@ class   GeneticalNode : public GeneticObj
         void                    set_ass(unsigned int key, SMART(GeneticalNode) node);
         void                    add_son(boost::shared_ptr<GeneticalNode> son);
         SMART(GeneticalNode)    get_local();
-        Serialize               serialize();
+        Serialize               *serialize();
         char                    *deserialize(char*);
 
         void                    set_type(int type);

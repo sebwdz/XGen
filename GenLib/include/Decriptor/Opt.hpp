@@ -111,6 +111,7 @@
 
 #define         SON             2
 #define         PARENT          0
+#define         NETWORK         4
 
 /* OTHER */
 

@@ -113,6 +113,7 @@ SMART(GeneticalNode)        Decriptor::getSubChan(SMART(GeneticalNode) chan, std
             if (tmp->get_type() == VALUE)
               chan = chan->get_son_ref((unsigned int)tmp->get_value()._f);
             else
+
               chan = chan->get_ass(tmp->get_value()._ui);
           }
       }

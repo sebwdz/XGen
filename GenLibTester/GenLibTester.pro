@@ -4,6 +4,8 @@ INCLUDEPATH += ../GenLib/include/
 LIBS += -lsfml-graphics -lsfml-window -lsfml-system
 
 
+QT  += network
+
 CONFIG(debug, debug|release) {
     LIBS += ../build-GenLib-Desktop-Debug/libGenLib.a
     LIBS += ../build-VirtinV4-Desktop-Debug/libVirtinV4.a

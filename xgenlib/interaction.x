@@ -9,8 +9,8 @@
 	?comin		3;
 	
 	[ SCOPE ]
-	?link			1;
 	?oth			0;
+	?link			1;
 	?son			2;
 	?parent		3;
 	?network	4;

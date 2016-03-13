@@ -117,7 +117,7 @@ Snake<(
 	:Snake|Move
 	:Init ((
 			cp (@Head % (@))
-			set (@Len 15)
+			set (@Len 25)
 			shared (/Head /Len)
 			set (@Snake 5)
 			set (@DopamineAct 100)
@@ -133,7 +133,7 @@ Snake<(
 			cp (&rplsSnake^_param^?limit^0 1)
 			set (!t 0)
 	))
-	sup ((set (#life add (#life 1)) 3000)(:Snake|kill))
+	sup ((set (#life add (#life 1)) 5000)(:Snake|kill))
 )>
 
 Snake|kill<(

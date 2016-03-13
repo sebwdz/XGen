@@ -1,12 +1,19 @@
 
 #include            <iostream>
+#include            <QtNetwork/QNetworkInterface>
 #include            "Network/Receiver.hpp"
 
 Receiver::Receiver() : QUdpSocket()
 {
-    m_addr = QHostAddress("224.000.000.1");
-    bind(QHostAddress::Any, 12345, QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint);
+    m_addr = QHostAddress("224.0.0.1");
+    bind(QHostAddress::Any, 16325, QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint);
+    foreach(QNetworkInterface interface, QNetworkInterface::allInterfaces())
+    {
+        if (interface.name() == "wlan0")
+            setMulticastInterface(interface);
+    }
     joinMulticastGroup(m_addr);
+    std::cout << multicastInterface().name().toStdString() << std::endl;
 }
 
 Receiver::~Receiver()

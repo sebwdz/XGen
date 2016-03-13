@@ -3,7 +3,7 @@
 
 Sender::Sender() : QUdpSocket()
 {
-    m_addr = QHostAddress("224.000.000.1");
+    m_addr = QHostAddress("224.0.0.1");
 }
 
 Sender::~Sender()
@@ -13,5 +13,5 @@ Sender::~Sender()
 
 void            Sender::send(Package *package)
 {
-    writeDatagram(package->data, package->size, m_addr, 12345);
+    writeDatagram(package->data, package->size, m_addr, 16325);
 }

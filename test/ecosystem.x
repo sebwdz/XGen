@@ -21,7 +21,10 @@ sendfood<(
 		cp (&SendFood^_exec :send|exec)
 		cp (&SendFood^_param 0 (0 0 ?scope (?network) ?manual ?limit (1)))
 	))
-	kill
+	sup ((set (!time add (!time 1)) 72)(
+			set (&SendFood^_param^?limit^0 1)
+			set (!time 0)
+	)(set (&SendFood^_param^?limit^0 0)))
 )>
 
 sendsnake<(
@@ -31,5 +34,8 @@ sendsnake<(
 		cp (&SendSnake^_exec :send|exec)
 		cp (&SendSnake^_param 0 (0 0 ?scope (?network) ?manual ?limit (1)))
 	))
-	kill
+	sup ((set (!time add (!time 1)) 1989)(
+			set (&SendSnake^_param^?limit^0 1)
+			set (!time 0)
+	)(set (&SendSnake^_param^?limit^0 0)))
 )>

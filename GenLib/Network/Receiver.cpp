@@ -4,7 +4,7 @@
 
 Receiver::Receiver() : QUdpSocket()
 {
-    m_addr = QHostAddress("227.0.0.1");
+    m_addr = QHostAddress("224.000.000.1");
     bind(QHostAddress::Any, 12345, QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint);
     joinMulticastGroup(m_addr);
 }

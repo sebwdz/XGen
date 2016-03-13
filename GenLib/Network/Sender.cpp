@@ -3,7 +3,7 @@
 
 Sender::Sender() : QUdpSocket()
 {
-    m_addr = QHostAddress("227.0.0.1");
+    m_addr = QHostAddress("224.000.000.1");
 }
 
 Sender::~Sender()

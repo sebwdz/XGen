@@ -48,6 +48,9 @@ public:
     SMART(GeneticalNode) move_pos(GeneticalNode *node);
     SMART(GeneticalNode) round(GeneticalNode *node);
     SMART(GeneticalNode) sqrt(GeneticalNode *node);
+    SMART(GeneticalNode) key_exist(GeneticalNode *node);
+    SMART(GeneticalNode) attach(GeneticalNode *node);
+    SMART(GeneticalNode) free(GeneticalNode* node);
 
     /* chan */
 

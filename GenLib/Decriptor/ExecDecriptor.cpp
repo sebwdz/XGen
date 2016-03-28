@@ -252,6 +252,8 @@ SMART(GeneticalNode)          Decriptor::decript_function(GeneticalNode *node)
     {
       if (m_attach)
         m_parent->get_parent()->get_line()->add_signal(node->get_value()._uc, m_parent);
+      else
+          m_parent->get_line()->add_signal(node->get_value()._uc, this);
     }
   else
     get_line()->add_signal(node->get_value()._uc, this);
@@ -317,8 +319,9 @@ SMART(GeneticalNode)              Decriptor::copy_value(GeneticalNode *node)
     GeneticalNode               *son;
 
     av = SMART(GeneticalNode)(new GeneticalNode());
-    if (node->get_type() == VALUE)
+    if (node->get_type() == VALUE || node->get_type() == EMPTY_CHAN)
     {
+        av->set_type(node->get_type());
         av->set_value(node->get_value());
         for (unsigned int it = 0; it < vct.size(); it++)
         {
@@ -437,14 +440,39 @@ SMART(GeneticalNode)            Decriptor::erase(GeneticalNode *node)
 {
     std::vector<SMART(GeneticalNode)>   &vct = node->get_son();
     SMART(GeneticalNode)                chan;
-    float                               it;
+    SMART(GeneticalNode)                chan2;
+    nodeValue                           it;
+    boost::unordered_map<unsigned int, SMART(GeneticalNode)>::iterator  i;
 
-    if (vct.size() > 2 && (chan = get_chan(vct[0].get()))->get_son().size())
+    if (vct.size() > 1 && (chan = get_chan(vct[0].get()))->get_son().size())
     {
-        it = get_value(vct[1].get());
-        if (it < chan->get_son().size())
+        if (vct[1]->get_type() != VALUE && vct[1]->get_type() != EMPTY_CHAN)
+            it = (chan2 = get_chan(vct[1].get()))->get_value();
+        else
+            it = (chan2 = vct[1])->get_value();
+        if (chan2->get_type() == VALUE && it._f < chan->get_son().size())
         {
-            chan->get_son().erase(chan->get_son().begin() + (int)it);
+            for (i = chan->get_ass().begin(); i != chan->get_ass().end(); i++)
+            {
+                if (i->second == chan->get_son()[it._f])
+                {
+                    chan->get_ass().erase(i);
+                    break;
+                }
+                chan->get_son().erase(chan->get_son().begin() + (unsigned int)it._f);
+            }
+        }
+        else
+        {
+            for (unsigned int ix = 0; ix < chan->get_son().size(); ix++)
+            {
+                if (chan->get_son_ref(ix) == chan->get_ass(it._ui))
+                {
+                    chan->get_son().erase(chan->get_son().begin() + ix);
+                    break;
+                }
+            }
+            chan->get_ass().erase(it._ui);
         }
     }
     return (SMART(GeneticalNode)());
@@ -452,6 +480,10 @@ SMART(GeneticalNode)            Decriptor::erase(GeneticalNode *node)
 
 SMART(GeneticalNode)            Decriptor::move_pos(GeneticalNode *node)
 {
+    std::pair<float, float>     vct;
+
+    vct.first = get_line()->get_chan()->get_ass(Chanel::hash("__pos__"))->get_son_ref(0)->get_value()._f - m_parent->get_pos().first;
+    vct.second = get_line()->get_chan()->get_ass(Chanel::hash("__pos__"))->get_son_ref(1)->get_value()._f - m_parent->get_pos().second;
     (void)node;
     if (!m_attach)
     {
@@ -463,6 +495,7 @@ SMART(GeneticalNode)            Decriptor::move_pos(GeneticalNode *node)
     {
         m_parent->get_pos().first = get_line()->get_chan()->get_ass(Chanel::hash("__pos__"))->get_son_ref(0)->get_value()._f;
         m_parent->get_pos().second = get_line()->get_chan()->get_ass(Chanel::hash("__pos__"))->get_son_ref(1)->get_value()._f;
+        CAST(ModuleClass*)(m_parent)->change_pos(vct);
         CAST(ModuleClass*)(m_parent->get_parent())->move_object(m_parent);
     }
     return (SMART(GeneticalNode)());
@@ -494,4 +527,51 @@ SMART(GeneticalNode)            Decriptor::sqrt(GeneticalNode *node)
         res->get_value()._f = std::sqrt(get_value(node->get_son()[0].get()));
     }
     return (res);
+}
+
+SMART(GeneticalNode)            Decriptor::key_exist(GeneticalNode *node)
+{
+    std::vector<SMART(GeneticalNode)>   &vct = node->get_son();
+    SMART(GeneticalNode)                chan;
+    SMART(GeneticalNode)                res(new GeneticalNode());
+
+    if (vct.size() > 1)
+    {
+        chan = get_chan(vct[0].get());
+        if (vct[1]->get_type() == EMPTY_CHAN && chan->get_ass(vct[1]->get_value()._ui, false))
+            res->get_value()._f = 1;
+        else if (vct[1]->get_type() == VALUE && chan->get_son_ref(vct[1]->get_value()._f, false))
+            res->get_value()._f = 1;
+    }
+    return (res);
+}
+
+SMART(GeneticalNode)            Decriptor::attach(GeneticalNode *node)
+{
+    std::vector<SMART(GeneticalNode)>   &vct = node->get_son();
+    GeneticalNode                       *use;
+    Decriptor                           *decriptor;
+
+    if (vct.size() > 0)
+    {
+        if (vct[0]->get_type() == VALUE)
+            use = vct[0].get();
+        else
+            use = get_chan(vct[0].get()).get();
+        for (unsigned int it = 0; it < use->get_son().size(); it++)
+        {
+            decriptor = new Decriptor(NULL);
+            decriptor->set_block(use->get_son_ref(it)->copy());
+            decriptor->catch_simple(ATTACH, m_parent);
+        }
+    }
+    return (SMART(GeneticalNode)());
+}
+
+SMART(GeneticalNode)        Decriptor::free(GeneticalNode* node)
+{
+    (void)node;
+    if (m_parent)
+        CAST(ModuleClass*)(m_parent)->add_signal(FREE, this);
+    return (SMART(GeneticalNode)());
 }

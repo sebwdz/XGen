@@ -42,6 +42,9 @@ DecriptorManager::DecriptorManager()
   m_opt.insert(std::make_pair(MOVE, &Decriptor::move_pos));
   m_opt.insert(std::make_pair(ROUND, &Decriptor::round));
   m_opt.insert(std::make_pair(SQRT, &Decriptor::sqrt));
+  m_opt.insert(std::make_pair(KEY_EXIST, &Decriptor::key_exist));
+  m_opt.insert(std::make_pair(ATTACH_INSTRU, &Decriptor::attach));
+  m_opt.insert(std::make_pair(FREE, &Decriptor::free));
 }
 
 DecriptorManager::~DecriptorManager()

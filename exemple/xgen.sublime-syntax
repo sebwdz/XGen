@@ -1,0 +1,62 @@
+%YAML1.2
+---
+# See http://www.sublimetext.com/docs/3/syntax.html
+file_extensions:
+  - x
+scope: source.xgen
+contexts:
+  main:
+
+    # Comments begin
+    - match: '\['
+      scope: punctuation.definition.comment.begin.xgen
+      push: block_comment
+
+    - match: ':|\||>'
+      scope: entity.name.function.xgen
+
+    # String   
+    - match: '"'
+      scope: punctuation.definition.string.begin.example-c
+      push: double_quoted_string
+
+    #KeyWords
+
+    - match: '[A-Za-z_0-9|() \t$]*<'
+      scope: entity.name.function.xgen
+
+    # Numbers
+    - match: '\b(-)?[0-9.]+\b'
+      scope: constant.numeric.xgen
+
+    # Empty
+    - match: '\/[A-Za-z_0-9]*\b'
+      scope: storage.type
+
+    - match: '\?[A-Za-z_0-9:!.]*'
+      scope: constant.numeric.xgen
+
+    - match: '(set|add|sub|div|mult|creat|duplic|new_head|attach|detach|inf|\
+              |sup|egal|shared|unshared||kill|destroy|\
+              |or|and|xor|no|take_out|link||comin|splitin|echo|mod|while|\
+              |cp|call|%|\*|ret|pow|rand|len|erase|move|key_exist|free|sqrt|round|\^)\s'
+      scope: keyword.control.xgen
+
+    - match: '(#this|#__oth__|#__av__|#__vct__|@__pos__)(\s|\^|\b)'
+      scope: keyword.control.xgen
+    #Variable
+    - match: '(\@|\#|\!|\&|^|\$)[A-Za-z_0-9|]*'
+      scope: storage.type
+
+  block_comment:
+    - meta_scope: comment.block.xgen
+    - match: '\]'
+      pop: true
+
+  double_quoted_string:
+    - meta_scope: string.quoted.double.example-c
+    - match: '\\.'
+      scope: constant.character.escape.example-c
+    - match: '"'
+      scope: punctuation.definition.string.end.example-c
+      pop: true

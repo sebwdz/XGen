@@ -98,7 +98,8 @@ Snake|Move<(
 							set (* (@target /Food) sub (* (@target /Food 1)))))
 							set (@eat add (@eat 1))
 							sup ((@eat 5)(
-									:Init((set (@eat 0)
+									:Init((
+											set (@eat 0)
 											new_head ((:Snake|tail))
 									))
 							))
@@ -115,12 +116,12 @@ Snake|Move<(
 
 Snake<(
 	:Init ((
+			set (@Impulse 10) [ For color ]
 			cp (@Head % (@))
 			set (@Len 25)
 			shared (/Head /Len)
 			set (@Snake 5)
 			set (@SnakeHead 5)
-			set (@DopamineAct 100)
 			cp (&gettarget^_exec :gettarget|exec)
 			cp (&gettarget^_clean :gettarget|clean)
 			cp (&gettarget^_param 0 (200 0 ?scope (?oth) ?manual ?limit (0)))
@@ -151,6 +152,7 @@ Snake|tail<(
 			cp (@Head % (@))
 			take_out
 			set (@Snake 5)
+			set (@Impulse 10)	[ For color ]
 	))
 	inf ((* (#Head /Snake) 1)(:Snake|kill))
 	sup ((set (!t add (!t 1)) 5)(
@@ -178,11 +180,11 @@ Snake|tail<(
 
 main<(
 	set (@Snake 10)
-	inf ((set (!it add (!it 1)) 2)(set (!eat 1000)))
+	?Init set (!eat 1000) ?ie__
 	set (!t add (!t 1))
 	sup ((!t 50)(set (!t 0) creat ((:cell))))
-	sup ((set (!eat add (!eat 1)) 1550)(
+	sup ((set (!snake add (!snake 1)) 1550)(
 			creat ((:Snake :Snake|Move))
-			set (!eat 0)
+			set (!snake 0)
 	))
 )>

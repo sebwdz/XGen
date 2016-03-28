@@ -1,0 +1,5 @@
+
+Lancez les programmes test1 et test2 avec ./GenLibTester test1/out.gen
+Pour le test3 utiliser ./GenLibTester test3/out.gen 2
+
+Un package sublime text est fourni pour la coloration syntaxique

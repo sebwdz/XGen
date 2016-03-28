@@ -37,6 +37,7 @@ public:
     virtual void                catch_link(unsigned int code, void *sig);
     virtual void                catch_takeout(unsigned int code, void *sig);
     virtual void                catch_split(unsigned int code, void *sig);
+    virtual void                catch_free(unsigned int code, void *sig);
     void                        cal_pos();
     void                        change_pos(std::pair<float, float> &pos);
 

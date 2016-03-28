@@ -90,12 +90,14 @@ SMART(GeneticalNode)    GeneticalNode::get_ass(unsigned int key, bool creat)
   return (it->second);
 }
 
-SMART(GeneticalNode)                 &GeneticalNode::get_son_ref(unsigned int ref)
+SMART(GeneticalNode)                 GeneticalNode::get_son_ref(unsigned int ref, bool creat)
 {
   SMART(GeneticalNode)          res;
 
   while (ref >= m_son.size())
     {
+      if (!creat)
+          return (SMART(GeneticalNode)());
       res = SMART(GeneticalNode)(new GeneticalNode());
       res->set_parent(this);
       m_son.push_back(res);

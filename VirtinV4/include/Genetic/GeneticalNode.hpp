@@ -29,7 +29,7 @@ class   GeneticalNode : public GeneticObj
         GeneticalNode           *get_block();
 
         SMART(GeneticalNode)    get_ass(unsigned int key, bool creat = true);
-        SMART(GeneticalNode)    &get_son_ref(unsigned int ref);
+        SMART(GeneticalNode)    get_son_ref(unsigned int ref, bool creat = true);
 
         void                    remove_ass(unsigned int key);
         void                    set_ass(unsigned int key, SMART(GeneticalNode) node);

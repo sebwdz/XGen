@@ -12,6 +12,7 @@ ModuleClass::ModuleClass(Object *parent) : Movable(parent)
     m_sig.insert(std::make_pair(LINK, (SIG_CATCH)(&ModuleClass::catch_link)));
     m_sig.insert(std::make_pair(SPLIT, (SIG_CATCH)(&ModuleClass::catch_split)));
     m_sig.insert(std::make_pair(SPLITIN, (SIG_CATCH)(&ModuleClass::catch_split)));
+    m_sig.insert(std::make_pair(FREE, (SIG_CATCH)(&ModuleClass::catch_free)));
     m_type ^= TYPE_MODULE;
     m_spliter = NULL;
 }
@@ -324,6 +325,26 @@ void        ModuleClass::catch_split(unsigned int code, void *sig)
         CAST(ModuleClass*)(m_parent)->add_object(split);
     else
         add_object(split);
+}
+
+void                ModuleClass::catch_free(unsigned int code, void *sig)
+{
+    Decriptor       *decriptor;
+
+    decriptor = CAST(Decriptor*)(sig);
+    for (unsigned int it = 0; it < m_decriptor.size(); it++)
+    {
+        if (m_decriptor[it] == decriptor)
+        {
+            m_decriptor.erase(m_decriptor.begin() + it);
+            break;
+        }
+    }
+    decriptor->set_attach(false);
+    decriptor->set_parent(NULL);
+    decriptor->set_pos(get_pos());
+    if (m_parent)
+        CAST(ModuleClass*)(m_parent)->add_object(decriptor);
 }
 
 void                    ModuleClass::cal_pos()

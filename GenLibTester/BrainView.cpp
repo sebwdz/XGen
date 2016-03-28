@@ -17,7 +17,7 @@ void        BrainView::show_tester(Brain *brain)
 {
     sf::View                view;
     view = sf::View(sf::Vector2f(brain->get_pos().first, brain->get_pos().second), sf::Vector2f(400, 400));
-    view.zoom(1.5);
+    view.zoom(1);
     clear();
     setView(view);
     show_module(brain);
@@ -51,14 +51,14 @@ void        BrainView::show_module(ModuleClass *module)
     res = Chanel::hash(str);
     res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value()._f * 200.0;
     res = res > 254 ? 254 : res;
-    sf::Color cl(1, 0, res);
+    sf::Color cl(0, 0, 0);
 
     str = "ImNucleusSplit";
     res = Chanel::hash(str);
     res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value()._f * 20.0;
     if (res > 0)
       cl = sf::Color(200, 200, 200);
-    str = "DopamineAct";
+    str = "Dopamine";
     res = Chanel::hash(str);
     res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value()._f * 200.0;
     /*    str = "DopamineAct";
@@ -67,7 +67,7 @@ void        BrainView::show_module(ModuleClass *module)
     res = res > 254 ? 254 : res;
     if (res > 0)
       cl.g = res;
-    str = "Snake";
+    str = "Impulse";
     res = Chanel::hash(str);
     res = module->get_line()->get_chan(res + CHANNEL_RANGE)->get_value()._f * 50.0;
     res = res > 254 ? 254 : res;

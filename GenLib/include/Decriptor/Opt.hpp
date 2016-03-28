@@ -43,8 +43,9 @@
 
 /* signals */
 
+#define         ATTACH_INSTRU   60 + OPT_RANGE
 #define         ATTACH          2 + OPT_RANGE
-#define         FREE            11 + OPT_RANGE
+#define         FREE            59 + OPT_RANGE
 
 #define         LINK            1 + OPT_RANGE
 #define         COMIN           3 + OPT_RANGE
@@ -75,6 +76,7 @@
 #define         MOVE            65 + OPT_RANGE
 #define         ROUND           64 + OPT_RANGE
 #define         SQRT            63 + OPT_RANGE
+#define         KEY_EXIST       62 + OPT_RANGE
 
 /* PROPRIETY */
 

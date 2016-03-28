@@ -28,9 +28,7 @@ Math|Factorial<(
 Math|IsPrime<(
 	set (!i 2)
 	set (!stop div (#__av__^0 2))
-
-	while (or ((inf ((!i !stop))
-		))(
+	while (inf ((!i !stop))(
 			and ((
 					egal ((mod (#__av__^0 !i) 0))
 					no ((egal (( !i #__av__^0)))) 
@@ -43,7 +41,6 @@ Math|IsPrime<(
 )>
 
 get_vct<(
-	cp (!vct 0)
 	set (!vct^0 sub (* (#__av__^0 0) * (#__av__^1 0)))
 	set (!vct^1 sub (* (#__av__^0 1) * (#__av__^1 1)))
 	ret (!vct)

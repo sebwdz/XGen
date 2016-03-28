@@ -14,4 +14,5 @@ Sender::~Sender()
 void            Sender::send(Package *package)
 {
     writeDatagram(package->data, package->size, m_addr, 16325);
+    flush();
 }

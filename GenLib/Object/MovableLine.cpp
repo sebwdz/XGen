@@ -89,19 +89,8 @@ void            MovableLine::change_chan(GeneticalNode* ref, sMovableChan *move)
 
 void            MovableLine::exec()
 {
-    std::pair<float, float>     pos;
-    CHAN_MOVELIST::iterator     it;
-    CHAN_MOVELIST::iterator     rm;
     std::vector<SMART(GeneticalNode)>   &inter = m_parent->get_line()->get_interaction()->get_son();
 
-    /*pos = m_parent->get_pos();
-    pos.first += m_move.first;
-    pos.second += m_move.second;
-    if (m_parent->get_type() & TYPE_MODULE)
-        CAST(ModuleClass*)(m_parent)->change_pos(m_move);
-    m_parent->set_pos(pos);
-    */
-    // Clean
     for (unsigned int it = 0; it < inter.size(); it++)
     {
         if (m_decriptor)
@@ -111,23 +100,6 @@ void            MovableLine::exec()
             m_decriptor->turn(inter[it]->get_ass(Chanel::hash("_clean")).get());
         }
     }
-    /*
-    it = m_change.begin();
-    while (it != m_change.end())
-    {
-        if (it->second->total != 0) {
-            change_chan(it->first, it->second);
-        }
-        else
-            it->second->life++;
-        if (it->second->life > 20) {
-            rm = it++;
-            delete rm->second;
-            m_change.erase(rm);
-        }
-        else
-            it++;
-    }*/
 }
 
 void            MovableLine::reduce(float &chan, GeneticalNode *prop)
@@ -327,7 +299,7 @@ bool              MovableLine::check_attach(Object *obj, GeneticalNode *prop)
         m_parent->add_signal(LINK, static_cast<void*>(obj));
         res = true;
     }
-    else if (type == COMIN)
+    else if (type == COMIN && obj->get_type() & TYPE_MODULE)
     {
         m_parent->add_signal(COMIN, static_cast<void*>(obj));
         res = true;

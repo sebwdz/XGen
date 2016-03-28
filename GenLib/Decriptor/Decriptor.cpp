@@ -60,7 +60,7 @@ SMART(GeneticalNode)     Decriptor::get_block() const
 
 float    Decriptor::get_value(GeneticalNode *node)
 {
-  if (node->get_type() != VALUE)
+  if (node->get_type() != VALUE && node->get_type() != EMPTY_CHAN)
       return (get_chan(node)->get_value()._f);
   return (node->get_value()._f);
 }
@@ -113,7 +113,6 @@ SMART(GeneticalNode)        Decriptor::getSubChan(SMART(GeneticalNode) chan, std
             if (tmp->get_type() == VALUE)
               chan = chan->get_son_ref((unsigned int)tmp->get_value()._f);
             else
-
               chan = chan->get_ass(tmp->get_value()._ui);
           }
       }
@@ -132,7 +131,8 @@ void        Decriptor::catch_simple(unsigned int code, void *sig)
   if (code == ATTACH && !m_attach)
     {
       parent = static_cast<ModuleClass*>(sig);
-      CAST(ModuleClass*)(m_parent)->get_map()->remove_object(this);
+      if (m_parent)
+        CAST(ModuleClass*)(m_parent)->get_map()->remove_object(this);
       parent->attach_decriptor(this);
     }
 }

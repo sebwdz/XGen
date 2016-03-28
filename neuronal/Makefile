@@ -19,7 +19,10 @@ LIB	=		../xgenlib/array.x \
 			../xgenlib/chain.x
 
 
-SRC =		cell.x
+SRC =		NeuronalNetwork.x \
+			Neuron.x \
+			Axon.x \
+			synapse.x
 
 
 BEGIN =		main

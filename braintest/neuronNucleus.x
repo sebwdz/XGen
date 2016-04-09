@@ -5,7 +5,7 @@ Nucleus|Learn<(
 	inf ((@Input 1)(
 			no ((egal ((@Learn 0)))(
 				set (@Biais sub (@Biais div (@Learn 100)))
-				echo ("B = " @Biais " Impulse " @Impulse "\n")
+				[echo ("B = " @Biais " Accu " @Accu "\n")]
 				set (@Learn 0)
 			))
 	)(set (@Biais 0)))
@@ -14,13 +14,19 @@ Nucleus|Learn<(
 
 Input<(
 	set (@Biais 1)
-	:Init ((shared (/Input) set (@Input 1) call (:Push 0 (% (* (@Parent /Input)) % (@)))))
+	:Init ((
+			share (/Input)
+			set (@Input 1)
+			call (:Push 0 (% (* (@Parent /Input)) % (@)))
+	))
 	:freeAndKill
 )>
 
 Output<(
 	set (@Output 1)
-	:Init ((call (:Push 0 (% (* (@Parent /Output)) % (@)))))
+	:Init ((
+			call (:Push 0 (% (* (@Parent /Output)) % (@)))
+	))
 	:freeAndKill
 )>
 
@@ -48,10 +54,6 @@ IonLeakage<(
 )>
 
 ImpulseNucleus<(
-	sup ((set (#LastActive add (#LastActive 1)) 10)(
-			set (@Accu sub (@Accu 0.1))
-			inf ((@Accu 0)(set (@Accu 0)))
-	))
 	sup ((@Active 0)(
 			set (* (@Axon /Impulse) add (* (@Axon /Impulse) @Impulse))
 			set (@Impulse div (@Impulse 2))
@@ -60,13 +62,16 @@ ImpulseNucleus<(
 			))
 		)(
 			sup ((@Impulse @Biais)(
-					sup ((@Output 0)(echo (#LastActive " ")))
 					set (@Accu add (@Accu 1))
 					set (#LastActive 0)
-					sup ((@Output 0)(echo ("Active! " @Accu "\n")))
 					set (@Active 1)
 					set (@Impulse 15)
 			))
+	))
+	sup ((set (#LastActive add (#LastActive 1)) 10)(
+			sup ((@Accu 1)(set (@Accu sub (@Accu mult (@Accu 0.05)))
+			)(set (@Accu sub (@Accu 0.1))))
+			inf ((@Accu 0)(set (@Accu 0)))
 	))
 )>
 
@@ -83,6 +88,7 @@ NucleusNeuron<(
 			shared (/SynapsesDest)
 			attach ((:CreatAxon :IonLeakage))
 			set (@Biais div (sub (mod (rand 100) 50) 100))
+			sup ((@Input 0)(set (@Biais 1)))
 			cp (@CellCode^1 :Neuron)
 			cp (@SynapsesDest /Impulse)
 			move

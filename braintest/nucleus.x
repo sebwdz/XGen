@@ -14,13 +14,13 @@ CominCell|exec<(
 
 InitNucleus<(
 	:Init ((
-			shared (/Id)
+			share (/Id)
 			set (@Id rand )
 			cp (@CellCode^0 :Cell)
 			set (@ImNucleus 1)
 			cp (&CominCell^_exec :CominCell|exec)
 			cp (&CominCell^_param 0 (10 0 ?scope (?oth) ?comin ?limit (1)))
-			take_out
+			go_out
 	))
 	:freeAndKill
 )>

@@ -1,0 +1,226 @@
+
+
+sup ((set (!it add (!it 1)) 1)(set (!it 0)))
+
+[ ... ]
+
+set (!it add (!it 1))
+sup ((!it 1)(set (!it 0)))
+
+[ ... ]
+
+set (! (/it) add (! (/it) 1))
+sup (! (/it) 1)(set (! (/it 0)))
+
+[ ... 		Bytes code	... ]
+
+set %tmp !it;
+add %tmp 1;
+set !it %tmp;
+sup !it 1
+jmp %:end
+set !it 0
+:end
+
+[ ########################################################### ]
+
+if($av1 $av2 $av3 $code)<(
+	$av2 (($av1 $av3)(
+			$code
+	))
+)>
+
+while (and ((
+		inf ((!it 10))
+		sup ((!x 0))
+	))(
+		set (!it add (!it 1))
+))
+
+:if (:if (#it inf 10 0) and :if (#x sup 0 0)
+	(set (#it add (#it 2)))
+)
+
+while (and ((inf ((#it 10)) sup ((#x 0))))(
+	set (#it add (#it 2))
+))
+
+while (it < 10 && x > 0) {
+	it++;
+}
+
+[ ... 	Bytes code 		...	]
+
+:while [ Eval and ]
+	inf !it 10 [ eval !it < 10 ]
+	jmp %:infit
+	set %ok 1
+	sup !x 0	[ Eval !x > 0]
+	jmp %:infit
+	jmp %:itnd
+:xnd
+	jmp %:itnd
+:infit
+	set %ok 0
+:itnd
+	sup %ok 0
+	jmp %:end
+	set %tmp !it;
+	add %tmp 1;
+	set !it %tmp;
+	jmp %:while
+:end
+
+[ ############################################################## ]
+
+set (!x 0)
+set (!x add (!x 1)) [ -> incr (!x 1)]
+inf ((!x add (!y 2))(
+		echo ("ok")
+)(echo ("pas ok")))
+echo ("\n")
+
+[ ---- ]
+
+set !x 0
+[<]
+set /tmp !x
+add /tmp 1
+set !x /tmp
+[>] [ => add !x 1 ]
+set /tmp !y
+add /tmp 2
+inf !x /tmp
+jmp %:pas_ok
+echo "ok"
+jmp %:end
+:pas_ok
+echo "pas ok"
+:end
+echo "\n"
+
+! => resolution de variable
+/ => variable temporaire 0 ~ 100
+
+[ END ]
+
+[i]set [l]x [v]0
+[<]
+[i]set [t]tmp [l]x
+[i]add [t]tmp [v]1
+[i]set [l]x [t]tmp
+[>] [ => [i]add [l]x [v]1 ]
+[i]set [t]tmp [l]y
+[i]add [t]tmp 2
+[i]inf [l]x [t]tmp
+[i]jmp [v]%:pas_ok
+[i]echo [array][a]"ok" [ array + size + data addr ]
+[i]jmp [v]%:end
+:pas_ok
+[i]echo [array][a]"pas ok"
+:end
+[i]echo [array]"\n"
+
+[] => 1o
+[i] => instruction
+[l] => variable local
+[v] => value
+[t] => variable temporaire
+[arrray] => ptr to node
+
+
+exemple:
+[---]
+set (!v add (2 3 4 5))
+[---]
+[i]set [t]tmp [v]2
+[i]add [t]tmp [v]3
+[i]add [t]tmp [v]4
+[i]add [t]tmp [v]5
+[i]set [l]v [t]tmp
+[---]
+
+[---]
+set (!x 1)
+while (inf (!x 2)(
+		set (!x add (!x 1))
+))
+
+[---]
+:beg
+[i]set [l]x [v]1
+[i]inf [l]x [v]2
+[i]jmp [v]%:end
+[i]set [t]tmp [l]x
+[i]add [t]tmp 1
+[i]set [l]x [t]tmp
+[i]jmp %:beg
+:end
+
+[---]
+
+[i] => 1o
+[l] => 4o
+[v] => 4o
+[t] => 1o
+[array] => sizeof ptr to node
+
+[---]
+cp (!lst 0)
+set (!it 0)
+while (inf ((!it 10))(
+		set (!lst (!it) !it)
+		set (!it add (!it 1))
+))
+[---]
+[i]cp [l]lst [v]0
+[i]set [l]it [v]0
+:beg
+[i]inf [l]it [v]10
+[i]jmp [v]%:end
+
+[i]get [t]tmp [l]lst
+[i]son [t]tmp [l]it
+[i]set [t]tmp [l]it
+
+set [t]tmp [l]it
+add [t]tmp 1
+set [l]it [t]tmp
+:end
+[---]
+
+[array] devient [ptr]
+
+[ variable => ] [type][value]
+[ value => ] [v]value
+[ ptr => ] [ptr]%node
+
+[type][value] 
+instru => [type][value][code]
+
+set [l][t][][] !x /tmp
+set [l][v][][] !x 0
+set [t][v][][] /tmp 0
+
+mult [t][v][][] /tmp 10
+inf [t][v][][] /tmp 10
+jmp [v][][][] 10
+
+cp [l][ptr][][] !x %
+
+get [t][l][][] /tmp !lst
+son [t][l][][] /tmp !it
+set [t][v][][] /tmp 10
+
+set / round -> [l][g][sg][t] -> [v][l][g][sg][t]
+add / sub / div / mult / mod / sqrt / pow -> [l][g][sg][t] -> [l][g][sg][t][v]
+inf / sup / egal / and / or / xor / no -> [l][g][sg][t][v] -> [l][g][sg][t][v]
+jmp -> [v]
+cp -> [l][g][sg][t] -> [ptr]
+echo -> [ptr]
+len -> [l][g][sg][t][v]
+rand -> [l][g][sg][t]
+call -> [t] [l][g][sg][t][v] [l][g][sg][t][v]
+key_exist / erase -> [ptr] -> [l][g][sg][t][v]
+* / % -> [t] -> [l][g][sg][t][v]
+get / son  -> [t] -> [l][sg][t][t]

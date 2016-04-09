@@ -10,7 +10,7 @@
 
 /* Set opt */
 
-#define         SET             0 + OPT_RANGE
+#define         SET             78 + OPT_RANGE
 #define         ADD             1 + OPT_RANGE
 #define         SUB             2 + OPT_RANGE
 #define         DIV             95 + OPT_RANGE
@@ -77,6 +77,10 @@
 #define         ROUND           64 + OPT_RANGE
 #define         SQRT            63 + OPT_RANGE
 #define         KEY_EXIST       62 + OPT_RANGE
+#define         INCR            61 + OPT_RANGE
+#define         DECR            75 + OPT_RANGE
+#define         VAL             76 + OPT_RANGE
+#define         CP_ONE          77 + OPT_RANGE
 
 /* PROPRIETY */
 

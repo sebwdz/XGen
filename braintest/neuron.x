@@ -26,45 +26,74 @@ SetUp<(
 
 get_learn_dir<(
 	set (!learn #__av__^0)
-	echo ("Frequence = " * (@Nucleus /Accu) "\n")
+	div (!learn 10)
 	sup ((* (@Nucleus /Accu) 3)(
-			sup ((!learn 0)(set (!dir 0.5))
-				(set (!dir -1)))
+			sup ((!learn 0)(set (!dir !learn))
+				(set (!dir !learn)))
 		)(
-			sup ((!learn 0)(set (!dir -0.5))
-				(set (!dir 1)))
+			sup ((!learn 0)(set (!dir sub (0 !learn)))
+				(set (!dir sub (0 !learn))))
 	))
-	ret (!dir)
+	ret (div (!dir 10))
+)>
+
+Membrane|DopLearn<(
+	egal ((* (* (!syn 1) /SynapsesDest) /Dopamine)(
+			[echo ("Dopamine !\n")]
+			sup ((@Dopamine 0.05)(
+					sup ((* (@Nucleus /Accu) 3)(
+							call (:Synapse|learn 0 (!syn /DopPositive mult (@DopPositive -0.01)))
+						)(
+							call (:Synapse|learn 0 (!syn /DopNegative mult (@DopNegative -0.01)))
+					))
+				)(
+					call (:Synapse|learn 0 (!syn /DopNegative mult (@DopNegative 0.0001)))
+					call (:Synapse|learn 0 (!syn /DopPositive mult (@DopPositive 0.0001)))
+			))
+	))
 )>
 
 MembraneLearn<(
 	inf ((@Input 1)(
-	set (!learn sub (@Dopamine mult (@Peptide 1)))
+	sup ((* (@Nucleus /Accu) 3)(
+			set (@Dopamine @DopPositive)
+	)(set (@Dopamine @DopNegative)))
+	[no ((egal ((@Dopamine 0)))(
+				echo ("Positive dop => " @DopPositive "\n")
+				echo ("Negative dop => " @DopNegative "\n")
+	))]
+	set (!learn sub (@Dopamine @Peptide))
 	no ((egal ((!learn 0)))(
 			set (!it 0)
 			set (!dir div (call (:get_learn_dir 0 (!learn)) 1))
 			while (inf ((!it @Synapses^_size))(
 					cp (!syn @Synapses^_data (!it))
-					and ((
-							egal ((* (* (!syn 1) /SynapsesDest) /Impulse))
-							sup ((* (* (!syn 1) /LastImpulse) 1))
-						)(
-							set (!tmp * (!syn 2))
-							echo (!tmp " ")
-							set (!tmp add (!tmp div (!dir 10)))
-							echo (!dir " => " !tmp " ")
-							set (* (!syn 2) !tmp)
+					sup ((* (* (!syn 1) /LastImpulse) 2)(
+							egal ((* (* (!syn 1) /SynapsesDest) /Impulse)(
+									call (:Synapse|learn 0 (!syn /Impulse !dir))
+								)(
+									
+							))
 					))
 					set (!it add (!it 1))
 			))
 			set (* (@Nucleus /Learn) !dir)
-			set (@Dopamine 0)
-			set (@Peptide 0)
+			set (@Dopamine set (@Peptide set (@DopNegative set (@DopPositive 0))))
 	))
 	))
 )>
 
 Membrane<(
+	set (!it 0)
+	while (inf ((!it @Synapses^_size))(
+			cp (!syn @Synapses^_data (!it))
+			call (:Synapse|get 0 (!syn /Impulse))
+			call (:Synapse|get 0 (!syn /DopPositive))
+			call (:Synapse|get 0 (!syn /DopNegative))
+			call (:Synapse|get 0 (!syn /Peptide))
+			cp (* (!syn 4) 0)
+			set (!it add (!it 1))
+	))
 	sup ((@Impulse 0)(
 			inf ((* (@Nucleus /Active) 1)(
 					set (* (@Nucleus /Impulse) add (* (@Nucleus /Impulse) div (@Impulse 10)))

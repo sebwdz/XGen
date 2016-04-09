@@ -2,14 +2,14 @@
 [ AXON ]
 
 Axon|ExecSynapses<(
-	set (@LastImpulse @Impulse)
+	set (@LastImpulse * (@Nucleus /Accu))
 	sup ((@Impulse 1)(
+			no ((egal ((@SynapseDest /Impulse)))(set (@LastImpulse 5)))
 			set (!it 0)
 			while (inf ((!it @Synapses^_size))(
 					cp (!syn @Synapses^_data (!it))
-					set (!val * (* (!syn 0) @SynapsesDest))
-					set (!val add (mult (div (@Impulse 1) * (!syn 2)) !val))
-					set (* (* (!syn 0) @SynapsesDest) !val)
+					call (:Synapse|clean 0 (!syn))
+					call (:Synapse|exec 0 (!syn /Impulse @Impulse))
 					set (!it add (!it 1))
 			))
 			set (@Impulse div (@Impulse 10))
@@ -32,7 +32,7 @@ ToGrowthCone<(
 					erase (& /LinkWithNucleus)
 					set (@LinkOk 0)
 					take_out
-					attach ((:GrowthCone))
+					attach ((:GrowthCone :Axon|ExecSynapses))
 	))))
 	sup ((!ok 0)(:freeAndKill))
 )>
@@ -42,7 +42,7 @@ Axon<(
 			set (@ImAxon 10)
 			cp (&LinkWithNucleus^_exec :LinkWithNucleus)
 			cp (&LinkWithNucleus^_param 0 (10 0 ?scope (?oth) ?link ?limit (1)))
-			attach ((:ToGrowthCone :Axon|ExecSynapses))
+			attach ((:ToGrowthCone))
 	))
 	:freeAndKill
 )>

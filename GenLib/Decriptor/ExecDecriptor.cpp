@@ -534,13 +534,17 @@ SMART(GeneticalNode)            Decriptor::key_exist(GeneticalNode *node)
     std::vector<SMART(GeneticalNode)>   &vct = node->get_son();
     SMART(GeneticalNode)                chan;
     SMART(GeneticalNode)                res(new GeneticalNode());
+    GeneticalNode                       *use;
 
     if (vct.size() > 1)
     {
         chan = get_chan(vct[0].get());
-        if (vct[1]->get_type() == EMPTY_CHAN && chan->get_ass(vct[1]->get_value()._ui, false))
+        use = vct[1].get();
+        if (use->get_type() != EMPTY_CHAN && use->get_type() != VALUE)
+            use = get_chan(use).get();
+        if (use->get_type() == EMPTY_CHAN && chan->get_ass(use->get_value()._ui, false))
             res->get_value()._f = 1;
-        else if (vct[1]->get_type() == VALUE && chan->get_son_ref(vct[1]->get_value()._f, false))
+        else if (use->get_type() == VALUE && chan->get_son_ref(use->get_value()._f, false))
             res->get_value()._f = 1;
     }
     return (res);
@@ -573,5 +577,54 @@ SMART(GeneticalNode)        Decriptor::free(GeneticalNode* node)
     (void)node;
     if (m_parent)
         CAST(ModuleClass*)(m_parent)->add_signal(FREE, this);
+    return (SMART(GeneticalNode)());
+}
+
+SMART(GeneticalNode)        Decriptor::incr(GeneticalNode* node)
+{
+    std::vector<SMART(GeneticalNode)>   &vct = node->get_son();
+    SMART(GeneticalNode)                chan;
+    float                   value;
+
+    if (vct.size() > 0)
+    {
+        chan = get_chan(vct[0].get());
+        if (vct.size() > 1)
+            value = get_value(vct[1].get());
+        else
+            value = 1;
+        if (node->get_value()._uc == INCR)
+            chan->get_value()._f += value;
+        else
+            chan->get_value()._f -= value;
+    }
+    return (chan);
+}
+
+SMART(GeneticalNode)    Decriptor::val(GeneticalNode* node)
+{
+    std::vector<SMART(GeneticalNode)>   &vct = node->get_son();
+
+    if (vct.size())
+        return (vct[0]);
+    return (SMART(GeneticalNode)());
+}
+
+SMART(GeneticalNode)    Decriptor::copy_one(GeneticalNode *node)
+{
+    std::vector<SMART(GeneticalNode)>   &vct = node->get_son();
+    SMART(GeneticalNode)                chan;
+    SMART(GeneticalNode)                chan2;
+
+    if (vct.size() > 1)
+    {
+        chan = get_chan(vct[0].get());
+        chan2 = get_chan(vct[1].get());
+        chan->set_type(chan2->get_type());
+        chan->set_value(chan2->get_value());
+        chan->set_ref(chan2->get_ref());
+        chan->set_function(NULL);
+        return (chan);
+    }
     return (SMART(GeneticalNode)());
 }

@@ -1,4 +1,38 @@
 
+[ SYNAPSE SETTER ]
+
+[ Impulse ]
+
+GrowthCone|createSynapse<(
+	cp (!syn #__av__^0)
+	call (:Synapse|add 0 (!syn /_receptor /Impulse
+								% ((/Impulse))))
+	call (:Synapse|add 0 (!syn /_emetor /Impulse
+								% ((/Impulse))))
+)>
+
+[ Dopamine ]
+
+GrowthCone|dopSynapse<(
+	cp (!syn #__av__^0)
+	call (:Synapse|add 0 (!syn /_receptor /DopPositive
+								% ((/Dopamine))))
+	call (:Synapse|add 0 (!syn /_receptor /DopNegative
+								% ((/Dopamine))))
+	call (:Synapse|add 0 (!syn /_emetor /Impulse
+								% ((/Dopamine))))
+)>
+
+[ Peptide ]
+
+GrowthCone|pepSynapse<(
+	cp (!syn #__av__^0)
+	call (:Synapse|add 0 (!syn /_receptor /Peptide
+								% ((/Peptide))))
+	call (:Synapse|add 0 (!syn /_emetor /Impulse
+								% ((/Peptide))))
+)>
+
 [ GROWTH CONE ]
 
 AtrByNeuron|exec<(
@@ -8,7 +42,8 @@ AtrByNeuron|exec<(
 			no ((egal ((* (#__oth__  /CellId) @Id))))
 			egal ((* (#__oth__ /SynapsesDest) /Impulse))
 		)(
-			call (:Synapse 0 (% (* (#__oth__)) % (@)))
+			cp (!syn call (:Synapse 0 (% (* (#__oth__)) % (@))))
+			call (@CreateSynapse 0 (!syn))
 	))
 )>
 
@@ -60,6 +95,13 @@ ExprAtr<(
 
 GrowthCone<(
 	:Init ((
+			no ((egal ((@SynapsesDest /Impulse)))(
+				egal ((@SynapsesDest /Dopamine)(
+						cp (@CreateSynapse^0 :GrowthCone|dopSynapse)
+					)(
+						cp (@CreateSynapse^0 :GrowthCone|pepSynapse)
+				))
+			)(cp (@CreateSynapse^0 :GrowthCone|createSynapse)))
 			cp (&RplsNucleus^_exec :RplsNucleus|exec)
 			cp (&RplsNucleus^_clean :RplsNucleus|clean)
 			cp (&RplsNucleus^_param 0 (0 0 ?scope (?link) ?manual ?limit (1)))

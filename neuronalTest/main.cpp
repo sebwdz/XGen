@@ -18,9 +18,9 @@ void        exec(Brain *brain)
     float                   val;
     int                     itest;
 
-    tests.push_back(new Test({true, true}, {true}));
-    tests.push_back(new Test({true, false}, {false}));
-    tests.push_back(new Test({false, true}, {false}));
+    tests.push_back(new Test({true, true}, {false}));
+    tests.push_back(new Test({true, false}, {true}));
+    tests.push_back(new Test({false, true}, {true}));
     tests.push_back(new Test({false, false}, {false}));
     it = 0;
     diff = 0;
@@ -34,32 +34,41 @@ void        exec(Brain *brain)
     wait = 1;
     itest = 0;
     val = 0;
-    while (it++ < 50000)
+    while (it++ < 70000)
     {
         tests[itest]->apply(input);
         brain->exec();
-        if (output->get_ass(Chanel::hash("_data"))->get_son().size())
+        /*if (output->get_ass(Chanel::hash("_data"))->get_son().size())
         {
             tmp = boost::static_pointer_cast<GeneticalNode>(output->get_ass(Chanel::hash("_data"))->get_son_ref(0)->get_ref());
             if (tmp->get_ass(Chanel::hash("Active"))->get_value()._f > 0)
                 ok++;
-        }
-        if (it - diff > 100)
+        }*/
+        if (it - diff > 50)
         {
+            if (output->get_ass(Chanel::hash("_data"))->get_son().size())
+                    {
+                        tmp = boost::static_pointer_cast<GeneticalNode>(output->get_ass(Chanel::hash("_data"))->get_son_ref(0)->get_ref());
+                        if (tmp->get_ass(Chanel::hash("Accu"))->get_value()._f > 3)
+                            ok++;
+                        std::cout << "accu => " << tmp->get_ass(Chanel::hash("Accu"))->get_value()._f << std::endl;
+                    }
+            if (it > 70000)
+                std::cout << "NO LEARN !" << std::endl;
             std::cout << ok << std::endl;
             diff = it;
             tests[itest]->print();
             if (tests[itest]->evaluate(ok))
             {
-                if (good->get_ref())
+                if (it < 70000 && good->get_ref())
                     boost::static_pointer_cast<GeneticalNode>(good->get_ref())->get_ass(Chanel::hash("Impulse"))->get_value()._f = 10;
                 std::cout << "ok " << std::endl;
             }
             else
             {
-                if (bad->get_ref())
+                if (it < 70000 && bad->get_ref())
                     boost::static_pointer_cast<GeneticalNode>(bad->get_ref())->get_ass(Chanel::hash("Impulse"))->get_value()._f = 10;
-                std::cout << "\t\t\tko " << std::endl;
+                std::cout << "\t\t\t\t\t\tko " << std::endl;
             }
             ok = 0;
             if (val++ > 4)
@@ -74,7 +83,6 @@ void        exec(Brain *brain)
                 val = 0;
             }
         }
-        usleep(100);
     }
 }
 

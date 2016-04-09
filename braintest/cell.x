@@ -12,10 +12,10 @@ Cell<(
 [ MAIN CODE ]
 
 main<(
-	inf ((!t3 4)(
+	inf ((!t3 6)(
 			:Init ((
 					cp (#Nucleus :Nucleus)
-					shared (/__pos__ /Parent)
+					share (/__pos__ /Parent)
 					cp (@Parent % (@))
 			))
 			inf ((set (!t add (!t 1)) 0)(
@@ -29,8 +29,8 @@ main<(
 						)(new_head ((#Nucleus :NeuronPeptide))))
 					)(
 						cp (@__pos__ 0 (sub (mod (rand 30) 15) sub (mod (rand 30) 15)))
-						inf ((set (!t3 add (!t3 1)) 4)(
-								egal ((!t3 1)(
+						inf ((set (!t3 add (!t3 1)) 6)(
+								inf ((!t3 3)(
 										new_head ((#Nucleus :Output))
 								)(new_head ((#Nucleus :Input))))
 						))

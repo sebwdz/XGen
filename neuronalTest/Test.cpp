@@ -11,7 +11,7 @@ void            Test::apply(SMART(GeneticalNode) in)
 {
     SMART(GeneticalNode)        tmp;
     static int t = 0;
-    if (t++ > 5)
+    if (t++ > 0)
     {
         t = 0;
         for (unsigned int i = 0; i < in->get_ass(Chanel::hash("_data"))->get_son().size(); i++)
@@ -20,7 +20,7 @@ void            Test::apply(SMART(GeneticalNode) in)
                 break;
             tmp = boost::static_pointer_cast<GeneticalNode>(in->get_ass(Chanel::hash("_data"))->get_son_ref(i)->get_ref());
             if (m_input[i])
-                tmp->get_ass(Chanel::hash("Impulse"))->get_value()._f = 10;
+                tmp->get_ass(Chanel::hash("Impulse"))->get_value()._f = 1;
             else
                 tmp->get_ass(Chanel::hash("Impulse"))->get_value()._f = 0;
         }
@@ -33,9 +33,9 @@ bool            Test::evaluate(int active)
 
     for (unsigned int i = 0; i < m_output.size(); i++)
     {
-        if (m_output[i] && active >= 10)
+        if (m_output[i] && active > 0)
             return (true);
-        else if (!m_output[i] && active < 10)
+        else if (!m_output[i] && active < 1)
             return (true);
     }
     return (false);

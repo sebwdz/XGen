@@ -45,6 +45,10 @@ DecriptorManager::DecriptorManager()
   m_opt.insert(std::make_pair(KEY_EXIST, &Decriptor::key_exist));
   m_opt.insert(std::make_pair(ATTACH_INSTRU, &Decriptor::attach));
   m_opt.insert(std::make_pair(FREE, &Decriptor::free));
+  m_opt.insert(std::make_pair(INCR, &Decriptor::incr));
+  m_opt.insert(std::make_pair(DECR, &Decriptor::incr));
+  m_opt.insert(std::make_pair(VAL, &Decriptor::val));
+  m_opt.insert(std::make_pair(CP_ONE, &Decriptor::copy_one));
 }
 
 DecriptorManager::~DecriptorManager()

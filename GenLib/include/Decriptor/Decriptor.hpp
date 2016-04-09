@@ -51,6 +51,9 @@ public:
     SMART(GeneticalNode) key_exist(GeneticalNode *node);
     SMART(GeneticalNode) attach(GeneticalNode *node);
     SMART(GeneticalNode) free(GeneticalNode* node);
+    SMART(GeneticalNode) incr(GeneticalNode* node);
+    SMART(GeneticalNode) val(GeneticalNode* node);
+    SMART(GeneticalNode) copy_one(GeneticalNode *node);
 
     /* chan */
 

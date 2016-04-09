@@ -14,17 +14,19 @@ NodeMaker::NodeMaker(std::string &maind, bool asmn)
     m_opt.push_back(std::make_pair("OR", OR));
     m_opt.push_back(std::make_pair("AND", AND));
     m_opt.push_back(std::make_pair("NO", NO));
-    m_opt.push_back(std::make_pair("SHARED", SHARED));
-    m_opt.push_back(std::make_pair("UNSHARED", UNSHARED));
+    m_opt.push_back(std::make_pair("SHARE", SHARED));
+    m_opt.push_back(std::make_pair("UNSHARE", UNSHARED));
     m_opt.push_back(std::make_pair("ADD", ADD));
+    m_opt.push_back(std::make_pair("+", ADD));
     m_opt.push_back(std::make_pair("SUB", SUB));
+    m_opt.push_back(std::make_pair("-", SUB));
     m_opt.push_back(std::make_pair("CP", COPY));
     m_opt.push_back(std::make_pair("SET", SET));
     m_opt.push_back(std::make_pair("MULT", MULT));
     m_opt.push_back(std::make_pair("DIV", DIV));
     m_opt.push_back(std::make_pair("MOD", MOD));
     m_opt.push_back(std::make_pair("WHILE", WHILE));
-    m_opt.push_back(std::make_pair("CREAT", CREAT));
+    m_opt.push_back(std::make_pair("CREATE", CREAT));
     m_opt.push_back(std::make_pair("DETACH", DETACH));
     m_opt.push_back(std::make_pair("NEW_HEAD", NEW_HEAD));
     m_opt.push_back(std::make_pair("DUPLIC", DUPLIC));
@@ -33,13 +35,14 @@ NodeMaker::NodeMaker(std::string &maind, bool asmn)
     m_opt.push_back(std::make_pair("ATTACH", ATTACH_INSTRU));
     m_opt.push_back(std::make_pair("LINK", LINK));
     m_opt.push_back(std::make_pair("COMIN", COMIN));
-    m_opt.push_back(std::make_pair("TAKE_OUT", TAKEOUT));
+    m_opt.push_back(std::make_pair("GO_OUT", TAKEOUT));
     m_opt.push_back(std::make_pair("FREE", FREE));
     m_opt.push_back(std::make_pair("KILL", KILL));
     m_opt.push_back(std::make_pair("DESTROY", DESTROY));
     m_opt.push_back(std::make_pair("VAR", VAR));
     m_opt.push_back(std::make_pair("ECHO", ECHO));
     m_opt.push_back(std::make_pair("CALL", CALL));
+    m_opt.push_back(std::make_pair("KEY_EXIST", KEY_EXIST));
     m_opt.push_back(std::make_pair("%", REF));
     m_opt.push_back(std::make_pair("*", DEREF));
 
@@ -51,6 +54,10 @@ NodeMaker::NodeMaker(std::string &maind, bool asmn)
     m_opt.push_back(std::make_pair("MOVE", MOVE));
     m_opt.push_back(std::make_pair("ROUND", ROUND));
     m_opt.push_back(std::make_pair("SQRT", SQRT));
+    m_opt.push_back(std::make_pair("INCR", INCR));
+    m_opt.push_back(std::make_pair("DECR", DECR));
+    m_opt.push_back(std::make_pair("VAL", VAL));
+    m_opt.push_back(std::make_pair("CP_ONE", CP_ONE));
     m_asm = asmn;
     m_size = 0;
 }

@@ -1,5 +1,5 @@
 
-CC = 		../ASM
+CC = 		../../ASM
 
 TARGET = 	out.gen
 

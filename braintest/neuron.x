@@ -76,7 +76,7 @@ MembraneLearn<(
 									call (:Membrane|DopLearn 0 (!syn ))
 							))
 					))
-					set (!it add (!it 1))
+					incr (!it)
 			))
 			set (* (@Nucleus /Learn) !dir)
 			set (@Dopamine set (@Peptide set (@DopNegative set (@DopPositive 0))))
@@ -93,7 +93,7 @@ Membrane<(
 			call (:Synapse|get 0 (!syn /DopNegative))
 			call (:Synapse|get 0 (!syn /Peptide))
 			cp (* (!syn 4) 0)
-			set (!it add (!it 1))
+			incr (!it)
 	))
 	sup ((@Impulse 0)(
 			inf ((* (@Nucleus /Active) 1)(

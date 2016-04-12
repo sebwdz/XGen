@@ -21,26 +21,11 @@ data<(
 )>
 
 test<(
-	cp (!tmp % (12))
-	set (!x * (!tmp))
-	echo (!x "\n")
-	ret (0)
-	[set (!w 10)
-	set (!z 5)
-
-	cp (!x^_dodo 15)
-	echo (!x^_dodo "\n")
-	cp (!y !x)
-
-	echo (!y^_dodo "\n")
-	set (!y^0 2)
-	cp (!y^0 4)
-	echo (!y^_dodo "\n")
-	cp (!y 0)]
+	{AA 10}
 	set (!tmp 12)
-	cp (!y 0 {_dodo 14 {a !tmp b 10}})
+	cp (!y 0 ({_dodo (14 15 ({a !tmp}))}))
 	echo (1 (!y^_dodo) "\n")
-	echo (!y^_dodo^b "\n")
+	echo (!y^_dodo^a "\n")
 	echo (!y^0^1 "\n")
 	cp (!data :data)
 	call (!data)

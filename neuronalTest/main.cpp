@@ -35,7 +35,7 @@ void        exec(Brain *brain)
     itest = 0;
     val = 0;
     it = 0;
-    while (it++ < 70000)
+    while (it++ < 100000)
     {
         tests[itest]->apply(input);
         brain->exec();
@@ -54,20 +54,23 @@ void        exec(Brain *brain)
                             ok++;
                         std::cout << "accu => " << tmp->get_ass(Chanel::hash("Accu"))->get_value()._f << std::endl;
                     }
-            if (it > 70000)
+            if (it > 90000)
+            {
+                return ;
                 std::cout << "NO LEARN !" << std::endl;
+            }
             std::cout << ok << std::endl;
             diff = it;
             tests[itest]->print();
             if (tests[itest]->evaluate(ok))
             {
-                if (it < 70000 && good->get_ref())
+                if (it < 90000 && good->get_ref())
                     boost::static_pointer_cast<GeneticalNode>(good->get_ref())->get_ass(Chanel::hash("Impulse"))->get_value()._f = 10;
                 std::cout << "ok " << std::endl;
             }
             else
             {
-                if (it < 70000 && bad->get_ref())
+                if (it < 90000 && bad->get_ref())
                     boost::static_pointer_cast<GeneticalNode>(bad->get_ref())->get_ass(Chanel::hash("Impulse"))->get_value()._f = 10;
                 std::cout << "\t\t\t\t\t\tko " << std::endl;
             }

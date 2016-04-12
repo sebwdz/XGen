@@ -154,7 +154,7 @@ SMART(GeneticalNode)               NodeMaker::read_node(NodeData *data, std::siz
     std::vector<SMART(GeneticalNode)> newAv;
     unsigned int                      key;
 
-    found = data->data.find_first_of("\t \n()}", pos);
+    found = data->data.find_first_of("\t \n(){}", pos);
     if (data->data[pos] == ':')
     {
         tmp = data->data.substr(pos + 1, found - (pos + 1));
@@ -176,6 +176,27 @@ SMART(GeneticalNode)               NodeMaker::read_node(NodeData *data, std::siz
         make_node(tmp, str, newAv);
         return (get_node(tmp)->block);
     }
+    else if (data->data[pos] == '{')
+    {
+        pos++;
+        while (data->data[pos] != '}')
+        {
+            pos = data->data.find_first_not_of("\t \n", pos);
+            found = data->data.find_first_of("\t \n", pos);
+            key = Chanel::hash(data->data.substr(pos, found - pos));
+            pos = found;
+            pos = data->data.find_first_not_of("\t \n", pos);
+            son = read_node(data, pos, str, av);
+            son->set_key(key);
+            pos = data->data.find_first_not_of("\t\n ", pos);
+            if (data->data[pos] != '}')
+                throw (std::string("Error Expected '}'"));
+            pos++;
+            return (son);
+        }
+        pos++;
+        return (node);
+    }
     tmp = data->data.substr(pos, found - pos);
     node = get_value(data, tmp, av);
     pos = data->data.find_first_not_of("\t \n", found);
@@ -192,24 +213,6 @@ SMART(GeneticalNode)               NodeMaker::read_node(NodeData *data, std::siz
                 throw (std::string("Error Expected ')'"));
         }
         pos++;
-    }
-    else if (data->data[pos] == '{')
-    {
-        pos++;
-        while (data->data[pos] != '}')
-        {
-            pos = data->data.find_first_not_of("\t ", pos);
-            found = data->data.find_first_of("\t ", pos);
-            key = Chanel::hash(data->data.substr(pos, found - pos));
-            pos = found;
-            pos = data->data.find_first_not_of("\t ", pos);
-            son = read_node(data, pos, str, av);
-            son->set_key(key);
-            node->add_son(son);
-            pos = data->data.find_first_not_of("\t\n ", pos);
-        }
-        pos++;
-        return (node);
     }
     return (node);
 }

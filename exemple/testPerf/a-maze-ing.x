@@ -47,6 +47,7 @@ aux_check_door<(
 					sup ((* (!arround !dir) -1))
 					inf ((* (!av^0 /_data * (!arround !dir) /_id) 1))
 				)(
+					[call (:debug 0 (!av^0))]
 					set (* (!av^0 /_data * (!arround !dir) /_id) 1)
 					set (* (!case /_door !dir) 1)
 					set (!inv call (:inv_dir 0 (!dir)))

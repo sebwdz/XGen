@@ -172,20 +172,30 @@ while (inf ((!it 10))(
 		set (!lst (!it) !it)
 		set (!it add (!it 1))
 ))
+<
+	[l]lst
+	[l]it
+	[t]tmp
+>
 [---]
-[i]cp [l]lst [v]0
-[i]set [l]it [v]0
+[i]cp [d]0 [v]0
+[i]set [d]1 [v]0
 :beg
-[i]inf [l]it [v]10
+[i]inf [d]1 [v]10
 [i]jmp [v]%:end
 
-[i]get [t]tmp [l]lst
-[i]son [t]tmp [l]it
-[i]set [t]tmp [l]it
+[ push tmp ]
 
-set [t]tmp [l]it
-add [t]tmp 1
-set [l]it [t]tmp
+[i]get [t]0 [d]0
+[i]son [t]0 [l]1
+[i]set [d]0 [l]1
+
+[ pop tmp ]
+[ push tmp ]
+
+set [t]0 [l]1
+add [t]0 1
+set [l]1 [t]0
 :end
 [---]
 
@@ -224,3 +234,71 @@ call -> [t] [l][g][sg][t][v] [l][g][sg][t][v]
 key_exist / erase -> [ptr] -> [l][g][sg][t][v]
 * / % -> [t] -> [l][g][sg][t][v]
 get / son  -> [t] -> [l][sg][t][t]
+
+pair($av1 $av2)<(
+	$av1 $av2
+)>
+
+[
+Code<(
+	if ((sup (1 0))(
+		if ((and (!x sup (!y 10)))(
+			if ((call (!w))(
+				<(
+					while ((sup (!y !x))(
+					))
+				)>
+			))
+		))
+	))
+)>
+]
+
+cp (!pair :pair(("A")("salut")))
+
+cp (!pair (("A")("salut")))
+
+Obj|say_name<(
+	echo (* (#this /_name) "!")
+)>
+
+ObjA<(
+	cp (* (#this /_name) 2 ("NAME"))
+	cp (* (#this /_sayName) :Obj|say_name)
+)>
+
+ObjB<(
+	{/_name 2 ("NAME")}
+	{/sayName :Obj|say_name}
+)>
+
+ObjC<(
+	{/_objB :ObjB}
+	{/_age 10}
+)>
+
+ObjD<(
+	call (:ObjA)
+	set (* (#this /_age) 10)
+)>
+
+ObjE<(
+	cp (* (#this) :ObjB)
+	set (* (#this /_age) 10)
+)>
+
+[ call sayName ObjC ]
+cp (#this % (!ObjC))
+call (!objC^_objB^sayName)
+
+[ call sayName ObjD-E ]
+cp (#this % (!objD))
+call (!objD^sayName)
+
+test<(
+	[ create ObjB ]
+	cp (!ojbB :ObjB)
+	[ create ObjA ]
+	cp (#this % (!objA))
+	call (:ObjA)
+)>

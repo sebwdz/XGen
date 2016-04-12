@@ -23,10 +23,12 @@ class   GeneticalNode : public GeneticObj
         void                    set_block(GeneticalNode *block);
         void                    set_chan(boost::shared_ptr<GeneticalNode> chan);
         void                    set_function(SMART(GeneticalNode) (Decriptor::*fonction)(GeneticalNode*));
+        void                    set_key(unsigned int);
 
         SMART(GeneticalNode)    (Decriptor::*get_function())(GeneticalNode*);
         SMART(GeneticalNode)    &get_chan();
         GeneticalNode           *get_block();
+        unsigned int            get_key();
 
         SMART(GeneticalNode)    get_ass(unsigned int key, bool creat = true);
         SMART(GeneticalNode)    get_son_ref(unsigned int ref, bool creat = true);
@@ -55,6 +57,7 @@ class   GeneticalNode : public GeneticObj
         USE_LIST                            m_ass;
         SMART(GeneticalNode)                m_local;
         std::vector<SMART(GeneticalNode)>   m_son;
+        unsigned int                        m_key;
 };
 
 #endif // GENETICALNODE_HPP_INCLUDED

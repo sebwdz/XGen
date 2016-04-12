@@ -7,6 +7,7 @@ GeneticalNode::GeneticalNode(GeneticObj *parent) : GeneticObj(parent)
     m_type = 5;
     m_function = NULL;
     m_block = NULL;
+    m_key = 0;
 }
 
 GeneticalNode::~GeneticalNode()
@@ -42,6 +43,11 @@ void            GeneticalNode::set_function(SMART(GeneticalNode) (Decriptor::*fu
     m_function = function;
 }
 
+void            GeneticalNode::set_key(unsigned int key)
+{
+    m_key = key;
+}
+
 void            GeneticalNode::set_chan(SMART(GeneticalNode) chan)
 {
     m_chan = chan;
@@ -67,6 +73,11 @@ SMART(GeneticalNode)        GeneticalNode::get_local()
   return (m_local);
 }
 
+unsigned int                GeneticalNode::get_key()
+{
+    return (m_key);
+}
+
 GeneticalNode    *GeneticalNode::get_block()
 {
   return (m_block);
@@ -83,6 +94,7 @@ SMART(GeneticalNode)    GeneticalNode::get_ass(unsigned int key, bool creat)
         return (res);
       res = SMART(GeneticalNode)(new GeneticalNode());
       res->set_parent(this);
+      res->set_key(key);
       m_ass.insert(std::make_pair(key, res));
       m_son.push_back(res);
       return (res);
@@ -108,13 +120,16 @@ SMART(GeneticalNode)                 GeneticalNode::get_son_ref(unsigned int ref
 void                                GeneticalNode::add_son(boost::shared_ptr<GeneticalNode> son)
 {
   son->set_parent(this);
+  if (son->get_key())
+      m_ass[son->get_key()] = son;
   m_son.push_back(son);
 }
 
 
 void                GeneticalNode::set_ass(unsigned int key, SMART(GeneticalNode) node)
 {
-  m_ass[key] = node;
+    node->set_key(key);
+    m_ass[key] = node;
 }
 
 void                GeneticalNode::remove_ass(unsigned int key)
@@ -133,6 +148,7 @@ void        GeneticalNode::load(std::ifstream &stream)
     int             type;
 
     stream.read(reinterpret_cast<char*>(&m_value), sizeof(nodeValue));
+    stream.read(reinterpret_cast<char*>(&m_key), sizeof(unsigned int));
     stream.read(reinterpret_cast<char*>(&nb), sizeof(unsigned int));
     for (unsigned int it = 0; it < nb; it++)
     {
@@ -140,6 +156,8 @@ void        GeneticalNode::load(std::ifstream &stream)
         m_son.push_back(SMART(GeneticalNode)(new GeneticalNode(this)));
         m_son.back()->load(stream);
         m_son.back()->set_type(type);
+        if (m_son.back()->get_key())
+            m_ass[m_son.back()->get_key()] = m_son.back();
     }
 }
 
@@ -150,6 +168,7 @@ void        GeneticalNode::save(std::ofstream &stream)
 
     size = m_son.size();
     stream.write(reinterpret_cast<const char*>(&m_value), sizeof(nodeValue));
+    stream.write(reinterpret_cast<const char*>(&m_key), sizeof(unsigned int));
     stream.write(reinterpret_cast<const char*>(&size), sizeof(unsigned int));
     for (it = 0; it < m_son.size(); it++)
     {

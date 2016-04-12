@@ -23,13 +23,16 @@ SMART(GeneticalNode)    GeneticalNode::copy(SMART(GeneticalNode) cp)
     {
         node->m_son.push_back(m_son[it]->copy());
         node->m_son.back()->set_parent(node.get());
+        node->m_son.back()->set_key(m_son[it]->get_key());
+        if (m_son[it]->get_key())
+            node->m_ass.insert(std::make_pair(m_son[it]->get_key(), node->m_son.back()));
     }
-    for (ass = m_ass.begin(); ass != m_ass.end(); ass++)
+    /*for (ass = m_ass.begin(); ass != m_ass.end(); ass++)
       {
         nw = ass->second->copy();
         nw->set_parent(node.get());
         node->m_ass.insert(std::make_pair(ass->first, nw));
-      }
+      }*/
     node->set_type(m_type);
     return (node);
 }

@@ -18,7 +18,7 @@ main<(
 					share (/__pos__ /Parent)
 					cp (@Parent % (@))
 			))
-			inf ((set (!t add (!t 1)) 0)(
+			inf ((set (!t add (!t 1)) 4)(
 					cp (@__pos__ 0 (sub (mod (rand 30) 15) sub (mod (rand 30) 15)))
 					new_head ((#Nucleus))
 				)(
@@ -29,8 +29,8 @@ main<(
 						)(new_head ((#Nucleus :NeuronPeptide))))
 					)(
 						cp (@__pos__ 0 (sub (mod (rand 30) 15) sub (mod (rand 30) 15)))
-						inf ((set (!t3 add (!t3 1)) 6)(
-								inf ((!t3 3)(
+						inf ((set (!t3 add (!t3 1)) 4)(
+								inf ((!t3 2)(
 										new_head ((#Nucleus :Output))
 								)(new_head ((#Nucleus :Input))))
 						))

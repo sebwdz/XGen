@@ -34,6 +34,7 @@ void        exec(Brain *brain)
     wait = 1;
     itest = 0;
     val = 0;
+    it = 0;
     while (it++ < 70000)
     {
         tests[itest]->apply(input);

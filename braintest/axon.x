@@ -31,7 +31,7 @@ ToGrowthCone<(
 					set (!ok 1)
 					erase (& /LinkWithNucleus)
 					set (@LinkOk 0)
-					take_out
+					go_out
 					attach ((:GrowthCone :Axon|ExecSynapses))
 	))))
 	sup ((!ok 0)(:freeAndKill))

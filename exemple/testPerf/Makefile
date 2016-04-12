@@ -1,17 +1,18 @@
 
-CC = 		../ASM
+CC = 		../../ASM
 
 TARGET = 	out.gen
 
 LIBDIR =	../xgenlib/
 
-SRC =		exemple.x
+SRC =		a-maze-ing.x
 
+LIB =		../../xgenlib/object.x
 
-BEGIN =		test
+BEGIN =		main
 
 all:
-	$(CC) $(BEGIN) $(TARGET) $(SRC)
+	$(CC) $(BEGIN) $(TARGET) $(SRC) $(LIB)
 
 
 

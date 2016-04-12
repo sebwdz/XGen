@@ -11,7 +11,6 @@ Nucleus|Learn<(
 	)(set (@Biais 0)))
 )>
 
-
 Input<(
 	set (@Biais 1)
 	:Init ((
@@ -63,6 +62,7 @@ ImpulseNucleus<(
 		)(
 			sup ((@Impulse @Biais)(
 					set (@Accu add (@Accu 1))
+					sup ((@Accu 20)(set (@Accu 20)))
 					set (#LastActive 0)
 					set (@Active 1)
 					set (@Impulse 15)
@@ -78,14 +78,14 @@ ImpulseNucleus<(
 CreatAxon<(
 	sup ((@ImInCell 0)(
 		set (!in 1)
-		:Init ((creat ((:Axon))))
+		:Init ((create ((:Axon))))
 	))
 	sup ((@Axon 0)(attach ((:ImpulseNucleus)) :freeAndKill))
 )>
 
 NucleusNeuron<(
 	:Init ((
-			shared (/SynapsesDest)
+			share (/SynapsesDest /Output)
 			attach ((:CreatAxon :IonLeakage))
 			set (@Biais div (sub (mod (rand 100) 50) 100))
 			sup ((@Input 0)(set (@Biais 1)))

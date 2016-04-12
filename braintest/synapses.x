@@ -1,6 +1,11 @@
 
 [ SYNAPSE ]
 
+[
+	create synapses
+	from -> to -> syn
+]
+
 Synapse<(
 	cp (!syn % ((#__av__^0 #__av__^1)))
 	egal ((@SynapsesDest /Impulse)(
@@ -26,7 +31,7 @@ Synapse|add<(
 )>
 
 [
-	%synapse -> from -> value
+	%synapse -> from -> value -> ()
 ]
 
 Synapse|exec<(
@@ -48,7 +53,7 @@ Synapse|clean<(
 )>
 
 [
-	%synapse -> to
+	%synapse -> to -> ()
 ]
 
 Synapse|learn<(
@@ -61,10 +66,17 @@ Synapse|learn<(
 			set (!tmp * (!emit 1))
 			set (!tmp add (!tmp div (!av^2 10)))
 			[echo (!av^2 " => " * (!emit 1) " ")]
+			sup ((!tmp 10)(set (!tmp 10)))
+			inf ((!tmp -10)(set (!tmp -10)))
 			set (* (!emit 1) !tmp)
 			set (!it add (!it 1))
 	))
 )>
+
+[
+	get value from synapse
+	%syn -> from -> ()
+]
 
 Synapse|get<(
 	cp (!av #__av__)

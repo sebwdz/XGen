@@ -84,20 +84,19 @@ SMART(GeneticalNode)        Decriptor::set_function(GeneticalNode *node)
   value1._f = 0;
   if (vct.size() && node->get_value()._uc == SET)
   {
-      res = get_chan(get_next_node(vct[it].get()));
+      res = get_chan(vct[it++].get());
       value1 = res->get_value();
   }
-  else if (vct.size())
-      value1._f = get_value(get_next_node(vct[it].get()));
-  for (it = 1; it < vct.size(); it++)
+  for (it = it; it < vct.size(); it++)
     {
       value2 = get_value(get_next_node(vct[it].get()));
       if (node->get_value()._uc == SET)
       {
-        value1._f = value2;
-        res->get_value() = value1;
+        res->get_value()._f = value2;
         return (res);
       }
+      else if (it == 0)
+          value1._f = value2;
       else if (node->get_value()._uc == ADD)
         value1._f += value2;
       else if (node->get_value()._uc == MULT)
@@ -315,6 +314,7 @@ SMART(GeneticalNode)              Decriptor::echo(GeneticalNode *node)
 SMART(GeneticalNode)              Decriptor::copy_value(GeneticalNode *node)
 {
     SMART(GeneticalNode)          av;
+    SMART(GeneticalNode)          res;
     std::vector<SMART(GeneticalNode)> &vct = node->get_son();
     GeneticalNode               *son;
 
@@ -328,17 +328,19 @@ SMART(GeneticalNode)              Decriptor::copy_value(GeneticalNode *node)
             son = vct[it].get();
             if (son->get_type() == GLOBAL_CHAN ||
                     son->get_type() == LOCAL_CHAN || son->get_type() == FAST_CHAN || son->get_type() == INSTRU)
-                av->add_son(get_chan(son)->copy());
+                res = get_chan(son)->copy();
             else if (son->get_son().size() && son->get_type() == VALUE)
-                av->add_son(copy_value(son));
+                res = copy_value(son);
             else
-                av->add_son(son->copy());
+                res = son->copy();
+            res->set_key(son->get_key());
+            av->add_son(res);
         }
     }
     else if (node->get_type() != BLOCK)
         get_chan(node)->copy(av);
     else
-        av = node->copy(av);
+        node->copy(av);
     return (av);
 }
 
@@ -376,7 +378,7 @@ SMART(GeneticalNode)            Decriptor::ref_function(GeneticalNode *node)
         if (node->get_value()._uc == DEREF)
         {
             if (!(res = boost::static_pointer_cast<GeneticalNode>(get_chan(vct[0].get())->get_ref())))
-                res = vct[0];
+                return (SMART(GeneticalNode)(new GeneticalNode()));
             return (getSubChan(res, vct, 1));
         }
         else

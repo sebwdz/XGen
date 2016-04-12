@@ -38,13 +38,13 @@ get_learn_dir<(
 )>
 
 Membrane|DopLearn<(
+	cp (!syn #__av__^0)
 	egal ((* (* (!syn 1) /SynapsesDest) /Dopamine)(
-			[echo ("Dopamine !\n")]
 			sup ((@Dopamine 0.05)(
 					sup ((* (@Nucleus /Accu) 3)(
-							call (:Synapse|learn 0 (!syn /DopPositive mult (@DopPositive -0.01)))
+							call (:Synapse|learn 0 (!syn /DopPositive mult (@DopPositive -0.05)))
 						)(
-							call (:Synapse|learn 0 (!syn /DopNegative mult (@DopNegative -0.01)))
+							call (:Synapse|learn 0 (!syn /DopNegative mult (@DopNegative -0.05)))
 					))
 				)(
 					call (:Synapse|learn 0 (!syn /DopNegative mult (@DopNegative 0.0001)))
@@ -64,6 +64,7 @@ MembraneLearn<(
 	))]
 	set (!learn sub (@Dopamine @Peptide))
 	no ((egal ((!learn 0)))(
+			[sup ((@Output 0)(echo ("Out\t")))]
 			set (!it 0)
 			set (!dir div (call (:get_learn_dir 0 (!learn)) 1))
 			while (inf ((!it @Synapses^_size))(
@@ -72,7 +73,7 @@ MembraneLearn<(
 							egal ((* (* (!syn 1) /SynapsesDest) /Impulse)(
 									call (:Synapse|learn 0 (!syn /Impulse !dir))
 								)(
-									
+									call (:Membrane|DopLearn 0 (!syn ))
 							))
 					))
 					set (!it add (!it 1))

@@ -2,6 +2,7 @@
 #include    <boost/lexical_cast.hpp>
 #include    <boost/algorithm/string/replace.hpp>
 #include    "include/NodeMaker.hpp"
+#include        "Decriptor/chanel.hpp"
 
 std::string             remove_comment(std::string buff) {
     std::string res;
@@ -151,8 +152,9 @@ SMART(GeneticalNode)               NodeMaker::read_node(NodeData *data, std::siz
     std::size_t                       found;
     std::string                       tmp;
     std::vector<SMART(GeneticalNode)> newAv;
+    unsigned int                      key;
 
-    found = data->data.find_first_of("\t ()", pos);
+    found = data->data.find_first_of("\t \n()}", pos);
     if (data->data[pos] == ':')
     {
         tmp = data->data.substr(pos + 1, found - (pos + 1));
@@ -180,7 +182,7 @@ SMART(GeneticalNode)               NodeMaker::read_node(NodeData *data, std::siz
     if (data->data[pos] == '(')
     {
         pos++;
-        pos = data->data.find_first_not_of("\t\n ", pos);
+        pos = data->data.find_first_not_of(" \t\n", pos);
         while (data->data[pos] != ')')
         {
             son = read_node(data, pos, str, av);
@@ -190,6 +192,24 @@ SMART(GeneticalNode)               NodeMaker::read_node(NodeData *data, std::siz
                 throw (std::string("Error Expected ')'"));
         }
         pos++;
+    }
+    else if (data->data[pos] == '{')
+    {
+        pos++;
+        while (data->data[pos] != '}')
+        {
+            pos = data->data.find_first_not_of("\t ", pos);
+            found = data->data.find_first_of("\t ", pos);
+            key = Chanel::hash(data->data.substr(pos, found - pos));
+            pos = found;
+            pos = data->data.find_first_not_of("\t ", pos);
+            son = read_node(data, pos, str, av);
+            son->set_key(key);
+            node->add_son(son);
+            pos = data->data.find_first_not_of("\t\n ", pos);
+        }
+        pos++;
+        return (node);
     }
     return (node);
 }

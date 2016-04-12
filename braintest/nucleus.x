@@ -26,7 +26,7 @@ InitNucleus<(
 )>
 
 CreatCell<(
-	sup ((set (!t2 add (!t2 1)) 15)(:Init ((creat (@CellCode)))))
+	sup ((set (!t2 add (!t2 1)) 15)(:Init ((create (@CellCode)))))
 	sup ((@ImInCell 0)(
 			set (!ok 1)
 			:Init ((erase (& /CominCell)))

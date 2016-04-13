@@ -40,9 +40,7 @@ SMART(GeneticalNode)        Decriptor::turn(GeneticalNode *node)
       res = (this->*(fct))(node);
     }
   else if (node->get_type() == VALUE)
-  {
     res = nothing(node);
-  }
   else if (node->get_type() == BLOCK)
       res = nothing(node);
   else
@@ -197,7 +195,6 @@ SMART(GeneticalNode)         Decriptor::comp_funcion(GeneticalNode *node)
           m_lastComp = true;
           if (vct.size() > 1)
             turn(get_next_node(vct[1].get()));
-            return (m_last);
         }
       else
         {

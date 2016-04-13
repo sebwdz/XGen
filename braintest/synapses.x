@@ -49,7 +49,7 @@ Synapse|exec<(
 )>
 
 Synapse|clean<(
-	cp (* (!av^0 4) 0)
+	cp (* (#__av__^0 4) 0)
 )>
 
 [

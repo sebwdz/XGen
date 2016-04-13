@@ -4,7 +4,7 @@
 Nucleus|Learn<(
 	inf ((@Input 1)(
 			no ((egal ((@Learn 0)))(
-				set (@Biais sub (@Biais div (@Learn 100)))
+				set (@Biais .- (@Biais div (@Learn 100)))
 				[echo ("B = " @Biais " Accu " @Accu "\n")]
 				set (@Learn 0)
 			))
@@ -57,7 +57,7 @@ ImpulseNucleus<(
 			set (* (@Axon /Impulse) add (* (@Axon /Impulse) @Impulse))
 			set (@Impulse div (@Impulse 2))
 			inf ((@Impulse 0.1)(
-					sup ((set (!time add (!time 1)) 5)(set (!time 0) set (@Active 0)))
+					sup ((set (!time .+ (!time 1)) 5)(set (!time 0) set (@Active 0)))
 			))
 		)(
 			sup ((@Impulse @Biais)(

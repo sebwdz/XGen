@@ -20,36 +20,29 @@ SetUp<(
 					{_param 0 (25 0 ?scope (?oth) ?manual ?limit (1))}
 			))
 	))
-	sup ((incr (!t 1) 50)(
-		erase (& /RplsOthNeuron)
-		:freeAndKill
+	sup ((incr (!t) 50)(
+			erase (& /RplsOthNeuron)
+			:freeAndKill
 	))
 )>
 
 get_learn_dir<(
 	set (!learn #__av__^0)
-	div (!learn 10)
-	sup ((* (@Nucleus /Accu) 3)(
-			sup ((!learn 0)(set (!dir !learn))
-				(set (!dir !learn)))
-		)(
-			sup ((!learn 0)(set (!dir sub (0 !learn)))
-				(set (!dir sub (0 !learn))))
-	))
-	ret (div (!dir 10))
+	set (!dir sup ((* (@Nucleus /Accu) 3)(!learn)(.- (0 !learn))))
+	div (!dir 10)
 )>
 
 Membrane|DopLearn<(
 	cp (!syn #__av__^0)
 	egal ((* (* (!syn 1) /SynapsesDest) /Dopamine)(
-			sup ((@Dopamine 0.001)(
+			sup ((@Dopamine 0.05)(
 					sup ((* (@Nucleus /Accu) 3)(
 							call (:Synapse|learn 0 (!syn /DopPositive mult (@DopPositive -0.005)))
 						)(
 							call (:Synapse|learn 0 (!syn /DopNegative mult (@DopNegative -0.005)))
 					))
 				)(
-					set (!rate sup ((@Peptide 0)(val (0.01))(val (0.002))))
+					set (!rate 0.001)
 					call (:Synapse|learn 0 (!syn /DopNegative mult (@DopNegative !rate)))
 					call (:Synapse|learn 0 (!syn /DopPositive mult (@DopPositive !rate)))
 			))
@@ -97,12 +90,11 @@ Membrane<(
 			cp (* (!syn 4) 0)
 			incr (!it)
 	))
-	sup ((@Impulse 0)(
-			inf ((* (@Nucleus /Active) 1)(
-					set (* (@Nucleus /Impulse) add (* (@Nucleus /Impulse) div (@Impulse 10)))
+	and ((sup ((@Impulse 0)) inf ((* (@Nucleus /Active) 1)))(
+					incr (* (@Nucleus /Impulse) div (@Impulse 10))
 			))
-			set (@Impulse 0)
-	)(set (@Impulse 0)))
+	))
+	set (@Impulse 0)
 )>
 
 ExprMembrane<(

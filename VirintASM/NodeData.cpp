@@ -18,9 +18,7 @@ NodeMaker::NodeMaker(std::string &maind, bool asmn)
     m_opt.push_back(std::make_pair("SHARE", SHARED));
     m_opt.push_back(std::make_pair("UNSHARE", UNSHARED));
     m_opt.push_back(std::make_pair("ADD", ADD));
-    m_opt.push_back(std::make_pair("+", ADD));
     m_opt.push_back(std::make_pair("SUB", SUB));
-    m_opt.push_back(std::make_pair("-", SUB));
     m_opt.push_back(std::make_pair("CP", COPY));
     m_opt.push_back(std::make_pair("SET", SET));
     m_opt.push_back(std::make_pair("MULT", MULT));
@@ -59,6 +57,12 @@ NodeMaker::NodeMaker(std::string &maind, bool asmn)
     m_opt.push_back(std::make_pair("DECR", DECR));
     m_opt.push_back(std::make_pair("VAL", VAL));
     m_opt.push_back(std::make_pair("CP_ONE", CP_ONE));
+
+    m_opt.push_back(std::make_pair(".+", ADD));
+    m_opt.push_back(std::make_pair(".-", SUB));
+    m_opt.push_back(std::make_pair(".%", MOD));
+    m_opt.push_back(std::make_pair(".*", MULT));
+    m_opt.push_back(std::make_pair("./", DIV));
     m_asm = asmn;
     m_size = 0;
 }

@@ -12,7 +12,7 @@ Axon|ExecSynapses<(
 					call (:Synapse|exec 0 (!syn /Impulse @Impulse))
 					incr (!it)
 			))
-			set (@Impulse div (@Impulse egal ((@SynapseDest /Impulse)(val (10))(val (5)))))
+			set (@Impulse div (@Impulse 10))
 	))
 )>
 

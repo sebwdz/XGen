@@ -3,8 +3,8 @@
 
 Neuron|RplsOth|exec<(
 	sup ((* (#__oth__ /ImNeuron) 0)(
-			set (@__pos__^0 sub (@__pos__^0 #__vct__^0))
-			set (@__pos__^1 sub (@__pos__^1 #__vct__^1))
+			cp (@__pos__ 0 (sub (@__pos__^0 #__vct__^0)
+				sub (@__pos__^1 #__vct__^1)))
 	))
 )>
 
@@ -14,11 +14,13 @@ Neuron|RplsOth|clean<(
 
 SetUp<(
 	:Init ((
-			cp (&RplsOthNeuron^_exec :Neuron|RplsOth|exec)
-			cp (&RplsOthNeuron^_clean :Neuron|RplsOth|clean)
-			cp (&RplsOthNeuron^_param 0 (25 0 ?scope (?oth) ?manual ?limit (1)))
+			cp (&RplsOthNeuron 0 (
+					{_exec :Neuron|RplsOth|exec}
+					{_clean :Neuron|RplsOth|clean}
+					{_param 0 (25 0 ?scope (?oth) ?manual ?limit (1))}
+			))
 	))
-	sup ((set (!t add (!t 1)) 50)(
+	sup ((incr (!t 1) 50)(
 		erase (& /RplsOthNeuron)
 		:freeAndKill
 	))
@@ -40,15 +42,16 @@ get_learn_dir<(
 Membrane|DopLearn<(
 	cp (!syn #__av__^0)
 	egal ((* (* (!syn 1) /SynapsesDest) /Dopamine)(
-			sup ((@Dopamine 0.05)(
+			sup ((@Dopamine 0.001)(
 					sup ((* (@Nucleus /Accu) 3)(
-							call (:Synapse|learn 0 (!syn /DopPositive mult (@DopPositive -0.05)))
+							call (:Synapse|learn 0 (!syn /DopPositive mult (@DopPositive -0.005)))
 						)(
-							call (:Synapse|learn 0 (!syn /DopNegative mult (@DopNegative -0.05)))
+							call (:Synapse|learn 0 (!syn /DopNegative mult (@DopNegative -0.005)))
 					))
 				)(
-					call (:Synapse|learn 0 (!syn /DopNegative mult (@DopNegative 0.0001)))
-					call (:Synapse|learn 0 (!syn /DopPositive mult (@DopPositive 0.0001)))
+					set (!rate sup ((@Peptide 0)(val (0.01))(val (0.002))))
+					call (:Synapse|learn 0 (!syn /DopNegative mult (@DopNegative !rate)))
+					call (:Synapse|learn 0 (!syn /DopPositive mult (@DopPositive !rate)))
 			))
 	))
 )>
@@ -64,7 +67,6 @@ MembraneLearn<(
 	))]
 	set (!learn sub (@Dopamine @Peptide))
 	no ((egal ((!learn 0)))(
-			[sup ((@Output 0)(echo ("Out\t")))]
 			set (!it 0)
 			set (!dir div (call (:get_learn_dir 0 (!learn)) 1))
 			while (inf ((!it @Synapses^_size))(
@@ -73,7 +75,7 @@ MembraneLearn<(
 							egal ((* (* (!syn 1) /SynapsesDest) /Impulse)(
 									call (:Synapse|learn 0 (!syn /Impulse !dir))
 								)(
-									call (:Membrane|DopLearn 0 (!syn ))
+									call (:Membrane|DopLearn 0 (!syn !dir))
 							))
 					))
 					incr (!it)

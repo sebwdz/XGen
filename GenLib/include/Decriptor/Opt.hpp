@@ -81,6 +81,7 @@
 #define         DECR            75 + OPT_RANGE
 #define         VAL             76 + OPT_RANGE
 #define         CP_ONE          77 + OPT_RANGE
+#define         NIL_INSTRU      222
 
 /* PROPRIETY */
 

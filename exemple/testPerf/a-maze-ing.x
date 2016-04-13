@@ -9,9 +9,7 @@
 ]
 
 inv_dir<(
-	set (!dir #__av__^0)
-	sup ((!dir 1)(decr (!dir 2))(incr (!dir 2)))
-	ret (!dir)
+	sup ((set (!dir #__av__^0) 1)(decr (!dir 2))(incr (!dir 2)))
 )>
 
 get_case<(
@@ -20,17 +18,14 @@ get_case<(
 	set (!count mod (rand 21))
 	while (egal ((1 1))(
 			inf ((!count 1)(
-				set (!id * (!tmp 0))
-				egal ((!tmp * (!lst))(
-						cp (* (!lst) * (!tmp 1))
-				))
-				ret (!id)
+					egal ((!tmp * (!lst))(cp (* (!lst) * (!tmp 1))))
+					ret (set (!id * (!tmp 0)))
 			))
 			decr (!count 1)
 			cp (!tmp * (!tmp 1))
 			egal ((!tmp 0)(cp (!tmp * (!lst))))
+			val (0)
 	))
-	ret (0)
 )>
 
 aux_check_door<(
@@ -47,7 +42,6 @@ aux_check_door<(
 					sup ((* (!arround !dir) -1))
 					inf ((* (!av^0 /_data * (!arround !dir) /_id) 1))
 				)(
-					[call (:debug 0 (!av^0))]
 					set (* (!av^0 /_data * (!arround !dir) /_id) 1)
 					set (* (!case /_door !dir) 1)
 					set (!inv call (:inv_dir 0 (!dir)))
@@ -60,48 +54,36 @@ aux_check_door<(
 		incr (!turn)
 		sup ((incr (!dir) 3)(set (!dir 0)))
 	))
-	ret (!lst)
+	!lst
 )>
 
 check_door<(
-	cp (!av #__av__)
-	cp (!lst !av^1)
+	cp (! 0 ({lst #__av__^1}{lab #__av__^0}))
 	while (sup ((!lst 0))(
-	[		call (:debug 0 (!av^0))]
 			set (!dir mod (round (div (rand 1000) 0) 4))
-			cp (!lst call (:aux_check_door 0 (!av^0 !dir !lst)))
+			cp (!lst call (:aux_check_door 0 (!lab !dir !lst)))
 	))
 )>
 
 generate<(
-	cp (!tab % (0))
-	set (* (!tab /_h) #__av__^0)
-	set (* (!tab /_w) #__av__^1)
+	cp (!tab % (0 ({_h #__av__^0}{_w #__av__^1})))
 	cp (#check_door :check_door)
 	set (!caseId mod (rand mult (#__av__^0 #__av__^1)))
 	cp (!lst % ((!caseId)))
 	set (* (!tab /_data !caseId /_id) 1)
 	call (#check_door 0 (!tab !lst))
-	ret (!tab)
+	!tab
 )>
 
 get_arround<(
-	set (!from #__av__^1)
-	cp (!tab #__av__^0)
-	cp (!arround % (0 (-1 -1 -1 -1)))
-	no ((inf ((div (!from * (!tab /_w)) 1)))(
-			set (* (!arround 0) sub (!from * (!tab /_w))) 
+	cp (! 0 ({from #__av__^1}{tab #__av__^0}))
+	set (!tmp add (div (!from * (!tab /_w)) 1))
+	% ((
+			inf ((div (!from * (!tab /_w)) 1)(val (-1))(sub (!from * (!tab /_w))))
+			egal ((add (mod (!from * (!tab /_w)) 1) * (!tab /_w))(val (-1))(add (!from 1)))
+			sup ((!tmp * (!tab /_h))(val (-1))(add (!from * (!tab /_w))))
+			inf ((mod (!from * (!tab /_w)) 1)(val (-1))(sub (!from 1)))
 	))
-	no ((egal ((add (mod (!from * (!tab /_w)) 1) * (!tab /_w))))(
-			set (* (!arround 1) add (!from 1))
-	))
-	no ((sup ((add (div (!from * (!tab /_w)) 1) * (!tab /_h))))(
-			set (* (!arround 2) add (!from * (!tab /_w)))
-	))
-	no ((inf ((mod (!from * (!tab /_w)) 1)))(
-			set (* (!arround 3) sub (!from 1))
-	))
-	ret (!arround)
 )>
 
 show_case<(
@@ -118,10 +100,8 @@ show_case<(
 			))
 		)(
 			inf ((* (#__av__^0 /_door #__av__^1) 1)(echo ("|"))(echo (" ")))
-			egal ((* (#__av__^0 /_state) 3)(echo ("ST")))
-			egal ((* (#__av__^0 /_state) 4)(echo ("ED")))
-			egal ((* (#__av__^0 /_state) 1)(echo ("..")))
-			egal ((* (#__av__^0 /_state) 0)(echo ("  ")))
+			cp (!word 0 (2 ("  ") 2 ("..") 2 (0) 2 ("ST") 2 ("ED")))
+			echo (!word (* (#__av__^0 /_state)))
 			inf ((* (!arround 1) 0)(echo ("|")))
 	))
 )>
@@ -142,67 +122,55 @@ print_line<(
 )>
 
 show<(
-	cp (!av #__av__)
-	set (!case 0)
-	set (!it 0)
-	while (inf ((!it * (!av^0 /_h)))(
-			call (:print_line 0 (!av^0 !case 0))
-			call (:print_line 0 (!av^0 !case 3))
-			incr (!case * (!av^0 /_w))
-			egal ((add (!it 1) * (!av^0 /_h))(
-				call (:print_line 0 (!av^0 !case 2))
+	cp (! 0 ({lab #__av__^0}{case 0}{it 0}))
+	while (inf ((!it * (!lab /_h)))(
+			call (:print_line 0 (!lab !case 0))
+			call (:print_line 0 (!lab !case 3))
+			incr (!case * (!lab /_w))
+			egal ((add (!it 1) * (!lab /_h))(
+				call (:print_line 0 (!lab !case 2))
 			))
 			incr (!it)
 	))
 )>
 
 debug<(
-	cp (!av #__av__)
+	cp (!lab #__av__^0)
 	set (!it 0)
 	while (inf ((!it 30000))(
 		incr (!it)
 	))
-	call (:show 0 (!av^0))
+	call (:show 0 (!lab))
 )>
 
 find<(
 	cp (!tmp #__av__)
-	[call (:debug 0 (!tmp^0))]
-	call (:__push__ 0 (!id))
-	call (:__push__ 0 (!it))
-	call (:__push__ 0 (!arround))
-	call (:__push__ 0 (!av))
-	cp (!av !tmp)
-	set (!id !av^1)
-	egal ((* (!av^0 /_data !av^1 /_state) 4)(
-			ret (1)
+	call (:__push__ 0 (!))
+	cp (! 0 ({lab !tmp^0}{id !tmp^1}{it 0}))
+	erase (! /tmp)
+	egal ((* (!lab /_data !id /_state) 4)(ret (1)))
+	egal ((* (!lab /_data !id /_state) 0)(
+			set (* (!lab /_data !id /_state) 1)
 	))
-	egal ((* (!av^0 /_data !av^1 /_state) 0)(
-			set (* (!av^0 /_data !av^1 /_state) 1)
-	))
-	cp (!arround call (:get_arround 0 (!av^0 !av^1)))
-	set (!it 0)
+	cp (!arround call (:get_arround 0 (!lab !id)))
 	while (inf ((!it 4))(
-			egal ((* (!av^0 /_data !av^1 /_door !it) 1)(
+			and ((
+					egal ((* (!lab /_data !id /_door !it) 1))
 					and ((
 							sup ((* (!arround !it) -1))
-							no ((egal ((* (!av^0 /_data * (!arround !it) /_state) 1))))
-							no ((egal ((* (!av^0 /_data * (!arround !it) /_state) 3))))
-						)(
-							cp (!res call (#find 0 (!av^0 * (!arround !it))))
-							sup ((!res 0)(ret (1)))
-					))
+							no ((egal ((* (!lab /_data * (!arround !it) /_state) 1))))
+							no ((egal ((* (!lab /_data * (!arround !it) /_state) 3))))
+						))
+				)(
+					sup ((call (#find 0 (!lab * (!arround !it))) 0)(ret (1)))
 			))
 			incr (!it)
 	))
-	egal ((* (!av^0 /_data !av^1 /_state) 1)(
-			set (* (!av^0 /_data !av^1 /_state) 0)
+	egal ((* (!lab /_data !id /_state) 1)(
+			set (* (!lab /_data !id /_state) 0)
 	))
-	cp (!av call (:__pop__))
-	cp (!arround call (:__pop__))
-	cp (!it call (:__pop__))
-	cp (!id call (:__pop__))
-	ret (0)
+	cp (! call (:__pop__))
+	val (0)
 )>
 
 solve<(

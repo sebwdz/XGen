@@ -44,7 +44,7 @@ Synapse|exec<(
 			set (* (!av^0 4 * (!emit 0))
 					add (* (!av^0 4 * (!emit 0))
 						mult (* (!emit 1) !av^2)))
-			set (!it add (!it 1))
+			incr (!it)
 	))
 )>
 
@@ -69,7 +69,7 @@ Synapse|learn<(
 			sup ((!tmp 10)(set (!tmp 10)))
 			inf ((!tmp -10)(set (!tmp -10)))
 			set (* (!emit 1) !tmp)
-			set (!it add (!it 1))
+			incr (!it)
 	))
 )>
 
@@ -87,6 +87,6 @@ Synapse|get<(
 			cp (!emit * (!use !it))
 			set (!tmp mult (* (!emit 1) * (!av^0 4 * (!emit 0))))
 			set (@ (!av^1) add (!tmp @ (!av^1)))
-			set (!it add (!it 1))
+			incr (!it)
 	))
 )>

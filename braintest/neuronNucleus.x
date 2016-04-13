@@ -48,8 +48,8 @@ NeuronPeptide<(
 )>
 
 IonLeakage<(
-	sup ((@Impulse 0)(set (@Impulse sub (@Impulse mult (@Impulse 0.5)))))
-	inf ((@Impulse 0)(set (@Impulse add (@Impulse mult (@Impulse 0.5)))))
+	sup ((@Impulse 0)(decr (mult (@Impulse 0.5))))
+	inf ((@Impulse 0)(incr (mult (@Impulse 0.5))))
 )>
 
 ImpulseNucleus<(
@@ -61,8 +61,7 @@ ImpulseNucleus<(
 			))
 		)(
 			sup ((@Impulse @Biais)(
-					set (@Accu add (@Accu 1))
-					sup ((@Accu 20)(set (@Accu 20)))
+					sup ((incr (@Accu) 20)(set (@Accu 20)))
 					set (#LastActive 0)
 					set (@Active 1)
 					set (@Impulse 15)

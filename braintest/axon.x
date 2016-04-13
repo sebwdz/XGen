@@ -10,9 +10,9 @@ Axon|ExecSynapses<(
 					cp (!syn @Synapses^_data (!it))
 					call (:Synapse|clean 0 (!syn))
 					call (:Synapse|exec 0 (!syn /Impulse @Impulse))
-					set (!it add (!it 1))
+					incr (!it)
 			))
-			set (@Impulse div (@Impulse 10))
+			set (@Impulse div (@Impulse egal ((@SynapseDest /Impulse)(val (10))(val (5)))))
 	))
 )>
 

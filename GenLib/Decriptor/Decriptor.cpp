@@ -9,6 +9,7 @@ Decriptor::Decriptor(Object *obj) : Movable(obj)
   m_sig.insert(std::make_pair(ATTACH, (SIG_CATCH)(&Decriptor::catch_simple)));
   m_attach = false;
   m_fast = SMART(GeneticalNode)(new GeneticalNode());
+  m_lastCom = false;
 }
 
 Decriptor::~Decriptor()

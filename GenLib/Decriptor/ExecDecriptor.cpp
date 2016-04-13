@@ -24,9 +24,10 @@ GeneticalNode     *Decriptor::get_next_node(GeneticalNode *obj)
 SMART(GeneticalNode)        Decriptor::turn(GeneticalNode *node)
 {
   SMART(GeneticalNode)             (Decriptor::*fct)(GeneticalNode*);
+  SMART(GeneticalNode)             res;
 
   if (m_return)
-      return (SMART(GeneticalNode)());
+      return (m_return);
   if (node->get_type() == INSTRU)
     {
       if (!node->get_function())
@@ -36,26 +37,33 @@ SMART(GeneticalNode)        Decriptor::turn(GeneticalNode *node)
         }
       else
         fct = node->get_function();
+      res = (this->*(fct))(node);
     }
+  else if (node->get_type() == VALUE)
+  {
+    res = nothing(node);
+  }
+  else if (node->get_type() == BLOCK)
+      res = nothing(node);
   else
-    fct = &Decriptor::nothing;
+      res = get_chan(node);
+  m_last = res;
   Monitor::get_instance()->add_val(MN_INSTR);
-  return ((this->*(fct))(node));
+  return (res);
 }
 
 SMART(GeneticalNode)             Decriptor::nothing(GeneticalNode *node)
 {
     SMART(GeneticalNode)        res;
+    std::vector<SMART(GeneticalNode)>     &vct = node->get_son();
 
-  std::vector<SMART(GeneticalNode)>     &vct = node->get_son();
-
-    for (int it = 0; it < (int)vct.size(); it++)
+    for (unsigned int it = 0; it < vct.size(); it++)
     {
-        turn(get_next_node(vct[it].get()));
+        turn(vct[it].get());
         if (m_return)
-            return (res);
+            return (m_return);
     }
-  return (res);
+  return (m_last);
 }
 
 SMART(GeneticalNode)         Decriptor::copy(GeneticalNode *node)
@@ -138,7 +146,8 @@ int          Decriptor::comparator(GeneticalNode *node, GeneticalNode *content)
     {
       for (it = 0; it < vct.size(); it++)
         {
-          if ((tmp = comp_funcion(get_next_node(vct[it].get()))))
+          comp_funcion(vct[it].get());
+          if (m_lastComp)
               value1 = 1;
           else
               value1 = 0;
@@ -155,7 +164,10 @@ int          Decriptor::comparator(GeneticalNode *node, GeneticalNode *content)
         return (0);
     }
   else if (node->get_value()._uc == NO && vct.size() > 0)
-    return (comp_funcion(get_next_node(vct[it].get())) ? 0 : 1);
+  {
+      comp_funcion(vct[it].get());
+        return (m_lastComp ? 0 : 1);
+  }
   else if (vct.size() > 1)
     {
       value1 = get_value(get_next_node(vct[it++].get()));
@@ -182,17 +194,19 @@ SMART(GeneticalNode)         Decriptor::comp_funcion(GeneticalNode *node)
       content = get_next_node(vct[0].get());
       if (comparator(node, content))
         {
+          m_lastComp = true;
           if (vct.size() > 1)
             turn(get_next_node(vct[1].get()));
-            return (SMART(GeneticalNode)(new GeneticalNode()));
+            return (m_last);
         }
       else
         {
+          m_lastComp = false;
           if (vct.size() > 2)
             turn(get_next_node(vct[2].get()));
         }
     }
-  return (SMART(GeneticalNode)());
+  return (m_last);
 }
 
 SMART(GeneticalNode)          Decriptor::loop(GeneticalNode *node)
@@ -203,15 +217,18 @@ SMART(GeneticalNode)          Decriptor::loop(GeneticalNode *node)
 
   if (vct.size() > 1)
     {
-      comp = get_next_node(vct[0].get());
-      code = get_next_node(vct[1].get());
-      while (comp_funcion(comp)) {
+      comp = vct[0].get();
+      code = vct[1].get();
+      comp_funcion(comp);
+      while (m_lastComp)
+        {
           turn(code);
           if (m_return)
             return (SMART(GeneticalNode)());
+          comp_funcion(comp);
         }
     }
-  return (SMART(GeneticalNode)());
+  return (m_last);
 }
 
 SMART(GeneticalNode)          Decriptor::creat_function(GeneticalNode *node)
@@ -362,6 +379,8 @@ SMART(GeneticalNode)              Decriptor::call(GeneticalNode* node)
         else
             turn(son);
         res = m_return;
+        if (!res)
+            res = m_last;
         m_return = SMART(GeneticalNode)();
     }
     return (res);

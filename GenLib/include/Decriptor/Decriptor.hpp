@@ -72,8 +72,10 @@ private:
 
     SMART(GeneticalNode)    m_return;
     SMART(GeneticalNode)    m_block;
+    SMART(GeneticalNode)    m_last;
     unsigned int            m_jmp;
     SMART(GeneticalNode)    m_fast;
+    bool                    m_lastComp;
     bool                    m_attach;
 };
 

@@ -7,6 +7,7 @@
 NodeMaker::NodeMaker(std::string &maind, bool asmn)
 {
     m_main = maind;
+    m_opt.push_back(std::make_pair("NIL", NIL_INSTRU));
     m_opt.push_back(std::make_pair("SUP", SUP));
     m_opt.push_back(std::make_pair("INF", INF));
     m_opt.push_back(std::make_pair("EGAL", EGAL));

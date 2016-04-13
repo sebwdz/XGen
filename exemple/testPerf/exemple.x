@@ -32,7 +32,7 @@ len #lst /tmp
 set !len /tmp
 while:
 jmp %:end
-	get_chan #len !it /tmp
+	get_chan #lst !it /tmp
 	echo /tmp
 	incr !it
 	jmp %:while
@@ -44,7 +44,7 @@ set !it 0
 len #lst !len
 inf !it !len
 jmp %:end
-	get_chan #len !it [t]0
+	get_chan #lst !it [t]0
 	echo [t]0
 	incr !it !it
 :end

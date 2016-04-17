@@ -15,7 +15,7 @@ CominCell|exec<(
 InitNucleus<(
 	:Init ((
 			share (/Id)
-			set (@Id rand )
+			set (@Id rand)
 			cp (@CellCode^0 :Cell)
 			set (@ImNucleus 1)
 			cp (&CominCell^_exec :CominCell|exec)
@@ -26,7 +26,7 @@ InitNucleus<(
 )>
 
 CreatCell<(
-	sup ((set (!t2 .+ (!t2 1)) 15)(:Init ((create (@CellCode)))))
+	sup ((incr (!t) 3)(:Init ((create (@CellCode)))))
 	sup ((@ImInCell 0)(
 			set (!ok 1)
 			:Init ((erase (& /CominCell)))

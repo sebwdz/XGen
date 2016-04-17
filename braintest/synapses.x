@@ -65,7 +65,6 @@ Synapse|learn<(
 			cp (!emit * (!use !it))
 			set (!tmp * (!emit 1))
 			set (!tmp add (!tmp div (!av^2 10)))
-			[echo (!av^2 " => " * (!emit 1) " ")]
 			sup ((!tmp 10)(set (!tmp 10)))
 			inf ((!tmp -10)(set (!tmp -10)))
 			set (* (!emit 1) !tmp)

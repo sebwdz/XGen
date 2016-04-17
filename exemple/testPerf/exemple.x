@@ -1,4 +1,31 @@
 
+aux_check_door<(
+	cp (! ({tab #__av__^0}{lst #__av__^2}{dir #__av__^1}))
+	set (!id call (:get_case 0 (% (!lst))))
+	set (!turn 0)
+	cp (!arround call (:get_arround 0 (!tab !id)))
+	cp (!case % (* (!tab /_data !id)))
+	while (inf ((!turn 4))(
+			and ((
+					inf ((* (!case /_door !dir) 1))
+					sup ((* (!arround !dir) -1))
+					inf ((* (!tab /_data * (!arround !dir) /_id) 1))
+				)(
+					set (* (!tab /_data * (!arround !dir) /_id) 1)
+					set (* (!case /_door !dir) 1)
+					set (!inv call (:inv_dir 0 (!dir)))
+					set (* (!tab /_data * (!arround !dir) /_door !inv) 1)
+					inf ((* (!tab /_data * (!arround !dir) /_visit) 1)(
+							set (* (!tab /_data * (!arround !dir) /_visit) 1)
+							cp (!lst % ((* (!arround !dir) !lst)))
+					))
+			))
+		incr (!turn)
+		sup ((incr (!dir) 3)(set (!dir 0)))
+	))
+	!lst
+)>
+
 make_list<(
 	cp (#lst 0)
 	set (!it 0)

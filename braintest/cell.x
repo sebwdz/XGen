@@ -18,7 +18,7 @@ main<(
 					share (/__pos__ /Parent)
 					cp (@Parent % (@))
 			))
-			inf ((incr (!t) 3)(
+			inf ((incr (!t) 1)(
 					cp (@__pos__ 0 (.- (.% (rand 30) 15) .- (.% (rand 30) 15)))
 					new_head ((#Nucleus))
 				)(

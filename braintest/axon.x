@@ -3,7 +3,7 @@
 
 Axon|ExecSynapses<(
 	set (@LastImpulse * (@Nucleus /Accu))
-	sup ((@Impulse 1)(
+	or ((sup ((!last 1)) sup ((@Impulse 1)))(
 			no ((egal ((@SynapseDest /Impulse)))(set (@LastImpulse 5)))
 			set (!it 0)
 			while (inf ((!it @Synapses^_size))(
@@ -14,6 +14,7 @@ Axon|ExecSynapses<(
 			))
 			set (@Impulse div (@Impulse 10))
 	))
+	set (!last @Impulse)
 )>
 
 LinkWithNucleus<(

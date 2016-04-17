@@ -21,11 +21,13 @@ void        exec(Brain *brain)
     tests.push_back(new Test({true, true}, {false}));
     tests.push_back(new Test({true, false}, {true}));
     tests.push_back(new Test({false, true}, {true}));
-    tests.push_back(new Test({false, false}, {false}));
+    tests.push_back(new Test({false, false}, {true}));
     it = 0;
     diff = 0;
     if (!(cell = dynamic_cast<CellClass*>(*brain->get_begin())))
         return ;
+    for (unsigned int clean = 0; clean < 30; clean++)
+        brain->exec();
     input = cell->get_line()->get_chan(Chanel::hash("Input"));
     output = cell->get_line()->get_chan(Chanel::hash("Output"));
     good = cell->get_line()->get_chan(Chanel::hash("Dopamine"))->get_ass(Chanel::hash("_data"))->get_son_ref(0);
@@ -54,9 +56,8 @@ void        exec(Brain *brain)
                             ok++;
                         std::cout << "accu => " << tmp->get_ass(Chanel::hash("Accu"))->get_value()._f << std::endl;
                     }
-            if (it > 90000)
+            if (it > 95000)
             {
-                return ;
                 std::cout << "NO LEARN !" << std::endl;
             }
             std::cout << ok << std::endl;
@@ -64,27 +65,35 @@ void        exec(Brain *brain)
             tests[itest]->print();
             if (tests[itest]->evaluate(ok))
             {
-                if (it < 90000 && good->get_ref())
-                    boost::static_pointer_cast<GeneticalNode>(good->get_ref())->get_ass(Chanel::hash("Impulse"))->get_value()._f = 10;
+                if (it < 95000 && good->get_ref())
+                    boost::static_pointer_cast<GeneticalNode>(good->get_ref())->get_ass(Chanel::hash("Impulse"))->get_value()._f = 15;
                 std::cout << "ok " << std::endl;
             }
             else
             {
-                if (it < 90000 && bad->get_ref())
-                    boost::static_pointer_cast<GeneticalNode>(bad->get_ref())->get_ass(Chanel::hash("Impulse"))->get_value()._f = 10;
+                if (it < 95000 && bad->get_ref())
+                    boost::static_pointer_cast<GeneticalNode>(bad->get_ref())->get_ass(Chanel::hash("Impulse"))->get_value()._f = 15;
                 std::cout << "\t\t\t\t\t\tko " << std::endl;
             }
             ok = 0;
-            if (val++ > 4)
+            if (val++ > 3)
             {
-                for (unsigned int clean = 0; clean < 20; clean++)
+                for (unsigned int clean = 0; clean < 30; clean++)
                 {
                     tests[itest]->apply(input);
                     brain->exec();
                 }
-                if (++itest >= tests.size())
-                    itest = 0;
                 val = 0;
+                if (++itest >= tests.size())
+                {
+                    std::cout << "######################## BEGIN SESSION ########################" << std::endl;
+                    itest = 0;
+                }
+                for (unsigned int clean = 0; clean < 30; clean++)
+                {
+                    tests[itest]->apply(input);
+                    brain->exec();
+                }
             }
         }
     }

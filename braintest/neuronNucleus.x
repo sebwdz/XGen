@@ -8,30 +8,30 @@ Nucleus|Learn<(
 				[echo ("B = " @Biais " Accu " @Accu "\n")]
 				set (@Learn 0)
 			))
-	)(set (@Biais 0)))
+	))
 )>
 
 Input<(
-	set (@Biais 1)
-	:Init ((
-			share (/Input)
-			set (@Input 1)
-			call (:Push 0 (% (* (@Parent /Input)) % (@)))
+	sup ((@ImNucleus 0)(
+			set (@Biais 0.5)
+			:Init ((
+					share (/Input)
+					set (@Input 1)
+					call (:Push 0 (% (* (@Parent /Input)) % (@)))
+			))
+			:freeAndKill
 	))
-	:freeAndKill
 )>
 
 Output<(
 	set (@Output 1)
-	:Init ((
-			call (:Push 0 (% (* (@Parent /Output)) % (@)))
-	))
+	:Init ((call (:Push 0 (% (* (@Parent /Output)) % (@)))))
 	:freeAndKill
 )>
 
 NeuronDopamine<(
-	set (@Biais 1)
-	sup ((set (!it add (!it 1)) 5)(
+	sup ((@ImNucleus 0)(
+			set (@Biais 0.5)
 			cp (@SynapsesDest /Dopamine)
 			:freeAndKill
 	))
@@ -39,17 +39,12 @@ NeuronDopamine<(
 )>
 
 NeuronPeptide<(
-	set (@Biais 1)
-	sup ((set (!it add (!it 1)) 5)(
+	sup ((@ImNucleus 0)(
+			set (@Biais 0.5)
 			cp (@SynapsesDest /Peptide)
 			:freeAndKill
 	))
 	:Init ((call (:Push 0 (% (* (@Parent /Peptide)) % (@)))))
-)>
-
-IonLeakage<(
-	sup ((@Impulse 0)(decr (mult (@Impulse 0.5))))
-	inf ((@Impulse 0)(incr (mult (@Impulse 0.5))))
 )>
 
 ImpulseNucleus<(
@@ -57,7 +52,8 @@ ImpulseNucleus<(
 			set (* (@Axon /Impulse) add (* (@Axon /Impulse) @Impulse))
 			set (@Impulse div (@Impulse 2))
 			inf ((@Impulse 0.1)(
-					sup ((set (!time .+ (!time 1)) 5)(set (!time 0) set (@Active 0)))
+					set (!time 0)
+					set (@Active 0)
 			))
 		)(
 			sup ((@Impulse @Biais)(
@@ -66,6 +62,7 @@ ImpulseNucleus<(
 					set (@Active 1)
 					set (@Impulse 15)
 			))
+			decr (@Impulse mult (@Impulse 0.3))
 	))
 	sup ((set (#LastActive add (#LastActive 1)) 10)(
 			sup ((@Accu 1)(set (@Accu sub (@Accu mult (@Accu 0.05)))
@@ -85,9 +82,9 @@ CreatAxon<(
 NucleusNeuron<(
 	:Init ((
 			share (/SynapsesDest /Output)
-			attach ((:CreatAxon :IonLeakage))
+			set (@ImNucleus 1)
+			attach ((:CreatAxon))
 			set (@Biais div (sub (mod (rand 100) 50) 100))
-			sup ((@Input 0)(set (@Biais 1)))
 			cp (@CellCode^1 :Neuron)
 			cp (@SynapsesDest /Impulse)
 			move

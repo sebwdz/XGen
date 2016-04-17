@@ -28,21 +28,29 @@ SetUp<(
 
 get_learn_dir<(
 	set (!learn #__av__^0)
-	set (!dir sup ((* (@Nucleus /Accu) 3)(!learn)(.- (0 !learn))))
-	div (!dir 10)
+	set (!accu * (@Nucleus /Accu))
+	sup ((!learn 0)(
+			set (!rate sup ((!accu 3)(./ (.- (6 !accu) 3))(./ (!accu 3))))
+		)(
+			set (!rate sup ((!accu 3)(./ (!accu 6))(./ (.- (6 !accu) 3))))
+	))
+	sup ((!rate 0)(
+			set (!dir sup ((!accu 3)(!learn)(.- (0 !learn))))
+			.* (!dir !rate)
+	)(set (!dir 0)))
 )>
 
 Membrane|DopLearn<(
 	cp (!syn #__av__^0)
 	egal ((* (* (!syn 1) /SynapsesDest) /Dopamine)(
-			sup ((@Dopamine 0.05)(
+			sup ((@Dopamine 0.001)(
 					sup ((* (@Nucleus /Accu) 3)(
-							call (:Synapse|learn 0 (!syn /DopPositive mult (@DopPositive -0.005)))
+							call (:Synapse|learn 0 (!syn /DopPositive mult (@DopPositive -0.0005)))
 						)(
-							call (:Synapse|learn 0 (!syn /DopNegative mult (@DopNegative -0.005)))
+							call (:Synapse|learn 0 (!syn /DopNegative mult (@DopNegative -0.0005)))
 					))
 				)(
-					set (!rate 0.001)
+					set (!rate 0.0001)
 					call (:Synapse|learn 0 (!syn /DopNegative mult (@DopNegative !rate)))
 					call (:Synapse|learn 0 (!syn /DopPositive mult (@DopPositive !rate)))
 			))
@@ -54,17 +62,13 @@ MembraneLearn<(
 	sup ((* (@Nucleus /Accu) 3)(
 			set (@Dopamine @DopPositive)
 	)(set (@Dopamine @DopNegative)))
-	[no ((egal ((@Dopamine 0)))(
-				echo ("Positive dop => " @DopPositive "\n")
-				echo ("Negative dop => " @DopNegative "\n")
-	))]
-	set (!learn sub (@Dopamine @Peptide))
+	set (!learn sub (@Dopamine mult (@Peptide 2)))
 	no ((egal ((!learn 0)))(
 			set (!it 0)
-			set (!dir div (call (:get_learn_dir 0 (!learn)) 1))
+			set (!dir call (:get_learn_dir 0 (!learn)) 1)
 			while (inf ((!it @Synapses^_size))(
 					cp (!syn @Synapses^_data (!it))
-					sup ((* (* (!syn 1) /LastImpulse) 2)(
+					sup ((* (* (!syn 1) /LastImpulse) 3)(
 							egal ((* (* (!syn 1) /SynapsesDest) /Impulse)(
 									call (:Synapse|learn 0 (!syn /Impulse !dir))
 								)(
@@ -91,8 +95,7 @@ Membrane<(
 			incr (!it)
 	))
 	and ((sup ((@Impulse 0)) inf ((* (@Nucleus /Active) 1)))(
-					incr (* (@Nucleus /Impulse) div (@Impulse 10))
-			))
+			incr (* (@Nucleus /Impulse) div (@Impulse 1))
 	))
 	set (@Impulse 0)
 )>

@@ -14,14 +14,13 @@ void        exec(Brain *brain)
     SMART(GeneticalNode)    good;
     SMART(GeneticalNode)    bad;
     SMART(GeneticalNode)    tmp;
-    int                     wait;
     float                   val;
-    int                     itest;
+    unsigned int            itest;
 
     tests.push_back(new Test({true, true}, {false}));
     tests.push_back(new Test({true, false}, {true}));
     tests.push_back(new Test({false, true}, {true}));
-    tests.push_back(new Test({false, false}, {true}));
+    tests.push_back(new Test({false, false}, {false}));
     it = 0;
     diff = 0;
     if (!(cell = dynamic_cast<CellClass*>(*brain->get_begin())))
@@ -33,7 +32,6 @@ void        exec(Brain *brain)
     good = cell->get_line()->get_chan(Chanel::hash("Dopamine"))->get_ass(Chanel::hash("_data"))->get_son_ref(0);
     bad = cell->get_line()->get_chan(Chanel::hash("Peptide"))->get_ass(Chanel::hash("_data"))->get_son_ref(0);
     ok = 0;
-    wait = 1;
     itest = 0;
     val = 0;
     it = 0;
@@ -47,7 +45,7 @@ void        exec(Brain *brain)
             if (tmp->get_ass(Chanel::hash("Active"))->get_value()._f > 0)
                 ok++;
         }*/
-        if (it - diff > 50)
+        if (it - diff > 30)
         {
             if (output->get_ass(Chanel::hash("_data"))->get_son().size())
                     {

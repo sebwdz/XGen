@@ -2,6 +2,7 @@
 #include        <boost/lexical_cast.hpp>
 #include        "Cell/Brain.hpp"
 #include        "Decriptor/Opt.hpp"
+#include        "Decriptor/Decriptor.hpp"
 #include        "Decriptor/DecriptorManager.hpp"
 
 void        Decriptor::exec()
@@ -477,8 +478,8 @@ SMART(GeneticalNode)            Decriptor::erase(GeneticalNode *node)
                     chan->get_ass().erase(i);
                     break;
                 }
-                chan->get_son().erase(chan->get_son().begin() + (unsigned int)it._f);
             }
+            chan->get_son().erase(chan->get_son().begin() + (unsigned int)it._f);
         }
         else
         {

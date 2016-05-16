@@ -6,7 +6,7 @@ inv_dir<(
 get_case<(
 	cp (!lst #__av__^0)
 	cp (!tmp * (!lst))
-	set (!count mod (rand 21))
+	set (!count mod (rand 1))
 	while (egal ((1 1))(
 			inf ((decr (!count) 0)(
 					egal ((!tmp * (!lst))(cp (* (!lst) * (!tmp 1))))

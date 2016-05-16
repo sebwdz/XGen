@@ -44,6 +44,7 @@ NodeMaker::NodeMaker(std::string &maind, bool asmn)
     m_opt.push_back(std::make_pair("KEY_EXIST", KEY_EXIST));
     m_opt.push_back(std::make_pair("%", REF));
     m_opt.push_back(std::make_pair("*", DEREF));
+    m_opt.push_back(std::make_pair("GEN", GEN));
 
     m_opt.push_back(std::make_pair("LEN", SIZE));
     m_opt.push_back(std::make_pair("RET", RETURN));

@@ -65,8 +65,9 @@ MembraneLearn<(
 	set (!learn sub (@Dopamine mult (@Peptide 2)))
 	no ((egal ((!learn 0)))(
 			set (!it 0)
-			set (!dir call (:get_learn_dir 0 (!learn)) 1)
+			set (!use call (:get_learn_dir 0 (!learn)) 1)
 			while (inf ((!it @Synapses^_size))(
+					set (!dir mult (!use div (mod (rand 100) 100)))
 					cp (!syn @Synapses^_data (!it))
 					sup ((* (* (!syn 1) /LastImpulse) 3)(
 							egal ((* (* (!syn 1) /SynapsesDest) /Impulse)(

@@ -100,19 +100,26 @@ SMART(GeneticalNode)        Decriptor::getSubChan(SMART(GeneticalNode) chan, std
         if (vct[it]->get_type() == EMPTY_CHAN)
           chan = chan->get_ass(vct[it]->get_value()._ui);
         else if (vct[it]->get_type() == VALUE)
-          chan = chan->get_son_ref((unsigned int)vct[it]->get_value()._f);
+        {
+            if (vct[it]->get_value()._f >= 0)
+                chan = chan->get_son_ref((unsigned int)vct[it]->get_value()._f);
+        }
         else if (vct[it]->get_type() == INSTRU)
         {
             x = turn(vct[it].get());
             if (!x)
                 x = SMART(GeneticalNode)(new GeneticalNode);
+            if (x->get_value()._f >= 0)
             chan = chan->get_son_ref((unsigned int)x->get_value()._f);
         }
         else
           {
             tmp = get_chan(vct[it].get()).get();
             if (tmp->get_type() == VALUE)
-              chan = chan->get_son_ref((unsigned int)tmp->get_value()._f);
+            {
+                if (tmp->get_value()._f >= 0)
+                    chan = chan->get_son_ref((unsigned int)tmp->get_value()._f);
+            }
             else
               chan = chan->get_ass(tmp->get_value()._ui);
           }

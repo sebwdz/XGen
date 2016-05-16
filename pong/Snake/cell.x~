@@ -12,6 +12,7 @@ Cell<(
 [ MAIN CODE ]
 
 main<(
+	echo ("ok"
 	inf ((!t3 6)(
 			:Init ((
 					cp (#Nucleus :Nucleus)

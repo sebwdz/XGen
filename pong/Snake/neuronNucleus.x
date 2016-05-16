@@ -52,8 +52,10 @@ ImpulseNucleus<(
 			set (* (@Axon /Impulse) add (* (@Axon /Impulse) @Impulse))
 			set (@Impulse div (@Impulse 2))
 			inf ((@Impulse 0.1)(
-					set (!time 0)
-					set (@Active 0)
+					sup ((incr (!time) 0)(
+							set (!time 0)
+							set (@Active 0)
+					))
 			))
 		)(
 			sup ((@Impulse @Biais)(
@@ -62,7 +64,7 @@ ImpulseNucleus<(
 					set (@Active 1)
 					set (@Impulse 15)
 			))
-			decr (@Impulse mult (@Impulse 0.3))
+			decr (@Impulse mult (@Impulse 0.9))
 	))
 	sup ((set (#LastActive add (#LastActive 1)) 10)(
 			sup ((@Accu 1)(set (@Accu sub (@Accu mult (@Accu 0.05)))

@@ -9,7 +9,7 @@
 Synapse<(
 	cp (!syn % ((#__av__^0 #__av__^1)))
 	egal ((@SynapsesDest /Impulse)(
-			set (* (!syn 2) sub (div (mod (rand 100) 100) 0.5))
+			set (* (!syn 2) sub (div (mod (rand 1000) 1000) 0.5))
 	)(set (* (!syn 2) 1)))
 	cp (!av #__av__)
 	call (:Push 0 (% (* (!av^0 /Synapses)) !syn))
@@ -27,6 +27,7 @@ Synapse|add<(
 	and ((egal ((!av^1 /_receptor)) egal ((!av^2 /Impulse)))(
 			set (* (!av^3 1) sub (div (mod (rand 100) 100) 0.5))
 	)(set (* (!av^3 1) 1)))
+	echo ("w => " * (!av^3 1) "\n")
 	call (:Push 0 (% (* (!av^0 3 !av^1 !av^2)) !av^3))
 )>
 
@@ -86,7 +87,6 @@ Synapse|get<(
 			cp (!emit * (!use !it))
 			set (!tmp mult (* (!emit 1) * (!av^0 4 * (!emit 0))))
 			set (@ (!av^1) add (!tmp @ (!av^1)))
-			echo ("w => " !tmp "\n")
 			incr (!it)
 	))
 )>

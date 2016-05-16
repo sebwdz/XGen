@@ -193,7 +193,7 @@ int         main(int ac, char **av)
     {
       std::cout << "./GenLibTester node_file" << std::endl;
       file = "../test5/out.gen";
-      //return (1);
+      return (1);
     }
   else
       file = av[1];

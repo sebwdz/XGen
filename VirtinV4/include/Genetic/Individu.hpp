@@ -21,7 +21,7 @@ public:
     SMART(GeneticalNode)            generate(GeneticalNode *patern);
     SMART(GeneticalNode)            getNodeByPatern(GeneticalNode *p);
     void                            getNodeSons(GeneticalNode*, GeneticalNode *p);
-    void                            mutate(GeneticalNode *patern, boost::shared_ptr<GeneticalNode> node);
+    void                            mutate(GeneticalNode *patern, boost::shared_ptr<GeneticalNode> node = boost::shared_ptr<GeneticalNode>());
     SMART(Individu)                 cross(Individu*, GeneticalNode *p);
     SMART(GeneticalNode)            cross(GeneticalNode *n1, GeneticalNode *n2, GeneticalNode *p);
 

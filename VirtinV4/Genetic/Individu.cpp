@@ -146,7 +146,7 @@ void            Individu::mutate(GeneticalNode *p, SMART(GeneticalNode) node)
     {
         if ((tmp = p->get_ass(Chanel::hash("_val"), false)))
         {
-            if (rand() % 1000 > 970)
+            if (rand() % 1000 > 900)
             {
                 if (tmp->get_value()._ui == Chanel::hash("_range"))
                 {
@@ -175,7 +175,7 @@ void            Individu::mutate(GeneticalNode *p, SMART(GeneticalNode) node)
         }
         if ((tmp = p->get_ass(Chanel::hash("_son"), false)))
         {
-            if (rand() % 1000 > 970)
+            if (rand() % 1000 > 900)
             {
                 range.first = p->get_ass(Chanel::hash("_sonmax"))->get_value()._f;
                 range.second = p->get_ass(Chanel::hash("_sonmin"))->get_value()._f;

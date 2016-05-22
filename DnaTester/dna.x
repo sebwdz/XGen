@@ -19,7 +19,7 @@ range($min $max)<(
 
 synapse<(
 	[ weight ] :range (-1000 1000)
-	[ expert ] :range (0 9)
+	[ expert ] :range (0 14)
 	[ buy / sell ] :range (0 1)
 )>
 
@@ -47,9 +47,9 @@ indicator<(
 			{_val /_choice}
 			{_choice (
 				 	/rsi /roc /macd /tend
-					/will /stoch /dir
+					/will /stoch /dir /res /sup
 			)}
-			{_son (:range (7 150) :range (1 4))} [period + ecart type (bb) - analyse]
+			{_son (:range (7 150) :range (1 400))} [period + ecart type (bb / sup /res) | analyse ]
 			{_sonmin 2}
 			{_sonmax 2}
 	)
@@ -57,19 +57,24 @@ indicator<(
 
 expert<(:neuron :neuron)>
 
-trader<(
+trader($choice)<(
 	gen (
 			{_val /_choice}
-			{_choice (
-				{_expert :expert}
-				{_indicator :indicator}
-			)}
+			$choice
 	)
 )>
 
 layer<(
 	gen (
-			{_son :trader}
+			{_son :trader ({_choice ({_expert :expert}{_indicator :indicator})})}
+			{_sonmin 5}
+			{_sonmax 15}
+	)
+)>
+
+layer_indicator<(
+	gen (
+			{_son :trader ({_choice ({_indicator :indicator})})}
 			{_sonmin 5}
 			{_sonmax 15}
 	)
@@ -83,11 +88,12 @@ moneyMagement<(
 )>
 
 dna<(
-	(:expert :expert :expert) [(decision up down) (ajust up adjust down) (guard * reliability)]
+	(:expert :expert :expert) [(decision up * down) (ajust up * adjust down) (guard * reliability)]
+	:layer_indicator
 	gen (
 			{_son :layer}
 			{_sonmin 1}
-			{_sonmax 4}
+			{_sonmax 5}
 	)
 	:moneyMagement
 )>

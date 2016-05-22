@@ -13,11 +13,11 @@ int main()
     std::cout << "started" << std::endl;
     algo.setPatern(patern);
     algo.load();
-    algo.generate(500);
+    algo.generate(150);
     while (cycle < 300)
     {
         std::cout << "begin cycle" << cycle << std::endl;
-        algo.exec(500);
+        algo.exec(150);
         cycle++;
     }
     std::cout << std::endl;

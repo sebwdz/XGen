@@ -123,12 +123,14 @@ void                        GeneticAlgorithm::exec(unsigned int size)
         ind.first->load();
         ind.second->load();
         tmp = ind.first->cross(ind.second, m_patern.get());
+        tmp->mutate(m_patern.get());
         str << "./pop/ind" << rand() << ".gen";
         tmp->setFile(str.str());
         tmp->save();
         tmp->unload();
         res.push_back(tmp);
         tmp = ind.second->cross(ind.first, m_patern.get());
+        tmp->mutate(m_patern.get());
         str.str("");
         str << "./pop/ind" << rand() << ".gen";
         tmp->setFile(str.str());

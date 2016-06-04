@@ -1,0 +1,8 @@
+
+[
+	main program
+]
+
+main<(
+	:Nucleus
+)>

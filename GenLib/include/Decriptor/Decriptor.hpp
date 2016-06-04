@@ -59,6 +59,7 @@ public:
 
     void            set_chan(GeneticalNode *node);
     void            set_attach(bool attach);
+    bool            get_attach();
     void            reset(SMART(GeneticalNode) obj);
     void            set_propriety(GeneticalNode *node, ChanPropriety *prop);
     SMART(GeneticalNode)    get_return();

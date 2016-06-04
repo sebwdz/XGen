@@ -13,7 +13,6 @@ Receiver::Receiver() : QUdpSocket()
             setMulticastInterface(interface);
     }
     joinMulticastGroup(m_addr);
-    std::cout << multicastInterface().name().toStdString() << std::endl;
 }
 
 Receiver::~Receiver()

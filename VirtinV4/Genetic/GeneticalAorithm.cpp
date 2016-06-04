@@ -72,7 +72,7 @@ Individu                    *GeneticAlgorithm::selection(Individu *prev)
 
     sum = 0;
     for (it = 0; it < m_pop.size(); it++)
-        sum += it * 2;
+        sum += it * it;
     do {
         ind = NULL;
         if (sum)
@@ -83,7 +83,7 @@ Individu                    *GeneticAlgorithm::selection(Individu *prev)
         while (r > 0 && it < m_pop.size())
         {
             ind = m_pop[it].get();
-            r -= it * 2;
+            r -= it * it;
             it++;
         }
     } while (ind != prev && !ind);
@@ -105,12 +105,9 @@ void                        GeneticAlgorithm::exec(unsigned int size)
     unsigned int                      limit;
     float                             sum = 0;
 
-    limit = size / 8;
+    limit = size / 1.5;
     evaluate();
     std::sort(m_pop.begin(), m_pop.end(), &comp_ind);
-    for (unsigned int it = 0; it < m_pop.size() - size; it++)
-        remove(m_pop[it]->getFile().c_str());
-    m_pop.erase(m_pop.begin(), m_pop.begin() + (m_pop.size() - size));
     for (unsigned int it = 0; it < m_pop.size(); it++)
         sum += m_pop[it]->getScore();
     std::cout << "average : " << sum / m_pop.size() << std::endl;
@@ -140,7 +137,11 @@ void                        GeneticAlgorithm::exec(unsigned int size)
         ind.first->unload();
         ind.second->unload();
     }
+    for (unsigned int it = 0; it < m_pop.size() - size; it++)
+        remove(m_pop[it]->getFile().c_str());
+    m_pop.erase(m_pop.begin(), m_pop.begin() + (m_pop.size() - size));
     m_pop.insert(m_pop.begin(), res.begin(), res.end());
+    generate(m_pop.size() + (m_pop.size() / 20));
 }
 
 void                        GeneticAlgorithm::evaluate()

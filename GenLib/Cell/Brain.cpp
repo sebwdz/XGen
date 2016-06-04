@@ -24,8 +24,8 @@ void        Brain::set_dna(boost::shared_ptr<GeneticalNode> block)
 
   cell = new CellClass(this);
   cell->set_dna(block);
-  p.first = 10;
-  p.second = 20;
+  p.first = 0;
+  p.second = 0;
   cell->set_pos(p);
   add_object(cell);
 }

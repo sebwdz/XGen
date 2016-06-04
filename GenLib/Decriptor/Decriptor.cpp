@@ -45,6 +45,11 @@ void        Decriptor::set_attach(bool attach)
     reset(m_block);
 }
 
+bool        Decriptor::get_attach()
+{
+    return (m_attach);
+}
+
 void        Decriptor::reset(SMART(GeneticalNode) obj)
 {
   std::vector<SMART(GeneticalNode)>  son = obj->get_son();
@@ -138,7 +143,7 @@ void        Decriptor::catch_simple(unsigned int code, void *sig)
 
   if (code == ATTACH && !m_attach)
     {
-      parent = static_cast<ModuleClass*>(sig);
+      parent = CAST(ModuleClass*)(sig);
       if (m_parent)
         CAST(ModuleClass*)(m_parent)->get_map()->remove_object(this);
       parent->attach_decriptor(this);

@@ -1,4 +1,25 @@
 
+[
+                # Push node in __stack__
+                ( $ -> node ) -> (void)
+]
+
+__push__<(
+        set ( #__stack_it__ add ( set ( !it #__stack_it__ ) 1 ) )
+        cp ( #__stack__ ( !it ) #__av__^0 )
+)>
+
+[
+                # Pop node and get
+                ( $ -> node ) -> (void)
+]
+
+__pop__<(
+        set ( #__stack_it__ set ( !it sub ( #__stack_it__ 1 ) ) )
+        ret ( #__stack__ ( !it ) )
+)>
+
+
 inv_dir<(
 	sup ((set (!dir #__av__^0) 1)(decr (!dir 2))(incr (!dir 2)))
 )>
@@ -158,6 +179,7 @@ solve<(
 main<(
 	cp (!lab call (:generate 0 (30 40)))
 	call (:solve 0 (!lab))
+	echo ("show lab\n")
 	call (:show 0 (!lab))
 )>
 

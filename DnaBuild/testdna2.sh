@@ -1,0 +1,11 @@
+#!/bin/bash
+
+function run {
+    res=$(ls testdna/*.TXT)
+    for tmp in $res
+    do
+	echo -e "Start : " $tmp
+	./trade_moulinette.php -p "../../tek2/trade/build-trade-Desktop-Debug/trade $2" -m $1 -f $tmp
+    done
+}
+run 100000 $1

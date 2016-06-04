@@ -1,99 +1,50 @@
 
+#include    "../GenLibTester/include/BrainView.hpp"
 #include    "Test.hpp"
 
 void        exec(Brain *brain)
 {
-    std::vector<Test*>  tests;
-    unsigned int    it;
-    CellClass       *cell;
-    int             ok;
-    unsigned int     diff;
-    SMART(GeneticalNode)    input;
-    SMART(GeneticalNode)    output;
-    SMART(GeneticalNode)    out;
-    SMART(GeneticalNode)    good;
-    SMART(GeneticalNode)    bad;
-    SMART(GeneticalNode)    tmp;
-    float                   val;
-    unsigned int            itest;
+    BrainView   view;
 
-    tests.push_back(new Test({true, true}, {false}));
-    tests.push_back(new Test({true, false}, {true}));
-    tests.push_back(new Test({false, true}, {true}));
-    tests.push_back(new Test({false, false}, {false}));
-    it = 0;
-    diff = 0;
-    if (!(cell = dynamic_cast<CellClass*>(*brain->get_begin())))
-        return ;
-    for (unsigned int clean = 0; clean < 30; clean++)
-        brain->exec();
-    input = cell->get_line()->get_chan(Chanel::hash("Input"));
-    output = cell->get_line()->get_chan(Chanel::hash("Output"));
-    good = cell->get_line()->get_chan(Chanel::hash("Dopamine"))->get_ass(Chanel::hash("_data"))->get_son_ref(0);
-    bad = cell->get_line()->get_chan(Chanel::hash("Peptide"))->get_ass(Chanel::hash("_data"))->get_son_ref(0);
-    ok = 0;
-    itest = 0;
-    val = 0;
-    it = 0;
-    while (it++ < 100000)
+    while (1)
     {
-        tests[itest]->apply(input);
         brain->exec();
-        /*if (output->get_ass(Chanel::hash("_data"))->get_son().size())
-        {
-            tmp = boost::static_pointer_cast<GeneticalNode>(output->get_ass(Chanel::hash("_data"))->get_son_ref(0)->get_ref());
-            if (tmp->get_ass(Chanel::hash("Active"))->get_value()._f > 0)
-                ok++;
-        }*/
-        if (it - diff > 30)
-        {
-            if (output->get_ass(Chanel::hash("_data"))->get_son().size())
-                    {
-                        tmp = boost::static_pointer_cast<GeneticalNode>(output->get_ass(Chanel::hash("_data"))->get_son_ref(0)->get_ref());
-                        if (tmp->get_ass(Chanel::hash("Accu"))->get_value()._f > 3)
-                            ok++;
-                        std::cout << "accu => " << tmp->get_ass(Chanel::hash("Accu"))->get_value()._f << std::endl;
-                    }
-            if (it > 95000)
-            {
-                std::cout << "NO LEARN !" << std::endl;
-            }
-            std::cout << ok << std::endl;
-            diff = it;
-            tests[itest]->print();
-            if (tests[itest]->evaluate(ok))
-            {
-                if (it < 95000 && good->get_ref())
-                    boost::static_pointer_cast<GeneticalNode>(good->get_ref())->get_ass(Chanel::hash("Impulse"))->get_value()._f = 15;
-                std::cout << "ok " << std::endl;
-            }
-            else
-            {
-                if (it < 95000 && bad->get_ref())
-                    boost::static_pointer_cast<GeneticalNode>(bad->get_ref())->get_ass(Chanel::hash("Impulse"))->get_value()._f = 15;
-                std::cout << "\t\t\t\t\t\tko " << std::endl;
-            }
-            ok = 0;
-            if (val++ > 3)
-            {
-                for (unsigned int clean = 0; clean < 30; clean++)
-                {
-                    tests[itest]->apply(input);
-                    brain->exec();
-                }
-                val = 0;
-                if (++itest >= tests.size())
-                {
-                    std::cout << "######################## BEGIN SESSION ########################" << std::endl;
-                    itest = 0;
-                }
-                for (unsigned int clean = 0; clean < 30; clean++)
-                {
-                    tests[itest]->apply(input);
-                    brain->exec();
-                }
-            }
-        }
+        brain->make_skeleton();
+        view.show_tester(brain);
+        usleep(1000);
+    }
+}
+
+void        prepareBrain(Brain *brain)
+{
+    SMART(GeneticalNode)        node(new GeneticalNode);
+    ModuleClass                 *module;
+    Decriptor                   *decr;
+    std::pair<float, float>     pos;
+
+    node->load_file("../neuronalTest/test.gen");
+    pos.first = -90;
+    pos.second = -40;
+    for (unsigned int it = 0; it < 3; it++)
+    {
+        decr = new Decriptor(NULL);
+        module = new ModuleClass(brain);
+        module->attach_decriptor(decr);
+        decr->set_block(node->get_son_ref(0)->copy());
+        module->set_pos(pos);
+        brain->add_object(module);
+        pos.second += 40;
+    }
+    pos.first = 90;
+    for (unsigned int it = 0; it < 3; it++)
+    {
+        pos.second -= 40;
+        decr = new Decriptor(NULL);
+        module = new ModuleClass(brain);
+        module->attach_decriptor(decr);
+        decr->set_block(node->get_son_ref(1)->copy());
+        module->set_pos(pos);
+        brain->add_object(module);
     }
 }
 
@@ -116,6 +67,7 @@ int         main(int ac, char **av)
     dna->load_file(file);
     brain->set_dna(dna);
 
+    prepareBrain(brain);
     exec(brain);
     delete brain;
     return (0);

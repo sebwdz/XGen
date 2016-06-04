@@ -1,8 +1,10 @@
 SOURCES += \
     main.cpp \
-    Test.cpp
+    ../GenLibTester/BrainView.cpp
 
 QT  += network
+
+LIBS += -lsfml-graphics -lsfml-window -lsfml-system
 
 INCLUDEPATH += ../VirtinV4/include
 INCLUDEPATH += ../GenLib/include/
@@ -24,4 +26,5 @@ CONFIG(release, debug|release) {
 }
 
 HEADERS += \
-    Test.hpp
+    Test.hpp \
+    ../GenLibTester/include/BrainView.hpp

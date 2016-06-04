@@ -61,8 +61,8 @@ void        ModuleClass::attach_decriptor(Decriptor *decriptor)
     }
     get_line()->shared_to_line(decriptor->get_line());
     decriptor->set_parent(this);
-    m_decriptor.push_back(decriptor);
     decriptor->set_attach(true);
+    m_decriptor.push_back(decriptor);
 }
 
 Skeleton                    *ModuleClass::get_skeleton()
@@ -114,15 +114,18 @@ std::vector<ModuleClass*> const  &ModuleClass::get_links() const
 
 void        ModuleClass::exec()
 {
-    unsigned int            it;
+    int            it;
 
     catch_signals();
-    for (it = 0; it < m_decriptor.size(); it++)
+    for (it = 0; it < (int)m_decriptor.size(); it++)
         m_decriptor[it]->exec();
-    for (it = 0; it != m_obj.size(); it++)
+    for (it = 0; it < (int)m_obj.size(); it++)
     {
         m_obj[it]->exec();
-        if (m_obj[it]->get_parent() != this)
+        if (m_obj[it]->get_parent() != this ||
+                (m_obj[it]->get_type() & TYPE_DECRIPTOR &&
+                 CAST(Decriptor*)(m_obj[it])->get_attach()))
+
         {
             if (!m_obj[it]->get_parent())
             {
@@ -202,6 +205,7 @@ void        ModuleClass::catch_duplic(unsigned int code, void *sig)
 void        ModuleClass::catch_kill(unsigned int code, void *sig)
 {
     OBJECT_LIST::iterator   it;
+
     OBJECT_LIST::iterator   dest;
     ModuleClass             *modul;
 
@@ -382,5 +386,6 @@ void                    ModuleClass::change_pos(std::pair<float, float> &pos)
         tmp.first += pos.first;
         tmp.second += pos.second;
         m_obj[it]->set_pos(tmp);
+        move_object(m_obj[it]);
     }
 }

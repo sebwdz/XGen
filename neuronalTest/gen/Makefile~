@@ -1,0 +1,18 @@
+
+CC = 		../../ASM
+
+TARGET = 	../test.gen
+
+SRC =		main.x \
+
+
+BEGIN =		main
+
+all:
+	$(CC) $(BEGIN) $(TARGET) $(SRC) $(LIB)
+
+
+
+
+
+

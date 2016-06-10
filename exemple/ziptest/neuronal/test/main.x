@@ -1,8 +1,0 @@
-
-[
-	main program
-]
-
-main<(
-	:Nucleus
-)>

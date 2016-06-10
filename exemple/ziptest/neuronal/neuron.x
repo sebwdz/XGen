@@ -4,9 +4,10 @@
 ]
 
 Neuron|exprDendrites<(
-	sup ((incr (!time) 150)(
+	sup ((incr (!time) 200)(
 			share (/__pid__)
 			inf ((#Dendrites 2)(
+					echo ("n Dendrites " @__pid__ "\n")
 					new_head ((:Dendrite))
 					incr (#Dendrites)	
 			)(:Utils|freeAndKill))
@@ -28,14 +29,22 @@ Neuron<(
 					cp (&rplsInput^_clean :Cell|rplsOther|clean)
 					cp (&rplsInput^_param 0 (30 0 ?scope (?oth) ?manual ?limit (1)))
 					
-					attach ((:Utils|stopInteraction (/rplsOther 700)))
-					attach ((:Utils|stopInteraction (/rplsOut 700)))
-					attach ((:Utils|stopInteraction (/rplsInput 420)))
+					attach ((:Utils|stopInteraction (/rplsOther 600)))
+					attach ((:Utils|stopInteraction (/rplsOut 600)))
 			))
+			attach ((:Utils|stopInteraction (/rplsInput 420)))
 
 			inf ((@WithoutDendrite 1)(
 					attach ((:Neuron|exprDendrites))
 			))
+			attach ((:Neuron|transmitImpulse))
 	))
 	:Utils|freeAndKill
+)>
+
+Neuron|transmitImpulse<(
+	sup ((@Impulse 0)(
+			incr (* (@Nucleus /Impulse) @Impulse)
+			set (@Impulse 0)
+	))
 )>

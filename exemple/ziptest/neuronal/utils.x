@@ -47,7 +47,6 @@ Utils|attach($code $to $target)<(
 			?Init
 					attach ($code)
 					set (!kill 1)
-					erase (& /Attach)
 			?ie__
 	))
 	sup ((!kill 0)(:Utils|freeAndKill))
@@ -65,13 +64,9 @@ Utils|stopInteraction($int $time)<(
 )>
 
 Utils|linkWith($name $scope $block $end $code)<(
-	:Utils|actWith ($name ?link $scope $block $end $code)
-)>
-
-Utils|actWith($name $type $scope $block $end $code)<(
 	:Utils|init ((
 			cp (& ($name /_exec) $block)
-			cp (& ($name /_param) 0 (10 0 ?scope ($scope) $type ?limit (1)))
+			cp (& ($name /_param) 0 (10 0 ?scope ($scope) ?link ?limit (1)))
 	))
 	sup ((!kill 0)(:Utils|freeAndKill))
 	sup (($end 0)(
@@ -86,7 +81,7 @@ Utils|actWith($name $type $scope $block $end $code)<(
 Utils|findNear|exec($find)<(
 	sup ((* (#__oth__ $find) 0)(
 			and ((
-					no ((egal ((@__pid__ * (#__oth__ /__pid__)))))
+					no ((egal ((@__pid__ * (#__oth__ /__pid)))))
 					or ((
 							inf ((#__vct__^2 * (#this /_near 2)))
 							inf ((* (#this /_near 2) 1))
@@ -97,13 +92,3 @@ Utils|findNear|exec($find)<(
 			))
 	))
 )>
-
-slab (/name 0)		[ add label to this node ]
-slab (/name)			[ remove label ]
-glab (:node /name)	[ get labev ptr => 0 (ptr1 ptr2) ]
-
-[ same thing ]
-[slab (/name @val^0^1)
-slab (/name glab (@myblock /name))
-set (slab (/name !x) 0)
-]

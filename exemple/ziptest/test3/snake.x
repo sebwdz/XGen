@@ -84,7 +84,7 @@ rplsSnake|clean<(
 )>
 
 [
-	move snake to this target
+	move snake to his target
 ]
 
 Snake|Move<(

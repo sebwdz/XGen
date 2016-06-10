@@ -1,5 +1,6 @@
 
 Lancez les programmes test1 et test2 et Amazeing avec ./GenLibTester test1/out.gen
 Pour le test3 utiliser ./GenLibTester test3/out.gen 2
+Pour lancer le test neuronal utiliser ./neuronalTest out.gen dans le dossier neuronal
 
 Un package sublime text est fourni pour la coloration syntaxique

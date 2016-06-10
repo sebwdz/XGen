@@ -50,6 +50,7 @@ DecriptorManager::DecriptorManager()
   m_opt.insert(std::make_pair(VAL, &Decriptor::val));
   m_opt.insert(std::make_pair(CP_ONE, &Decriptor::copy_one));
   m_opt.insert(std::make_pair(NIL_INSTRU, &Decriptor::nothing));
+  m_opt.insert(std::make_pair(MATCH, &Decriptor::match));
 }
 
 DecriptorManager::~DecriptorManager()

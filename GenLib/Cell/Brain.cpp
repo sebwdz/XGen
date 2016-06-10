@@ -4,12 +4,12 @@
 #include        "include/Cell/CellClass.hpp"
 #include        "include/Cell/Brain.hpp"
 
-unsigned int Package::_code = 0;
+//unsigned int Package::_code = 0;
 
 Brain::Brain() : ModuleClass(NULL)
 {
   m_type ^= TYPE_BRAIN;
-  Package::_code = random();
+  //Package::_code = random();
 }
 
 Brain::~Brain()
@@ -32,7 +32,7 @@ void        Brain::set_dna(boost::shared_ptr<GeneticalNode> block)
 
 void        Brain::exec()
 {
-    Package     *res;
+    /*Package     *res;
 
     static int  t = 0;
     while (m_send.size())
@@ -40,13 +40,13 @@ void        Brain::exec()
         m_sender.send(m_send.back());
         delete m_send.back();
         m_send.pop_back();
-    }
-    t++;
+    }*/
+    //t++;
     ModuleClass::exec();
     make_move_line();
     move();
     exec_move();
-    do {
+    /*do {
         res = m_receiver.listen();
         if (res)
         {
@@ -54,9 +54,9 @@ void        Brain::exec()
             delete[] res->data;
             delete res;
         }
-    } while (res);
+    } while (res);*/
 }
-
+/*
 void                            Brain::send_interaction(Object* from, GeneticalNode *prop)
 {
     Serialize                   data;
@@ -71,17 +71,17 @@ void                            Brain::send_interaction(Object* from, GeneticalN
     tmp = prop->serialize();
     data.append(tmp->data.data(), tmp->data.size());
     delete tmp;
-    /*from->get_used(prop, node);
+    from->get_used(prop, node);
     tmp = node->serialize();
     data.append(tmp->data.data(), tmp->data.size());
-    delete tmp;*/
+    delete tmp;
     pack = new Package;
     res = new char[data.data.size()];
     pack->data = (char*)memcpy(res, data.data.data(), data.data.size());
     pack->size = data.data.size();
     m_send.push_back(pack);
-}
-
+}*/
+/*
 void                        Brain::exec_interactions(Package *pack)
 {
     char                    *data;
@@ -98,3 +98,4 @@ void                        Brain::exec_interactions(Package *pack)
             m_moveLine.interact_with(CAST(Movable*)(m_obj[it]), node);
     }
 }
+*/

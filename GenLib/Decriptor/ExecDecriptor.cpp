@@ -29,6 +29,7 @@ SMART(GeneticalNode)        Decriptor::turn(GeneticalNode *node)
 
   if (m_return)
       return (m_return);
+  m_last = SMART(GeneticalNode)();
   if (node->get_type() == INSTRU)
     {
       if (!node->get_function())
@@ -644,6 +645,53 @@ SMART(GeneticalNode)    Decriptor::copy_one(GeneticalNode *node)
         chan->set_ref(chan2->get_ref());
         chan->set_function(NULL);
         return (chan);
+    }
+    return (SMART(GeneticalNode)());
+}
+
+bool                    Decriptor::match_with(SMART(GeneticalNode) cmp, GeneticalNode *opt, bool fill)
+{
+    SMART(GeneticalNode)               comp;
+
+    if (cmp->get_type() != VALUE)
+        comp = get_chan(cmp.get());
+    else
+        comp = cmp;
+    if (comp->get_value()._ui == NIL_INSTRU)
+        return (true);
+    if (comp->get_type() == GLOBAL_CHAN || comp->get_type() == LOCAL_CHAN || comp->get_type() == FAST_CHAN)
+    {
+        if (fill)
+            opt->copy(get_chan(comp.get()));
+        return (true);
+    }
+    if (comp->get_value()._f != opt->get_value()._f)
+        return (false);
+    if (comp->get_son().size() != opt->get_son().size())
+        return (false);
+    for (unsigned int it = 0; it < cmp->get_son().size(); it++)
+        if (!match_with(comp->get_son_ref(it), opt->get_son_ref(it).get(), fill))
+            return (false);
+    return (true);
+}
+
+SMART(GeneticalNode) Decriptor::match(GeneticalNode *node)
+{
+    SMART(GeneticalNode)            var;
+    SMART(GeneticalNode)            opt;
+    SMART(GeneticalNode)            comp;
+
+    if (node->get_son().size() < 2)
+        return (SMART(GeneticalNode)());
+    var = get_chan(node->get_son_ref(0).get());
+    opt = get_chan(node->get_son_ref(1).get());
+    for (unsigned int it = 0; it < opt->get_son().size(); it++)
+    {
+        if (match_with(opt->get_son_ref(it)->get_son_ref(0), var.get()))
+        {
+            match_with(opt->get_son_ref(it)->get_son_ref(0), var.get(), true);
+            return (turn(opt->get_son_ref(it)->get_son_ref(1).get()));
+        }
     }
     return (SMART(GeneticalNode)());
 }

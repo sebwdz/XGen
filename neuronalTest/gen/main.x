@@ -11,6 +11,10 @@ main<(
 		?ie__
 	)
 	nil (
+		sup ((incr (!time 1) 200)(
+				set (!time 1)
+				incr (@Impulse 0.1)
+		))
 		?Init
 			set (@Sens 1)
 			set (@Input 1)

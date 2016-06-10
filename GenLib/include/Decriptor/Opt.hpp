@@ -35,6 +35,7 @@
 #define         NEW_HEAD        17 + OPT_RANGE
 #define         COPY            99 + OPT_RANGE
 #define         CALL            94 + OPT_RANGE
+#define         MATCH           220 + OPT_RANGE
 
 /* use or unuse parameter */
 

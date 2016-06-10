@@ -64,6 +64,7 @@ NodeMaker::NodeMaker(std::string &maind, bool asmn)
     m_opt.push_back(std::make_pair(".%", MOD));
     m_opt.push_back(std::make_pair(".*", MULT));
     m_opt.push_back(std::make_pair("./", DIV));
+    m_opt.push_back(std::make_pair("MATCH", MATCH));
     m_asm = asmn;
     m_size = 0;
 }

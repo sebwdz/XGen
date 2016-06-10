@@ -21,7 +21,7 @@ GrowCone|goToTarget|exec<(
 
 GrowCone|goToTarget|clean<(
 	inf ((* (#this /_param ?limit 0) 1)(
-			sup ((incr (!time) 5)(
+			sup ((incr (!time) 2)(
 					set (* (#this /_param ?limit 0) 1)
 					set (!time 0)
 			))
@@ -62,20 +62,20 @@ GrowCone|goToTarget<(
 			cp (&rplsCell^_clean :Cell|rplsOther|clean)
 			cp (&rplsCell^_param 0 (20 0 ?scope (?oth) ?manual ?limit (1)))
 
-			cp (&rplsAxon^_exec :Cell|rplsOther|exec(/Axon 0.5))
+			cp (&rplsAxon^_exec :Cell|rplsOther|exec(/Axon 2))
 			cp (&rplsAxon^_clean :Cell|rplsOther|clean)
 			cp (&rplsAxon^_param 0 (30 0 ?scope (?oth) ?manual ?limit (1)))
 
 			cp (&atrByIn^_exec :Utils|findNear|exec (/Dendrite))
 			cp (&atrByIn^_clean :GrowCone|goToTarget|clean)
-			cp (&atrByIn^_param 0 (80 10 ?scope (?oth) ?manual ?limit (1)))
+			cp (&atrByIn^_param 0 (80 0 ?scope (?oth) ?manual ?limit (1)))
 
-			attach ((:Utils|stopInteraction (/goToTarget 200)))
-			attach ((:Utils|stopInteraction (/rplsAxon 610)))
+			attach ((:Utils|stopInteraction (/goToTarget 500)))
+			attach ((:Utils|stopInteraction (/rplsAxon 700)))
 			attach ((:Utils|stopInteraction (/rplsCell 300)))
 			attach ((:Utils|stopInteraction (/atrByIn 600)))
 	))
-	sup ((incr (!time) 300)(:Utils|freeAndKill set (@pow 0.7) set (@GrowEnd 1)))
+	sup ((incr (!time) 300)(:Utils|freeAndKill set (@pow 0.5) set (@GrowEnd 1)))
 )>
 
 [
@@ -84,7 +84,6 @@ GrowCone|goToTarget<(
 
 GrowCone<(
 	:Utils|init ((
-			set (@Impulse 10)
 			attach ((:GrowCone|goToTarget ()))
 	))
 	:Utils|freeAndKill	

@@ -37,7 +37,28 @@ NeuronNucleus<(
 			share (/__pid__)
 			inf ((@WithoutAxon 1)(
 					attach ((:NeuronNucleus|exprAxon))
+					attach ((:NeuronNucleus|accuImpulse :NeuronNucleus|active))
 			))
 	))
 	:Utils|freeAndKill
+)>
+
+[ Accu impulse ]
+
+NeuronNucleus|accuImpulse<(
+	sup ((@Impulse 0)(
+			incr (@StockImpulse @Impulse)
+			set (@Impulse 0)
+		)(
+			decr (@StockImpulse 0.01)
+	))
+)>
+
+[ Active Nucleus ]
+
+NeuronNucleus|active<(
+	sup ((@StockImpulse @Biais)(
+			incr (* (@Axon /Impulse) @StockImpulse)
+			set (@StockImpulse 0)
+	))
 )>

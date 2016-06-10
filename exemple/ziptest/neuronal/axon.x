@@ -54,6 +54,8 @@ Axon<(
 			set (@Input 0)
 			attach ((:Axon|linkNucleus))
 			attach ((:Axon|exprGrowCone))
+			cp (@PoolZone 0 ({axon % (@)}))
+			share (/PoolZone)
 	))
 	:Utils|freeAndKill
 )>

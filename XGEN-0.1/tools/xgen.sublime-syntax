@@ -3,6 +3,7 @@
 # See http://www.sublimetext.com/docs/3/syntax.html
 file_extensions:
   - x
+  - xss
 scope: source.xgen
 contexts:
   main:
@@ -36,11 +37,11 @@ contexts:
     - match: '\?[A-Za-z_0-9:!.]*'
       scope: constant.numeric.xgen
 
-    - match: '(gen|set|add|sub|div|mult|create|duplic|new_head|attach|detach|inf|\
+    - match: '(match|gen|set|add|sub|div|mult|create|duplic|new_head|attach|detach|inf|\
               |sup|egal|share|unshare||kill|destroy|\
-              |or|and|xor|no|go_out|link||comin|splitin|echo|mod|while|\
+              |or|and|xor|no|go_out|link|splitin|echo|mod|while|\
               |cp|cp_one|call|\%|\*|ret|pow|rand|len|erase|move|key_exist|free|\
-              sqrt|round|incr|decr|val|\.\+|\.\-|\^|nil|\.\%|\./|\.\*)'
+              |sqrt|round|incr|decr|val|\.\+|\.\-|\^|nil|\.\%|\./|\.\*|key)'
       scope: keyword.control.xgen
 
     - match: '(#this|#__oth__|#__av__|#__vct__|@__pos__)'

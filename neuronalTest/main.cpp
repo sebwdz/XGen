@@ -23,8 +23,8 @@ void        prepareBrain(Brain *brain)
     std::pair<float, float>     pos;
 
     node->load_file("../neuronalTest/test.gen");
-    pos.first = -90;
-    pos.second = -40;
+    pos.first = -80;
+    pos.second = -60;
     for (unsigned int it = 0; it < 3; it++)
     {
         decr = new Decriptor(NULL);
@@ -33,12 +33,12 @@ void        prepareBrain(Brain *brain)
         decr->set_block(node->get_son_ref(0)->copy());
         module->set_pos(pos);
         brain->add_object(module);
-        pos.second += 40;
+        pos.second += 60;
     }
-    pos.first = 90;
+    pos.first = 80;
     for (unsigned int it = 0; it < 3; it++)
     {
-        pos.second -= 40;
+        pos.second -= 60;
         decr = new Decriptor(NULL);
         module = new ModuleClass(brain);
         module->attach_decriptor(decr);

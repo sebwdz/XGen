@@ -1,5 +1,6 @@
 
 #include        <boost/lexical_cast.hpp>
+#include        <boost/algorithm/string.hpp>
 #include        "include/NodeMaker.hpp"
 #include        "Decriptor/Opt.hpp"
 #include        "Decriptor/chanel.hpp"
@@ -65,14 +66,15 @@ NodeMaker::NodeMaker(std::string &maind, bool asmn)
     m_opt.push_back(std::make_pair(".*", MULT));
     m_opt.push_back(std::make_pair("./", DIV));
     m_opt.push_back(std::make_pair("MATCH", MATCH));
+    m_opt.push_back(std::make_pair("KEY", KEY));
     m_asm = asmn;
     m_size = 0;
+    m_node = new NodeData();
 }
 
 NodeMaker::~NodeMaker()
 {
-    for (int it = 0; it < (int)m_node.size(); it++)
-        delete m_node[it];
+
 }
 
 void        NodeMaker::extract_arg(NodeData *dataN, std::string str)
@@ -95,8 +97,10 @@ void        NodeMaker::extract_arg(NodeData *dataN, std::string str)
 
 void        NodeMaker::add_data(std::string &name, std::string &data)
 {
-    NodeData                *dataN = new NodeData;
     std::size_t             it[2];
+    NodeData                *use = m_node;
+    NodeData                *dataN = new NodeData;
+    NodeData                *dataT;
 
     if ((it[0] = name.find_first_of('(')) != std::string::npos)
     {
@@ -104,16 +108,67 @@ void        NodeMaker::add_data(std::string &name, std::string &data)
         extract_arg(dataN, name.substr(it[0], it[1] - it[0]));
         name = name.substr(0, it[0]);
     }
-    dataN->name = name;
-    dataN->data = data;
-    m_node.push_back(dataN);
+    std::vector<std::string> strs;
+    boost::split(strs, name, boost::is_any_of("|"));
+    for (unsigned int it = 0; it < strs.size(); it++)
+    {
+        if (it != strs.size() - 1)
+        {
+            dataT = NULL;
+            for (unsigned int xxx = 0; xxx < use->node.size(); xxx++)
+            {
+                if (use->node[xxx]->key == Chanel::hash(strs[it]))
+                {
+                    dataT = use->node[xxx];
+                    break;
+                }
+            }
+            if (!dataT)
+            {
+                dataT = new NodeData;
+                dataT->name = strs[it];
+                dataT->key = Chanel::hash(strs[it]);
+                use->node.push_back(dataT);
+            }
+            use = dataT;
+        }
+        else
+        {
+            dataN->name = strs[it];
+            dataN->key = Chanel::hash(strs[it]);
+            dataN->data = data;
+            use->node.push_back(dataN);
+        }
+    }
 }
 
-NodeData        *NodeMaker::get_node(std::string &name)
+NodeData        *NodeMaker::get_node(std::string &name, NodeData* from)
 {
-    for (int it = 0; it < (int)m_node.size(); it++)
-        if (m_node[it]->name == name)
-            return (m_node[it]);
+    int         it;
+
+    from = m_node;
+    std::vector<std::string> strs;
+    boost::split(strs, name, boost::is_any_of("|"));
+
+    for (unsigned int x = 0; x < strs.size(); x++)
+    {
+        for (it = 0; it < (int)from->node.size(); it++)
+        {
+            if (from->node[it]->key == Chanel::hash(strs[x]))
+            {
+                if (x == strs.size() - 1)
+                    return (from->node[it]);
+                else
+                {
+                    from = from->node[it];
+                    it = -1;
+                    break;
+                }
+            }
+        }
+        if (it == (int)from->node.size())
+            break;
+    }
     throw (std::string ("Can't find node : ") + name);
     return (0);
 }
@@ -181,7 +236,7 @@ SMART(GeneticalNode) NodeMaker::get_value(NodeData *data, std::string &value, st
                 throw (std::string(value + " was not found, to few argument"));
             return (av[v]->copy());
         }
-        else if (value[0] == '@' || value[0] == '&' || value[0] == '#' || value[0] == '!')
+        else if (value[0] == '@' || value[0] == '&' || value[0] == '#' || value[0] == '!' || value[0] == '|')
         {
             node = SMART(GeneticalNode)(new GeneticalNode());
             tmp = value.substr(1);
@@ -194,6 +249,11 @@ SMART(GeneticalNode) NodeMaker::get_value(NodeData *data, std::string &value, st
               node->set_type(INTERACTION);
             else if (value[0] == '#')
               node->set_type(FAST_CHAN);
+            else if (value[0] == '|')
+            {
+               node->set_type(INSTRU);
+               node->get_value()._uc =  PACKAGE;
+            }
             else
               node->set_type(LOCAL_CHAN);
         }
@@ -266,12 +326,15 @@ void        NodeMaker::make_node(std::string &name, std::string &str, std::vecto
     std::size_t pos = 0;
 
     Node = get_node(name);
-    check_pile(Node);
-    str += "begin " + name + "\n";
-    Node->block = read_node(Node, pos, str, av);
-    Node->block->set_type(BLOCK);
-    str += "finish " + name + " succesfull\n";
-    m_pile.pop_back();
+    if (Node->name.size())
+    {
+        check_pile(Node);
+        str += "begin " + name + "\n";
+        Node->block = read_node(Node, pos, str, av);
+        Node->block->set_type(BLOCK);
+        str += "finish " + name + " succesfull\n";
+        m_pile.pop_back();
+    }
 }
 
 void            NodeMaker::check_pile(NodeData *data)

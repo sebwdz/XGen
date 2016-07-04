@@ -1,0 +1,30 @@
+
+Array<(
+	?class
+
+		?m /construct	?pl |Array^construct ?ple
+
+		?m /push_back 	?pl |Array^push_back ?ple
+		?m /pop_back 	?pl |Array^pop_back ?ple
+
+		?m /insert		?pl |Array^insert ?ple
+		?m /erase		?pl |Array^erase ?ple
+
+		?m /append		?pl |Array^append ?ple
+
+		?m /clear		?pl |Array^clear ?ple
+		?m /set			?pl |Array^set ?ple
+		?m /set_obj		?pl |Array^set_obj ?ple
+
+		?m /for_each	?pl |Array^for_each ?ple
+		?m /find_first	?pl |Array^find_first ?ple
+		?m /find_last	?pl |Array^find_last ?ple
+
+		?m /compare		?pl |Array^compare ?ple
+
+		?m /data		?pl |Array^data ?ple
+		?m /at 			?pl |Array^at ?ple
+		?m /size		?pl |Array^size ?ple
+
+	?eclass
+)>

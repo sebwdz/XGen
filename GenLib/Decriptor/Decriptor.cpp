@@ -114,8 +114,9 @@ SMART(GeneticalNode)        Decriptor::getSubChan(SMART(GeneticalNode) chan, std
             x = turn(vct[it].get());
             if (!x)
                 x = SMART(GeneticalNode)(new GeneticalNode);
+            // TODO check type !!!
             if (x->get_value()._f >= 0)
-            chan = chan->get_son_ref((unsigned int)x->get_value()._f);
+                chan = chan->get_son_ref((unsigned int)x->get_value()._f);
         }
         else
           {

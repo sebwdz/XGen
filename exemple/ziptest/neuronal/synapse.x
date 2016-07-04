@@ -7,6 +7,6 @@ Synapse|receptor($to $cond)<(
 
 Synapse|emettor($to $cond)<(
 	sup ((set (!nb $cond) 0)(
-			incr (* (@PoolZone /mols $to) !nb)
+			incr (* (@PoolZone $to) !nb)
 	))
 )>

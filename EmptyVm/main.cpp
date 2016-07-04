@@ -1,5 +1,6 @@
 
 #include    "Decriptor/Decriptor.hpp"
+#include    "Decriptor/DecriptorManager.hpp"
 
 SMART(GeneticalNode)        str_to_node(char *str)
 {
@@ -36,6 +37,7 @@ int         main(int ac, char **av)
     if (ac < 2)
         return (0);
     try {
+      DecriptorManager::get_instance()->load_packages();
         node->load_file(av[1]);
         get_av(av + 2)->copy(decript->get_fast()->get_ass(Chanel::hash("str_av")));
         decript->set_block(node);

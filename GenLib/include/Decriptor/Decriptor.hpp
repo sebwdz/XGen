@@ -56,6 +56,8 @@ public:
     SMART(GeneticalNode) copy_one(GeneticalNode *node);
     SMART(GeneticalNode) match(GeneticalNode *node);
     bool                 match_with(SMART(GeneticalNode) cmp, GeneticalNode *opt, bool fill = false);
+    SMART(GeneticalNode)   key(GeneticalNode *node);
+    SMART(GeneticalNode)   package(GeneticalNode *node);
 
     /* chan */
 

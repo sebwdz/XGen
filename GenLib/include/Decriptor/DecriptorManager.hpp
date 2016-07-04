@@ -2,7 +2,7 @@
 #define DECRIPTORMANAGER_HPP
 
 #include        <boost/unordered_map.hpp>
-#include        "Decriptor.hpp"
+#include        "Package.hpp"
 
 typedef union   decriptFunction
 {
@@ -15,13 +15,16 @@ class           DecriptorManager
 public:
     ~DecriptorManager();
 
-    static DecriptorManager                    *get_instance();
-    SMART(GeneticalNode)                       (Decriptor::*get_function(GeneticalNode*))(GeneticalNode*);
+    void                                        load_packages();
+    static DecriptorManager                     *get_instance();
+    SMART(GeneticalNode)                        (Decriptor::*get_function(GeneticalNode*))(GeneticalNode*);
+    Package                                     *get_package(unsigned int) const;
 
 private:
 
     DecriptorManager();
     boost::unordered_map<int, SMART(GeneticalNode) (Decriptor::*)(GeneticalNode*)>     m_opt;
+    Package                                                                            *m_package;
 };
 
 #endif // DECRIPTORMANAGER_HPP

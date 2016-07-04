@@ -49,15 +49,21 @@ void        NodeMaker::read_define(std::string &data)
     }
 }
 
-void            NodeMaker::apply_define()
+void            NodeMaker::apply_define(NodeData *from)
 {
   unsigned int  it;
   boost::unordered_map<std::string, std::string>::iterator str;
 
-  for (it = 0; it < m_node.size(); it++)
+  if (!from)
+      from = m_node;
+  for (it = 0; it < from->node.size(); it++)
     {
-      for (str = m_define.begin(); str != m_define.end(); str++)
-        boost::replace_all(m_node[it]->data, str->first, str->second);
+      if (!from->node[it]->block)
+      {
+        for (str = m_define.begin(); str != m_define.end(); str++)
+            boost::replace_all(from->node[it]->data, str->first, str->second);
+      }
+      apply_define(from->node[it]);
     }
 }
 
@@ -141,6 +147,28 @@ void        NodeMaker::read_data(std::ifstream &file)
         else
           read_define(data);
     }
+}
+
+void          NodeMaker::read_lib(std::string const &str)
+{
+    SMART(GeneticalNode)            node(new GeneticalNode());
+    NodeData                        *data = new NodeData();
+    NodeData                        *subData;
+
+    node->load_file(str);
+    for (unsigned int it = 0; it < node->get_son().size(); it++)
+    {
+        if (Chanel::hash("__name__") == node->get_son()[it]->get_key())
+            data->key = node->get_son()[it]->get_value()._ui;
+        else
+        {
+            subData = new NodeData();
+            subData->key = node->get_son()[it]->get_key();
+            subData->block = node->get_son()[it]->get_son_ref(0);
+            data->node.push_back(subData);
+        }
+    }
+    m_node->node.push_back(data);
 }
 
 

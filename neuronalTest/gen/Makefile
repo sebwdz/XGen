@@ -14,6 +14,7 @@ SRC =		main.x \
 		../../exemple/ziptest/neuronal/neuronNucleus.x \
 		../../exemple/ziptest/neuronal/axon.x \
 		../../exemple/ziptest/neuronal/growCone.x \
+		../../exemple/ziptest/neuronal/synapse.x
 
 
 BEGIN =		main

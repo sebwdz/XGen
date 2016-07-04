@@ -8,12 +8,13 @@ main<(
 			share (/Sens /Output /WithoutAxon)
 			set (@son 1)
 			attach ((:Nucleus))
+			sup ((@Impulse 0)(echo ("Impulse\n")))
 		?ie__
 	)
 	nil (
-		sup ((incr (!time 1) 200)(
+		sup ((incr (!time 1) 50)(
 				set (!time 1)
-				incr (@Impulse 0.1)
+				incr (@Impulse 1)
 		))
 		?Init
 			set (@Sens 1)

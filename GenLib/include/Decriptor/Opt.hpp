@@ -36,6 +36,7 @@
 #define         COPY            99 + OPT_RANGE
 #define         CALL            94 + OPT_RANGE
 #define         MATCH           220 + OPT_RANGE
+#define         PACKAGE         218 + OPT_RANGE
 
 /* use or unuse parameter */
 
@@ -84,6 +85,7 @@
 #define         CP_ONE          77 + OPT_RANGE
 #define         NIL_INSTRU      222
 #define         GEN             221
+#define         KEY             219
 
 /* PROPRIETY */
 

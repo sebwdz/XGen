@@ -1,4 +1,17 @@
 
+Axon|Transmit<(
+	set (@WorkImpulse 0)
+	sup ((@Impulse 0.05)(
+			incr (@WorkImpulse div (@Impulse 5))
+			decr (@Impulse div (@Impulse 5))
+	)(set (@Impulse 0)))
+)>
+
+Axon|ManagerSynapses<(
+	cp (* (@PoolZone) 0)
+	:Synapse|emettor (/Impulse sup ((@WorkImpulse 0)(@WorkImpulse)))
+)>
+
 [
 	Link Nucleus
 ]
@@ -52,10 +65,9 @@ Axon<(
 	:Utils|init ((
 			set (@Axon 1)
 			set (@Input 0)
-			attach ((:Axon|linkNucleus))
-			attach ((:Axon|exprGrowCone))
-			cp (@PoolZone 0 ({axon % (@)}))
-			share (/PoolZone)
+			attach ((:Axon|linkNucleus :Axon|exprGrowCone))
+			attach ((:Axon|Transmit :Axon|ManagerSynapses))
+			cp (@PoolZone % (0))
 	))
 	:Utils|freeAndKill
 )>

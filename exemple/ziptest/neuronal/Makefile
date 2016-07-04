@@ -14,7 +14,8 @@ SRC =		main.x \
 		axon.x \
 		growCone.x \
 		utils.x \
-		dendrite.x
+		dendrite.x \
+		synapse.x
 
 
 BEGIN =		main

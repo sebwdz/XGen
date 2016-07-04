@@ -1,9 +1,9 @@
 
-CC = 		../build/asm
+CC = 		../../build/asm
 
-TARGET = 	bomb.gen
+TARGET = 	out.gen
 
-SRC =		main.x
+SRC =		a-maze-ing.x
 
 BEGIN =		main
 

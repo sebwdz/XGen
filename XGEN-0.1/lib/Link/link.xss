@@ -1,0 +1,24 @@
+
+LinkList<(
+	?class
+		?m /construct	?l :linkListl|construct ?le
+
+		?m /push_back	?l :linkListl|push_back ?le
+		?m /push_front	?l :linkListl|push_front ?le
+		?m /insert		?l :linkListl|insert ?le
+
+		?m /pop_back	?l :linkListl|pop_back ?le
+		?m /pop_front	?l :linkListl|pop_front ?le
+		?m /erase		?l :linkListl|erase ?le
+
+		?m /clear		?l :linkListl|clear ?le
+		?m /set_obj		?l :linkListl|set_obj ?le
+
+		?m /for_each	?l :linkListl|for_each ?le
+
+		?m /begin		?l :linkListl|begin ?le
+		?m /end			?l :linkListl|end ?le
+
+		?m /size		?l :linkListl|size ?le
+	?eclass
+)>

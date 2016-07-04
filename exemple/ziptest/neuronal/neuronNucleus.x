@@ -18,7 +18,7 @@ NeuronNucleus|waitAxon<(
 ]
 
 NeuronNucleus|exprAxon<(
-	sup ((incr (!time) 100)(
+	sup ((incr (!time) 500)(
 			?Init
 					create ((:Axon))
 					attach ((:NeuronNucleus|waitAxon))
@@ -35,6 +35,7 @@ NeuronNucleus<(
 	:Utils|init ((
 			set (@NeuronNucleus 1)
 			share (/__pid__)
+			set (@Biais 1)
 			inf ((@WithoutAxon 1)(
 					attach ((:NeuronNucleus|exprAxon))
 					attach ((:NeuronNucleus|accuImpulse :NeuronNucleus|active))
@@ -50,7 +51,7 @@ NeuronNucleus|accuImpulse<(
 			incr (@StockImpulse @Impulse)
 			set (@Impulse 0)
 		)(
-			decr (@StockImpulse 0.01)
+			[decr (@StockImpulse 0.01)]
 	))
 )>
 

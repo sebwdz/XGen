@@ -44,7 +44,10 @@ SOURCES += \
     Map/MapController.cpp \
     Object/MovableLine.cpp \
     Network/Sender.cpp \
-    Network/Receiver.cpp
+    Network/Receiver.cpp \
+    Decriptor/Package.cpp \
+    Decriptor/Package/XGenPackage.cpp \
+    Decriptor/Package/XGenFunction.cpp
 
 HEADERS += \
     include/Cell/Module.hpp \
@@ -69,4 +72,7 @@ HEADERS += \
     include/Monitor.hpp \
     include/Network/Sender.hpp \
     include/Network/Receiver.hpp \
-    include/Network/Package.hpp
+    include/Network/Package.hpp \
+    include/Decriptor/Package.hpp \
+    include/Decriptor/Package/XGenPackage.hpp \
+    include/Decriptor/Package/XGenFunction.hpp

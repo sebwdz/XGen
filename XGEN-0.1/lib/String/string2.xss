@@ -1,0 +1,20 @@
+
+String<(
+	?class
+		?inhb :Array ?inhc /__array__ ?_ * (!this) ?_
+
+		?m /substr			?pl |String^substr ?ple
+
+		?m /find			?pl |String^find ?ple
+		?m /find_first		?pl |String^find_first ?ple
+		?m /find_last		?pl |String^find_last ?ple
+
+		?m /find_first_not	?pl |String^find_first_not ?ple
+		?m /find_last_not	?pl |String^find_last_not ?ple
+
+		?m /compare			?pl |String^compare ?ple
+		?m /ncompare		?pl |String^ncompare ?ple
+
+		?at /find_str		?_ % (:Utils|find_str) ?_
+	?eclass
+)>

@@ -7,8 +7,10 @@ typedef struct  NodeData
 {
     std::string                         name;
     std::string                         data;
+    unsigned int                        key;
     boost::unordered_map<std::string, unsigned int>   arg;
     SMART(GeneticalNode)                block;
+    std::vector<NodeData*>              node;
 } NodeData;
 
 class   NodeMaker
@@ -21,8 +23,9 @@ public:
     void            save(std::string &out);
 
     void            add_data(std::string &name, std::string &data);
-    NodeData        *get_node(std::string &name);
+    NodeData        *get_node(std::string &, NodeData *from = NULL);
     void            read_data(std::ifstream &file);
+    void            read_lib(std::string const &file);
     void            dasm(std::ofstream &file, GeneticalNode *node);
     std::string     convert_string(std::string buff);
     void            make_node(std::string &name, std::string &str, std::vector<SMART(GeneticalNode)> &av);
@@ -32,11 +35,11 @@ public:
     unsigned int    get_var(std::string &str);
     void        extract_arg(NodeData *dataN, std::string str);
     void        read_define(std::string &data);
-    void        apply_define();
+    void        apply_define(NodeData *from = NULL);
 
 private:
 
-    std::vector<NodeData*>   m_node;
+    NodeData                *m_node;
     std::string              m_main;
     std::vector<std::pair<std::string, unsigned int> >   m_opt;
     VAR_LIST                                             m_var;

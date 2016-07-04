@@ -428,7 +428,8 @@ SMART(GeneticalNode)            Decriptor::ret(GeneticalNode *node)
 {
     if (node->get_son().size())
     {
-        if (node->get_son()[0]->get_type() != VALUE)
+        if (node->get_son()[0]->get_type() != VALUE && node->get_son()[0]->get_type() != EMPTY_CHAN &&
+                node->get_son()[0]->get_type() != BLOCK)
             m_return = get_chan(node->get_son()[0].get());
         else
             m_return = node->get_son()[0];
@@ -639,7 +640,10 @@ SMART(GeneticalNode)    Decriptor::copy_one(GeneticalNode *node)
     if (vct.size() > 1)
     {
         chan = get_chan(vct[0].get());
-        chan2 = get_chan(vct[1].get());
+        if (!vct[1]->get_ref())
+            chan2 = get_chan(vct[1].get());
+        else
+            chan2 = vct[1];
         chan->set_type(chan2->get_type());
         chan->set_value(chan2->get_value());
         chan->set_ref(chan2->get_ref());
@@ -653,7 +657,7 @@ bool                    Decriptor::match_with(SMART(GeneticalNode) cmp, Genetica
 {
     SMART(GeneticalNode)               comp;
 
-    if (cmp->get_type() != VALUE)
+    if (cmp->get_type() != VALUE && cmp->get_type() != EMPTY_CHAN)
         comp = get_chan(cmp.get());
     else
         comp = cmp;
@@ -693,5 +697,30 @@ SMART(GeneticalNode) Decriptor::match(GeneticalNode *node)
             return (turn(opt->get_son_ref(it)->get_son_ref(1).get()));
         }
     }
+    return (SMART(GeneticalNode)());
+}
+
+SMART(GeneticalNode)    Decriptor::key(GeneticalNode *node)
+{
+    SMART(GeneticalNode)    res(new GeneticalNode());
+
+    res->set_type(EMPTY_CHAN);
+    res->get_value()._ui = get_chan(node->get_son_ref(0).get())->get_key();
+    return (res);
+}
+
+SMART(GeneticalNode)   Decriptor::package(GeneticalNode *node)
+{
+    Package             *pack;
+    unsigned int        it;
+
+    it = 0;
+    pack = DecriptorManager::get_instance()->get_package(node->get_son_ref(it++)->get_value()._ui);
+    while (it < node->get_son().size() && node->get_son_ref(it)->get_son().size() == 0)
+        pack = pack->getPackage(node->get_son_ref(it++)->get_value()._ui);
+    if (dynamic_cast<Function*>(pack))
+        return (((Function*)pack)->call(this, node->get_block(), copy_value(node->get_son_ref(it).get())));
+    else
+        std::cout << "bad package function" << std::endl;
     return (SMART(GeneticalNode)());
 }

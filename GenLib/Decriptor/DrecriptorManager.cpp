@@ -1,5 +1,6 @@
 
 #include            "Decriptor/Opt.hpp"
+#include            "Decriptor/Package/XGenPackage.hpp"
 #include            "Decriptor/DecriptorManager.hpp"
 
 DecriptorManager::DecriptorManager()
@@ -51,6 +52,10 @@ DecriptorManager::DecriptorManager()
   m_opt.insert(std::make_pair(CP_ONE, &Decriptor::copy_one));
   m_opt.insert(std::make_pair(NIL_INSTRU, &Decriptor::nothing));
   m_opt.insert(std::make_pair(MATCH, &Decriptor::match));
+  m_opt.insert(std::make_pair(KEY, &Decriptor::key));
+  m_opt.insert(std::make_pair(PACKAGE, &Decriptor::package));
+
+  m_package = new Package();
 }
 
 DecriptorManager::~DecriptorManager()
@@ -63,6 +68,32 @@ DecriptorManager    *DecriptorManager::get_instance()
   static DecriptorManager inst;
 
   return (&inst);
+}
+
+void                    DecriptorManager::load_packages()
+{
+    std::ifstream       file("packages.list");
+    std::string         type;
+    std::string         name;
+    std::string         filename;
+    Package             *pack;
+
+    while (!file.eof())
+    {
+        file >> type >> name >> filename;
+        std::cout << type << " " << name << " " << filename << std::endl;
+        if (type == "GEN")
+        {
+            pack = new XGenPackage();
+            pack->load(filename);
+            m_package->add_package(Chanel::hash(name), pack);
+        }
+    }
+}
+
+Package                 *DecriptorManager::get_package(unsigned int p) const
+{
+    return (m_package->getPackage(p));
 }
 
 SMART(GeneticalNode)    (Decriptor::*DecriptorManager::get_function(GeneticalNode* node))(GeneticalNode*)

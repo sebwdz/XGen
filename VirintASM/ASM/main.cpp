@@ -20,13 +20,20 @@ int make(std::vector<std::string> &conf)
         data = new NodeMaker(conf[0], true);
         while (it < (int)conf.size())
         {
-            file.open(conf[it].c_str());
-            if (!file.is_open())
-                throw (std::string("Can't open file ") + conf[it]);
-            data->read_data(file);
-            std::cout << "reader -> " << conf[it].c_str() << " succesfull" << std::endl;
-            it++;
-            file.close();
+               if (conf[it].find(".gen") != std::string::npos)
+               {
+                   data->read_lib(conf[it]);
+               }
+               else
+               {
+                   file.open(conf[it].c_str());
+                   if (!file.is_open())
+                       throw (std::string("Can't open file ") + conf[it]);
+                   data->read_data(file);
+                   file.close();
+               }
+                std::cout << "reader -> " << conf[it].c_str() << " succesfull" << std::endl;
+                it++;
         }
         data->apply_define();
         data->make_node(conf[0], str, av);
